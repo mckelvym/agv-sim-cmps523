@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: SensorReading.java
+package agv.sim.cmps523;
 
 public class SensorReading {
 	public double m_actual_angle;

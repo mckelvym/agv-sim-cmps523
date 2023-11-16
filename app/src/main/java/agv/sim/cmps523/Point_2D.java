@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: Point_2D.java
+package agv.sim.cmps523;
 
 public class Point_2D {
 	public double m_x,m_y;

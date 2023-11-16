@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: Agent.java 
+package agv.sim.cmps523;
 
 import java.awt.Color;
 import java.awt.geom.Line2D;

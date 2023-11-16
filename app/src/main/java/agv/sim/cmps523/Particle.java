@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: Particle.java
+package agv.sim.cmps523;
 
 public class Particle {
 	public double m_x;

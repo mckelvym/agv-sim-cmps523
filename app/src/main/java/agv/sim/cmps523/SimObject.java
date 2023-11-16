@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: SimObject.java
+package agv.sim.cmps523;
 
 public class SimObject {
 		public double m_x,m_y;

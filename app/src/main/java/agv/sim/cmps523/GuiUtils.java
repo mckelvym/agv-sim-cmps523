@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: GuiUtils.java
+package agv.sim.cmps523;
 
 import java.awt.Component;
 import java.awt.Dimension;

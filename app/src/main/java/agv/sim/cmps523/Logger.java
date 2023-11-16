@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: Logger.java
+package agv.sim.cmps523;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -47,7 +48,7 @@ public class Logger {
 		for (int i = 0; i < 3; i++)
 			time.add(0.0);
 		
-		String src = "src";
+		String src = "src/main/resources";
 		Logger.copy_file_to_directory("plot_pose_error.m", src, data_directory);
 		Logger.copy_file_to_directory("plot_pose_orientation_error.m", src, data_directory);
 		Logger.copy_file_to_directory("plot_poses.m", src, data_directory);		

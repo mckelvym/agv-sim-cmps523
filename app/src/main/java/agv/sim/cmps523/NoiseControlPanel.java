@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: NoiseControlPanel.java
+package agv.sim.cmps523;
 
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;

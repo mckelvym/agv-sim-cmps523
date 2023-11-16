@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: ObjectControlPanel.java
+package agv.sim.cmps523;
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;

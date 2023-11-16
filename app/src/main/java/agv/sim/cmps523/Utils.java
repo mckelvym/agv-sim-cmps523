@@ -2,6 +2,7 @@
 // CMPS 523
 // Final Project
 // File: Utils.java
+package agv.sim.cmps523;
 
 import java.io.PrintStream;
 import java.util.Random;
