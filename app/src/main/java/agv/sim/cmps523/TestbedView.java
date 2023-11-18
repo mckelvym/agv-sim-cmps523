@@ -62,28 +62,28 @@ public class TestbedView extends JPanel implements Observer {
         g.setColor(Color.white);
         g.fillRect(0, 0, getWidth(), getHeight());
         if (AGVsim.algorithm == 1)
-            draw_subjective_bot_belief_ellipses(g);
+            drawSubjectiveBotBeliefEllipses(g);
         if (AGVsim.algorithm == 2)
-            draw_particles(g);
+            drawParticles(g);
         if (drawSensorBeams)
             if (AGVsim.algorithm == 1)
-                draw_sensor_scan_wrt_belief(g);
+                drawSensorScanWrtBelief(g);
             else if (AGVsim.algorithm == 2)
-                draw_sensor_scan_wrt_actual(g);
+                drawSensorScanWrtActual(g);
         if (drawSensorReturnBeams)
             if (AGVsim.algorithm == 1)
-                draw_sensor_returns_wrt_belief(g);
+                drawSensorReturnsWrtBelief(g);
             else if (AGVsim.algorithm == 2)
-                draw_sensor_returns_wrt_actual(g);
-        draw_objects(g);
-        draw_bot_outline(g);
+                drawSensorReturnsWrtActual(g);
+        drawObjects(g);
+        drawBotOutline(g);
         //if (AGVsim.algorithm == 1)
-        draw_subjective_bot_outline(g);
-        draw_axes(g);
+        drawSubjectiveBotOutline(g);
+        drawAxes(g);
         g.setColor(savedColor);
     }
 
-    void draw_axes(Graphics g) {
+    void drawAxes(Graphics g) {
         final int x = 800;
         final int y = 400;
         Graphics2D g2 = (Graphics2D) g;
@@ -115,15 +115,15 @@ public class TestbedView extends JPanel implements Observer {
 
 
     // Read the Testbed class to draw bot's actual location
-    void draw_bot_outline(Graphics g) {
+    void drawBotOutline(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(Color.red);
         g2.setStroke(new BasicStroke(2));
-        double cols = AGVsim.testbed.get_x_position() * pcm;
-        double rows = AGVsim.testbed.get_y_position() * pcm; // convert from cm to pixels
-        double orient = AGVsim.testbed.get_orientation();
-        double trans_vel = AGVsim.agent.get_translational_velocity() * 5;
-        double rot_vel = AGVsim.agent.get_rotational_velocity();
+        double cols = AGVsim.testbed.getXPosition() * pcm;
+        double rows = AGVsim.testbed.getYPosition() * pcm; // convert from cm to pixels
+        double orient = AGVsim.testbed.getOrientation();
+        double trans_vel = AGVsim.agent.getTranslationalVelocity() * 5;
+        double rot_vel = AGVsim.agent.getRotationalVelocity();
         final double x1 = x(cols);
         final double y1 = y(rows);
         ellipse.setFrame(
@@ -150,15 +150,15 @@ public class TestbedView extends JPanel implements Observer {
     }
 
     // Read the Agent class to draw bot's believed location
-    void draw_subjective_bot_outline(Graphics g) {
+    void drawSubjectiveBotOutline(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(Color.blue);
         g2.setStroke(new BasicStroke(1));
-        double cols = AGVsim.agent.get_x_position() * pcm;
-        double rows = AGVsim.agent.get_y_position() * pcm; // convert from cm to pixels
-        double orient = AGVsim.agent.get_orientation();
-        double trans_vel = AGVsim.agent.get_translational_velocity() * 5;
-        double rot_vel = AGVsim.agent.get_rotational_velocity();
+        double cols = AGVsim.agent.getXPosition() * pcm;
+        double rows = AGVsim.agent.getYPosition() * pcm; // convert from cm to pixels
+        double orient = AGVsim.agent.getOrientation();
+        double trans_vel = AGVsim.agent.getTranslationalVelocity() * 5;
+        double rot_vel = AGVsim.agent.getRotationalVelocity();
         final double x1 = x(cols);
         final double y1 = y(rows);
         ellipse.setFrame(
@@ -185,11 +185,11 @@ public class TestbedView extends JPanel implements Observer {
     }
 
     // Read the Agent class to draw bot's believed location
-    void draw_subjective_bot_belief_ellipses(Graphics g) {
+    void drawSubjectiveBotBeliefEllipses(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1));
-        double cols = AGVsim.agent.get_x_position() * pcm;
-        double rows = AGVsim.agent.get_y_position() * pcm; // convert from cm to pixels
+        double cols = AGVsim.agent.getXPosition() * pcm;
+        double rows = AGVsim.agent.getYPosition() * pcm; // convert from cm to pixels
         double angle;
         double[] sqrt_eig = new double[2];
 
@@ -197,7 +197,7 @@ public class TestbedView extends JPanel implements Observer {
             float c = (float) ((2.0 - i) / 3.0);
             g2.setPaint(new Color(c, c, c));
 
-            Matrix covariance_matrix = AGVsim.agent.get_covar_mat(i);
+            Matrix covariance_matrix = AGVsim.agent.getCovarMat(i);
             EigenvalueDecomposition eigenvalue_decomposition = covariance_matrix.eig();
             Matrix eigenvector_matrix = eigenvalue_decomposition.getV();
             Matrix eigenvalue_matrix = eigenvalue_decomposition.getD();
@@ -241,7 +241,7 @@ public class TestbedView extends JPanel implements Observer {
                     sqrt_eig[1]);
             g2.translate(x(cols), y(rows));
             //g2.rotate(-AGVsim.agent.get_orientation());
-            g2.rotate(-angle - AGVsim.agent.get_orientation());
+            g2.rotate(-angle - AGVsim.agent.getOrientation());
             g2.draw(ellipse);
             //g2.fill(ellipse);
             g2.setPaint(Color.black);
@@ -250,7 +250,7 @@ public class TestbedView extends JPanel implements Observer {
         }
     }
 
-    void draw_particles(Graphics g) {
+    void drawParticles(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(Color.black);
         g2.setStroke(new BasicStroke(1));
@@ -261,30 +261,30 @@ public class TestbedView extends JPanel implements Observer {
         }
     }
 
-    void draw_objects(Graphics g) {
+    void drawObjects(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(Color.black);
         g2.setStroke(new BasicStroke(1));
-        for (int i = 0; i < AGVsim.testbed.nuobjects(); i++) {
+        for (int i = 0; i < AGVsim.testbed.numObjects(); i++) {
             ellipse.setFrame(
-                    x(AGVsim.testbed.object_at(i).x * pcm) - AGVsim.testbed.object_at(i).size,
-                    y(AGVsim.testbed.object_at(i).y * pcm) - AGVsim.testbed.object_at(i).size,
-                    AGVsim.testbed.object_at(i).size * 2,
-                    AGVsim.testbed.object_at(i).size * 2);
+                    x(AGVsim.testbed.objectAt(i).x * pcm) - AGVsim.testbed.objectAt(i).size,
+                    y(AGVsim.testbed.objectAt(i).y * pcm) - AGVsim.testbed.objectAt(i).size,
+                    AGVsim.testbed.objectAt(i).size * 2,
+                    AGVsim.testbed.objectAt(i).size * 2);
             g2.draw(ellipse);
             if (drawObjectId)
                 g2.drawString(
                         Integer.toString(i),
-                        (float) x(AGVsim.testbed.object_at(i).x * pcm),
-                        (float) y(AGVsim.testbed.object_at(i).y * pcm));
+                        (float) x(AGVsim.testbed.objectAt(i).x * pcm),
+                        (float) y(AGVsim.testbed.objectAt(i).y * pcm));
         }
     }
 
-    void draw_sensor_scan_wrt_belief(Graphics g) {
+    void drawSensorScanWrtBelief(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1));
-        double x = AGVsim.agent.get_sensor_x_position();
-        double y = AGVsim.agent.get_sensor_y_position();
+        double x = AGVsim.agent.getSensorXPosition();
+        double y = AGVsim.agent.getSensorYPosition();
         SensorReading[] p = AGVsim.agent.sensor.get_readings();
         for (final SensorReading sensorReading : p) {
             if (sensorReading != null && sensorReading.actualRange != -1) {
@@ -298,7 +298,7 @@ public class TestbedView extends JPanel implements Observer {
         }
     }
 
-    void draw_sensor_scan_wrt_actual(Graphics g) {
+    void drawSensorScanWrtActual(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1));
         double x = AGVsim.agent.sensor.get_x_position();
@@ -316,11 +316,11 @@ public class TestbedView extends JPanel implements Observer {
         }
     }
 
-    void draw_sensor_returns_wrt_belief(Graphics g) {
+    void drawSensorReturnsWrtBelief(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1));
-        double x = AGVsim.agent.get_sensor_x_position();
-        double y = AGVsim.agent.get_sensor_y_position();
+        double x = AGVsim.agent.getSensorXPosition();
+        double y = AGVsim.agent.getSensorYPosition();
         Vector<SensorReading> v = AGVsim.agent.sensor.get_hits();
         SensorReading p;
         for (int i = 0; i < v.size(); i++) {
@@ -336,7 +336,7 @@ public class TestbedView extends JPanel implements Observer {
         }
     }
 
-    void draw_sensor_returns_wrt_actual(Graphics g) {
+    void drawSensorReturnsWrtActual(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1));
         double x = AGVsim.agent.sensor.get_x_position();
@@ -374,34 +374,34 @@ public class TestbedView extends JPanel implements Observer {
         public void mouseClicked(MouseEvent e) {
             String mode = (String) ControlPanel.mouseModeCombo.getSelectedItem();
             if (Objects.equals(mode, "Add Object")) {
-                AGVsim.testbed.add_object(
+                AGVsim.testbed.addObject(
                         x(e.getX()) * cmp,
                         y(e.getY()) * cmp,
                         getValueDouble(ObjectControlPanel.objectSizeCombo));
             } else if (Objects.equals(mode, "Bot Actual")) {
                 if (Testbed.configOrientation) {
-                    double x = (x(e.getX()) * cmp - AGVsim.testbed.get_initial_x_position());
-                    double y = (y(e.getY()) * cmp - AGVsim.testbed.get_initial_y_position());
-                    AGVsim.testbed.set_initial_orientation(Math.atan2(y, x));
+                    double x = (x(e.getX()) * cmp - AGVsim.testbed.getInitialXPosition());
+                    double y = (y(e.getY()) * cmp - AGVsim.testbed.getInitialYPosition());
+                    AGVsim.testbed.setInitialOrientation(Math.atan2(y, x));
                 } else {
-                    AGVsim.testbed.set_initial_position(
+                    AGVsim.testbed.setInitialPosition(
                             x(e.getX()) * cmp,
                             y(e.getY()) * cmp);
                 }
                 Testbed.configOrientation = !Testbed.configOrientation;
-                AGVsim.engine.reset_system();
+                AGVsim.engine.resetSystem();
             } else if (Objects.equals(mode, "Bot Belief")) {
                 if (AGVsim.agent.configOrientation) {
-                    double x = (x(e.getX()) * cmp - AGVsim.agent.get_initial_x_position());
-                    double y = (y(e.getY()) * cmp - AGVsim.agent.get_initial_y_position());
-                    AGVsim.agent.set_initial_orientation(Math.atan2(y, x));
+                    double x = (x(e.getX()) * cmp - AGVsim.agent.getInitialXPosition());
+                    double y = (y(e.getY()) * cmp - AGVsim.agent.getInitialYPosition());
+                    AGVsim.agent.setInitialOrientation(Math.atan2(y, x));
                 } else {
-                    AGVsim.agent.set_initial_position(
+                    AGVsim.agent.setInitialPosition(
                             x(e.getX()) * cmp,
                             y(e.getY()) * cmp);
                 }
                 AGVsim.agent.configOrientation = !AGVsim.agent.configOrientation;
-                AGVsim.engine.reset_system();
+                AGVsim.engine.resetSystem();
             }
         }
 

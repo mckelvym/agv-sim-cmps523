@@ -31,7 +31,7 @@ public class AGVsim extends JFrame {
 
         this.addWindowListener(new WindowListener() {
             public void windowClosing(WindowEvent e) {
-                logger.save_data();
+                logger.saveData();
                 System.exit(0);
             }
 
@@ -74,7 +74,7 @@ public class AGVsim extends JFrame {
         //setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         pack();
 
-        GuiUtils.center_on_screen(this);
+        GuiUtils.centerOnScreen(this);
         // display
         setResizable(false);    // fixed size display
         setVisible(true);
@@ -95,7 +95,7 @@ public class AGVsim extends JFrame {
                     started = true;
                     out.println("Starting up..");
                     new AGVsim("AGV Sim");
-                    engine.build_architecture();
+                    engine.buildArchitecture();
                 }
             }
 
@@ -112,9 +112,9 @@ public class AGVsim extends JFrame {
             }
         });
 
-        testbed.add_object_without_repaint(600, 700, 1);
-        testbed.add_object_without_repaint(700, 200, 1);
-        testbed.add_object_without_repaint(100, 180, 1);
+        testbed.addObjectWithoutRepaint(600, 700, 1);
+        testbed.addObjectWithoutRepaint(700, 200, 1);
+        testbed.addObjectWithoutRepaint(100, 180, 1);
     }
 
     private void setupMenuBar() {

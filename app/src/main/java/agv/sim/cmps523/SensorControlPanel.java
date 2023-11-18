@@ -111,47 +111,47 @@ public class SensorControlPanel extends JDialog {
         int base_y = 0;
         this.setLayout(new GridBagLayout());
 
-        GuiUtils.add_to_gridbag(this, new JLabel("Sensor Configuration"), base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Sensor Configuration"), base_x, base_y, 2, 1);
         base_y += 2;
-        GuiUtils.add_to_gridbag(this, new JLabel("Angular Resolution:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensorAngResCombo, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Angular Resolution:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, sensorAngResCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Max Range:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensorMaxRangeCombo, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Max Range:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, sensorMaxRangeCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Display Beams:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensorDisplayCombo, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Display Beams:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, sensorDisplayCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Display Returned Beams:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensorReturnDisplayCombo, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Display Returned Beams:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, sensorReturnDisplayCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Z_hit:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, Z_HIT_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Z_hit:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, Z_HIT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Z_short:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, Z_SHORT_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Z_short:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, Z_SHORT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Z_max:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, Z_MAX_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Z_max:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, Z_MAX_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Z_rand:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, Z_RAND_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Z_rand:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, Z_RAND_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Sigma_hit:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, SIGMA_HIT_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Sigma_hit:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, SIGMA_HIT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Lambda_short:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, LAMBDA_SHORT_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Lambda_short:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, LAMBDA_SHORT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, closeButton, base_x, base_y, 2, 1);
 
         this.pack();
-        GuiUtils.center_on_screen(this);
+        GuiUtils.centerOnScreen(this);
         this.setVisible(true);
     }
 
     // Algorithm bearange_finder_model page 158
-    public static double get_sensor_noise_probability(int i) {
+    public static double getSensorNoiseProbability(int i) {
         return switch (i) {
             case 0 -> getValueDouble(Z_HIT_SLIDER);
             case 1 -> getValueDouble(Z_SHORT_SLIDER);
@@ -161,11 +161,11 @@ public class SensorControlPanel extends JDialog {
         };
     }
 
-    public static double get_sigma_hit() {
+    public static double getSigmaHit() {
         return getValueDouble(SIGMA_HIT_SLIDER);
     }
 
-    public static double get_lambda_short() {
+    public static double getLambdaShort() {
         return getValueDouble(LAMBDA_SHORT_SLIDER);
     }
 

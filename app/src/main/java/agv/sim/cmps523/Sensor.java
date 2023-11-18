@@ -39,7 +39,7 @@ public class Sensor {
         double susquares = 0.0;
         double length;
         for (int i = 0; i < 4; i++) {
-            noise.set(0, i, SensorControlPanel.get_sensor_noise_probability(i));
+            noise.set(0, i, SensorControlPanel.getSensorNoiseProbability(i));
             susquares += Utils.square(noise.get(0, i));
         }
         if (susquares <= 0.0)
@@ -57,10 +57,10 @@ public class Sensor {
             sensorReadings[i] = new SensorReading();
         noise = Matrix.identity(1, 4);
         for (int i = 0; i < 4; i++) {
-            noise.set(0, i, SensorControlPanel.get_sensor_noise_probability(i));
+            noise.set(0, i, SensorControlPanel.getSensorNoiseProbability(i));
         }
-        sigmaHit = SensorControlPanel.get_sigma_hit();
-        lambdaShort = SensorControlPanel.get_lambda_short();
+        sigmaHit = SensorControlPanel.getSigmaHit();
+        lambdaShort = SensorControlPanel.getLambdaShort();
         normalize_noise();
     }
 
@@ -158,8 +158,8 @@ public class Sensor {
         double actual_beam;
         double believed_beam;
         actual_beam = get_orientation() - Math.toRadians(fovDegrees / 2.0);
-        believed_beam = AGVsim.agent.get_sensor_orientation() - Math.toRadians(fovDegrees / 2.0);
-        out.println("Sensor: bot orientation vs. sensor orientation: " + Math.toDegrees(get_orientation()) + " " + Math.toDegrees(AGVsim.agent.get_sensor_orientation()));
+        believed_beam = AGVsim.agent.getSensorOrientation() - Math.toRadians(fovDegrees / 2.0);
+        out.println("Sensor: bot orientation vs. sensor orientation: " + Math.toDegrees(get_orientation()) + " " + Math.toDegrees(AGVsim.agent.getSensorOrientation()));
 
         sensorHits.clear();
         for (int beanum = 0; beanum < sensorReadings.length; beanum++) {
@@ -195,9 +195,9 @@ public class Sensor {
                     break;
                 actual_beax = get_x_position() + range * Math.cos(actual_angle);
                 actual_beay = get_y_position() + range * Math.sin(actual_angle);
-                for (int o = 0; o < testbed.nuobjects(); o++) {
-                    obj_x = testbed.object_at(o).x;
-                    obj_y = testbed.object_at(o).y;
+                for (int o = 0; o < testbed.numObjects(); o++) {
+                    obj_x = testbed.objectAt(o).x;
+                    obj_y = testbed.objectAt(o).y;
                     if (1.0 >= Math.sqrt(Utils.square(actual_beax - obj_x) + Utils.square(actual_beay - obj_y))) {
                         hit = true;
 
@@ -209,13 +209,13 @@ public class Sensor {
                         out.println("p=" + p);
 
                         believed_range = range * (1 - p);
-                        believed_beax = (AGVsim.agent.get_sensor_x_position() + believed_range * Math.cos(believed_angle));
-                        believed_beay = (AGVsim.agent.get_sensor_y_position() + believed_range * Math.sin(believed_angle));
+                        believed_beax = (AGVsim.agent.getSensorXPosition() + believed_range * Math.cos(believed_angle));
+                        believed_beay = (AGVsim.agent.getSensorYPosition() + believed_range * Math.sin(believed_angle));
                         out.println("Sensor: actual angle vs believed angle: " + Math.toDegrees(actual_angle) + " " + Math.toDegrees(believed_angle));
-                        sensorHits.add(new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), believed_range, o,
-                                testbed.object_at(o).x, testbed.object_at(o).y, believed_beax, believed_beay));
-                        sensorReadings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), believed_range, o,
-                                testbed.object_at(o).x, testbed.object_at(o).y, believed_beax, believed_beay);
+                        sensorHits.add(new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.getSensorOrientation(), believed_range, o,
+                                testbed.objectAt(o).x, testbed.objectAt(o).y, believed_beax, believed_beay));
+                        sensorReadings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.getSensorOrientation(), believed_range, o,
+                                testbed.objectAt(o).x, testbed.objectAt(o).y, believed_beax, believed_beay);
                         break;
                     }
                 }
@@ -223,9 +223,9 @@ public class Sensor {
             if (!hit) {
                 actual_beax = get_x_position() + range * Math.cos(actual_angle);
                 actual_beay = get_y_position() + range * Math.sin(actual_angle);
-                believed_beax = AGVsim.agent.get_sensor_x_position() + range * Math.cos(believed_angle);
-                believed_beay = AGVsim.agent.get_sensor_y_position() + range * Math.sin(believed_angle);
-                sensorReadings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), range, -1,
+                believed_beax = AGVsim.agent.getSensorXPosition() + range * Math.cos(believed_angle);
+                believed_beay = AGVsim.agent.getSensorYPosition() + range * Math.sin(believed_angle);
+                sensorReadings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.getSensorOrientation(), range, -1,
                         actual_beax, actual_beay, believed_beax, believed_beay);
             }
         }

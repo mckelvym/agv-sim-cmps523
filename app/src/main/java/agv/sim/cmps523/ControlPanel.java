@@ -93,22 +93,22 @@ public class ControlPanel extends JPanel {
         int base_x = 0;
         int base_y = 0;
         this.setLayout(new GridBagLayout());
-        GuiUtils.add_to_gridbag(this, simulationToolbar, base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, BUILD_BUTTON, base_x + 1, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, new JLabel("Click Mode:"), base_x + 2, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, mouseModeCombo, base_x + 3, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, simulationToolbar, base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, BUILD_BUTTON, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Click Mode:"), base_x + 2, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, mouseModeCombo, base_x + 3, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Translational Velocity (cm/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, TRANSLATIONAL_VELOCITY_SLIDER, base_x + 1, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, new JLabel("Time Delta:"), base_x + 2, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, TIME_DELTA_SLIDER, base_x + 3, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Translational Velocity (cm/sec):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, TRANSLATIONAL_VELOCITY_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Time Delta:"), base_x + 2, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, TIME_DELTA_SLIDER, base_x + 3, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Rotational Velocity (deg/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, ROTATIONAL_VELOCITY_SLIDER, base_x + 1, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, new JLabel("FPS:"), base_x + 2, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, FRAMERATE_COMBO, base_x + 3, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Rotational Velocity (deg/sec):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, ROTATIONAL_VELOCITY_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("FPS:"), base_x + 2, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, FRAMERATE_COMBO, base_x + 3, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, enableCorrectionCheckbox, base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, enableCorrectionCheckbox, base_x, base_y, 2, 1);
     }
 
     public Dimension getMinimumSize() {
@@ -119,11 +119,11 @@ public class ControlPanel extends JPanel {
         return new Dimension(sizeX, sizeY);
     }
 
-    public double get_current_translational_velocity() {
+    public double getCurrentTranslationalVelocity() {
         return Integer.valueOf(TRANSLATIONAL_VELOCITY_SLIDER.getValue()).doubleValue();
     }
 
-    public double get_current_rotational_velocity() {
+    public double getCurrentRotationalVelocity() {
         return Math.toRadians(-(Integer.valueOf(ROTATIONAL_VELOCITY_SLIDER.getValue()).doubleValue()));
     }
 
@@ -132,7 +132,7 @@ public class ControlPanel extends JPanel {
         return !isPaused;
     }
 
-    public void set_paused(boolean val) {
+    public void setPaused(boolean val) {
         isPaused = val;
     }
 
@@ -149,7 +149,7 @@ public class ControlPanel extends JPanel {
 
     private static class BuildButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            AGVsim.engine.build_architecture();
+            AGVsim.engine.buildArchitecture();
         }
     }
 
@@ -157,7 +157,7 @@ public class ControlPanel extends JPanel {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             double vel = Integer.valueOf(source.getValue()).doubleValue();
-            AGVsim.agent.set_translational_velocity(vel);
+            AGVsim.agent.setTranslationalVelocity(vel);
             System.out.println("ControlPanel: translational velocity = " + vel);
             AGVsim.testbedview.repaint();
         }
@@ -171,7 +171,7 @@ public class ControlPanel extends JPanel {
                 source.setValue(1);
                 vel = Math.toRadians(1.0);
             }
-            AGVsim.agent.set_rotational_velocity(vel);
+            AGVsim.agent.setRotationalVelocity(vel);
             System.out.println("ControlPanel: rotational velocity = " + Math.toDegrees(vel));
             AGVsim.testbedview.repaint();
         }
@@ -193,7 +193,7 @@ public class ControlPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) { // When reset is pressed
-            AGVsim.engine.reset_system();                // reset the system
+            AGVsim.engine.resetSystem();                // reset the system
             //reset_button.setEnabled(false);
             AGVsim.logger.init();
             currTime = 0;
@@ -214,7 +214,7 @@ public class ControlPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) { //When step button is pressed
-            AGVsim.engine.run_1_frame();
+            AGVsim.engine.run1Frame();
             resetButton.setEnabled(true);    //reactivate reset button
         }
     }                        //run simulation one step
@@ -238,12 +238,12 @@ public class ControlPanel extends JPanel {
                 stepButton.setEnabled(false);    // disable step button
                 runButton.setEnabled(false);        // disable play button
                 pauseButton.setEnabled(true);    // only the pause button is left enabled
-                set_paused(false);            // unpause the program
+                setPaused(false);            // unpause the program
                 long beforeTime = System.currentTimeMillis(); // from Davision, KGPJ, p. 23
                 int nuruns = 0;
                 while (isNotPaused() && nuruns < 9000) {        //while program is running
-                    AGVsim.engine.run_1_frame();    //run program 1 step and delay
-                    AGVsim.logger.save_time(currTime);
+                    AGVsim.engine.run1Frame();    //run program 1 step and delay
+                    AGVsim.logger.saveTime(currTime);
                     currTime += Engine.deltaT;
                     long delay = 1000 / Engine.fps; //according to  framerate
                     long timeDiff = System.currentTimeMillis() - beforeTime;
@@ -272,7 +272,7 @@ public class ControlPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) { // If pause button is clicked
-            set_paused(true);            // pause the simulation
+            setPaused(true);            // pause the simulation
             runButton.setEnabled(true);        // enable the play button
             pauseButton.setEnabled(false);    // disable the pause button
         }

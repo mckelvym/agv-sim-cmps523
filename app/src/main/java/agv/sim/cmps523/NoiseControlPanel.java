@@ -92,60 +92,60 @@ public class NoiseControlPanel extends JDialog {
         int base_y = 0;
         this.setLayout(new GridBagLayout());
 
-        GuiUtils.add_to_gridbag(this, new JLabel("Noise Configuration"), base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Noise Configuration"), base_x, base_y, 2, 1);
         base_y += 2;
-        GuiUtils.add_to_gridbag(this, new JLabel("Testbed Translational Noise (cm/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, TESTBED_V_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Testbed Translational Noise (cm/sec):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, TESTBED_V_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Testbed Rotational Noise (deg/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, TESTBED_W_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Testbed Rotational Noise (deg/sec):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, TESTBED_W_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 1 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, AGENT_A_1_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Agent alpha 1 noise (%):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, AGENT_A_1_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 2 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, AGENT_A_2_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Agent alpha 2 noise (%):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, AGENT_A_2_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 3 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, AGENT_A_3_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Agent alpha 3 noise (%):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, AGENT_A_3_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 4 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, AGENT_A_4_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Agent alpha 4 noise (%):"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, AGENT_A_4_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         if (AGVsim.algorithm == 2) {
             base_y++;
-            GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 5 noise (%):"), base_x, base_y, 1, 1);
-            GuiUtils.add_to_gridbag(this, AGENT_A_5_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+            GuiUtils.addToGridbag(this, new JLabel("Agent alpha 5 noise (%):"), base_x, base_y, 1, 1);
+            GuiUtils.addToGridbag(this, AGENT_A_5_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
             base_y++;
-            GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 6 noise (%):"), base_x, base_y, 1, 1);
-            GuiUtils.add_to_gridbag(this, AGENT_A_6_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+            GuiUtils.addToGridbag(this, new JLabel("Agent alpha 6 noise (%):"), base_x, base_y, 1, 1);
+            GuiUtils.addToGridbag(this, AGENT_A_6_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         }
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Sensor range noise sigma:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, SENSOR_RANGE_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Sensor range noise sigma:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, SENSOR_RANGE_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Sensor bearing noise sigma:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, SENSOR_BEARING_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Sensor bearing noise sigma:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, SENSOR_BEARING_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Sensor signature noise sigma:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, SENSOR_SIGNATURE_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Sensor signature noise sigma:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, SENSOR_SIGNATURE_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
 
         base_y++;
-        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, closeButton, base_x, base_y, 2, 1);
 
         this.pack();
-        GuiUtils.center_on_screen(this);
+        GuiUtils.centerOnScreen(this);
         this.setVisible(true);
     }
 
-    public static double get_testbed_v_noise() {
+    public static double getTestbedVNoise() {
         return getValueDouble(TESTBED_V_NOISE_SLIDER);
     }
 
-    public static double get_testbed_w_noise() {
+    public static double getTestbedWNoise() {
         return Math.toRadians(getValueDouble(TESTBED_W_NOISE_SLIDER));
     }
 
-    public static double get_alpha_noise(int i) {
+    public static double getAlphaNoise(int i) {
         double scale = 100.0;
         return switch (i) {
             case 1 -> getValueDouble(AGENT_A_1_NOISE_SLIDER) / scale;
@@ -158,7 +158,7 @@ public class NoiseControlPanel extends JDialog {
         };
     }
 
-    public static double get_sensor_noise(int i) {
+    public static double getSensorNoise(int i) {
         double val = 0.0;
 
         switch (i) {

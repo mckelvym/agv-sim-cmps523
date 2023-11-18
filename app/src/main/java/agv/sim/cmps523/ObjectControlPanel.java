@@ -40,31 +40,31 @@ public class ObjectControlPanel extends JDialog {
         this.setLayout(new GridBagLayout());
 
 
-        GuiUtils.add_to_gridbag(this, new JLabel("Add Point"), base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Add Point"), base_x, base_y, 2, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("X Location:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, xLocField, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("X Location:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, xLocField, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Y Location:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, yLocField, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Y Location:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, yLocField, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Size:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, objectSizeCombo, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Size:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, objectSizeCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, addButton, base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, addButton, base_x, base_y, 2, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Remove Points"), base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Remove Points"), base_x, base_y, 2, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, OBJECT_REMOVE_BUTTON, base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, objectCombo, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, OBJECT_REMOVE_BUTTON, base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, objectCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, new JLabel("Display Object IDs:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, objectIdDisplayCombo, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Display Object IDs:"), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, objectIdDisplayCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, closeButton, base_x, base_y, 2, 1);
 
         this.pack();
-        GuiUtils.center_on_screen(this);
+        GuiUtils.centerOnScreen(this);
         this.setVisible(true);
     }
 
@@ -80,7 +80,7 @@ public class ObjectControlPanel extends JDialog {
         public void actionPerformed(ActionEvent e) {
             int x = Integer.parseInt(xLocField.getText());
             int y = Integer.parseInt(yLocField.getText());
-            AGVsim.testbed.add_object(x, y,
+            AGVsim.testbed.addObject(x, y,
                     Double.parseDouble(String.valueOf(objectSizeCombo.getSelectedItem())));
         }
     }
@@ -95,7 +95,7 @@ public class ObjectControlPanel extends JDialog {
             if (objectCombo.getItemCount() > 0) {
                 int obj_id = objectCombo.getSelectedIndex();
                 objectCombo.removeItemAt(obj_id);
-                AGVsim.testbed.remove_object(obj_id + 1);
+                AGVsim.testbed.removeObject(obj_id + 1);
             }
         }
     }

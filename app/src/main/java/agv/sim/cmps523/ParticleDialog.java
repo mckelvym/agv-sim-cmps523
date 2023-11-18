@@ -30,12 +30,12 @@ class ParticleDialog extends JDialog {
         int base_y = 0;
         this.setLayout(new GridBagLayout());
 
-        GuiUtils.add_to_gridbag(this, new JLabel("Choose Number of Particles: "), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, numParticlesCombo, base_x, base_y + 1, 1, 1);
-        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y + 2, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Choose Number of Particles: "), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, numParticlesCombo, base_x, base_y + 1, 1, 1);
+        GuiUtils.addToGridbag(this, closeButton, base_x, base_y + 2, 1, 1);
 
         this.pack();
-        GuiUtils.center_on_screen(this);
+        GuiUtils.centerOnScreen(this);
         this.setVisible(true);
     }
 }

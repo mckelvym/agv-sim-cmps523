@@ -25,11 +25,11 @@ public class Logger {
         this.init();
     }
 
-    static BufferedWriter new_buffered_writer(String directory, String filename) throws IOException {
+    static BufferedWriter newBufferedWriter(String directory, String filename) throws IOException {
         return new BufferedWriter(new FileWriter(new File(directory, filename)));
     }
 
-    static void copy_file_to_directory(String file, String sdir, String ddir) {
+    static void copyFileToDirectory(String file, String sdir, String ddir) {
         try {
             File src = new File(sdir, file);
             BufferedReader reader = new BufferedReader(new FileReader(src));
@@ -64,33 +64,33 @@ public class Logger {
             time.add(0.0);
 
         String src = "src/main/resources";
-        Logger.copy_file_to_directory("plot_pose_error.m", src, dataDirectory);
-        Logger.copy_file_to_directory("plot_pose_orientation_error.m", src, dataDirectory);
-        Logger.copy_file_to_directory("plot_poses.m", src, dataDirectory);
+        Logger.copyFileToDirectory("plot_pose_error.m", src, dataDirectory);
+        Logger.copyFileToDirectory("plot_pose_orientation_error.m", src, dataDirectory);
+        Logger.copyFileToDirectory("plot_poses.m", src, dataDirectory);
     }
 
-    void save_agent_pose(Matrix m) {
+    void saveAgentPose(Matrix m) {
         agentPoses.add(m.copy());
     }
 
-    void save_testbed_pose(Matrix m) {
+    void saveTestbedPose(Matrix m) {
         testbedPoses.add(m.copy());
     }
 
-    void save_time(double tstamp) {
+    void saveTime(double tstamp) {
         time.add(tstamp);
     }
 
-    void save_data() {
+    void saveData() {
         out.print("Saving data..");
         try {
-            BufferedWriter agent_data = Logger.new_buffered_writer(dataDirectory, agentDataFile);
-            BufferedWriter testbed_data = Logger.new_buffered_writer(dataDirectory, testbedDataFile);
-            BufferedWriter misc_data = Logger.new_buffered_writer(dataDirectory, miscDataFile);
+            BufferedWriter agent_data = Logger.newBufferedWriter(dataDirectory, agentDataFile);
+            BufferedWriter testbed_data = Logger.newBufferedWriter(dataDirectory, testbedDataFile);
+            BufferedWriter misc_data = Logger.newBufferedWriter(dataDirectory, miscDataFile);
 
-            this.write_pose_vector_to_matlab_file(agent_data, agentPoses, "agent_poses");
-            this.write_pose_vector_to_matlab_file(testbed_data, testbedPoses, "testbed_poses");
-            this.write_array_to_matlab_file(misc_data, time, "time");
+            this.writePoseVectorToMatlabFile(agent_data, agentPoses, "agent_poses");
+            this.writePoseVectorToMatlabFile(testbed_data, testbedPoses, "testbed_poses");
+            this.writeArrayToMatlabFile(misc_data, time, "time");
 
             Vector<Double> pose_diffs = new Vector<>();
             Vector<Double> pose_orient_diffs = new Vector<>();
@@ -99,18 +99,18 @@ public class Logger {
                 final double degrees = Math.toDegrees(testbedPoses.elementAt(i).get(2, 0) - agentPoses.elementAt(i).get(2, 0));
                 pose_orient_diffs.add(degrees);
             }
-            this.write_array_to_matlab_file(agent_data, pose_diffs, "pose_error");
-            this.write_array_to_matlab_file(agent_data, pose_orient_diffs, "pose_orientation_error");
+            this.writeArrayToMatlabFile(agent_data, pose_diffs, "pose_error");
+            this.writeArrayToMatlabFile(agent_data, pose_orient_diffs, "pose_orientation_error");
 
             Vector<Double> objx = new Vector<>();
             Vector<Double> objy = new Vector<>();
-            for (int i = 0; i < AGVsim.testbed.nuobjects(); i++) {
-                objx.add(AGVsim.testbed.object_at(i).x());
-                objy.add(AGVsim.testbed.object_at(i).y());
+            for (int i = 0; i < AGVsim.testbed.numObjects(); i++) {
+                objx.add(AGVsim.testbed.objectAt(i).x());
+                objy.add(AGVsim.testbed.objectAt(i).y());
             }
 
-            this.write_array_to_matlab_file(misc_data, objx, "objects_loc_x");
-            this.write_array_to_matlab_file(misc_data, objy, "objects_loc_y");
+            this.writeArrayToMatlabFile(misc_data, objx, "objects_loc_x");
+            this.writeArrayToMatlabFile(misc_data, objy, "objects_loc_y");
 
             agent_data.close();
             testbed_data.close();
@@ -121,7 +121,7 @@ public class Logger {
         out.println("done.");
     }
 
-    void write_pose_vector_to_matlab_file(BufferedWriter writer, Vector<Matrix> poses, String var) throws IOException {
+    void writePoseVectorToMatlabFile(BufferedWriter writer, Vector<Matrix> poses, String var) throws IOException {
         writer.write("\n%begin auto output of array " + var + " (length: " + poses.size() + ")\n" + var + " = [\n");
         for (int i = 0; i < poses.size(); i++) {
             writer.write(" " + poses.elementAt(i).get(0, 0));
@@ -133,7 +133,7 @@ public class Logger {
         writer.write("\n]; %end auto output of array " + var);
     }
 
-    void write_array_to_matlab_file(BufferedWriter writer, double[] array, String var) throws IOException {
+    void writeArrayToMatlabFile(BufferedWriter writer, double[] array, String var) throws IOException {
         writer.write("\n%begin auto output of array " + var + " (length: " + array.length + ")\n" + var + " = [\n");
         for (final double v : array) {
             writer.write(" " + v);
@@ -141,7 +141,7 @@ public class Logger {
         writer.write("\n]; %end auto output of array " + var);
     }
 
-    void write_array_to_matlab_file(BufferedWriter writer, Vector<Double> array, String var) throws IOException {
+    void writeArrayToMatlabFile(BufferedWriter writer, Vector<Double> array, String var) throws IOException {
         writer.write("\n%begin auto output of array " + var + " (length: " + array.size() + ")\n" + var + " = [\n");
         for (int i = 0; i < array.size(); i++) {
             writer.write(" " + array.elementAt(i));
@@ -149,7 +149,7 @@ public class Logger {
         writer.write("\n]; %end auto output of array " + var);
     }
 
-    void write_double_array_to_matlab_file(BufferedWriter writer, double[] array1, double[] array2, String var) throws IOException {
+    void writeDoubleArrayToMatlabFile(BufferedWriter writer, double[] array1, double[] array2, String var) throws IOException {
         if (array1.length != array2.length) {
             out.println("Error writing arrays.. not same size");
             return;

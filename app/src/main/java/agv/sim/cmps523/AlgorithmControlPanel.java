@@ -32,12 +32,12 @@ public class AlgorithmControlPanel extends JDialog {
         int base_y = 0;
         this.setLayout(new GridBagLayout());
 
-        GuiUtils.add_to_gridbag(this, new JLabel("Choose Bayesian Filter: "), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, bayesianFilterCombo, base_x, base_y + 1, 1, 1);
-        GuiUtils.add_to_gridbag(this, close, base_x, base_y + 2, 1, 1);
+        GuiUtils.addToGridbag(this, new JLabel("Choose Bayesian Filter: "), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, bayesianFilterCombo, base_x, base_y + 1, 1, 1);
+        GuiUtils.addToGridbag(this, close, base_x, base_y + 2, 1, 1);
 
         this.pack();
-        GuiUtils.center_on_screen(this);
+        GuiUtils.centerOnScreen(this);
         this.setVisible(true);
     }
 

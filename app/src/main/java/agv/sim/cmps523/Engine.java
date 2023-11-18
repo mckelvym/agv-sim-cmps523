@@ -15,37 +15,37 @@ public class Engine {
     public Engine() {
     }
 
-    public void build_architecture() {
-        build_testbed_skeleton();
+    public void buildArchitecture() {
+        buildTestbedSkeleton();
         AGVsim.testbed.addObserver(AGVsim.testbedview);
-        reset_system();
+        resetSystem();
         if (AGVsim.controlPanel.isNotPaused())  // ensure simulation is paused
             AGVsim.controlPanel.pauseButton.doClick();
         AGVsim.controlPanel.stepButton.setEnabled(true); // enable step button
         AGVsim.controlPanel.runButton.setEnabled(true);  // enable run button
     }
 
-    void build_testbed_skeleton() {
+    void buildTestbedSkeleton() {
         AGVsim.agent = new Agent();
-        AGVsim.agent.set_sensor(AGVsim.sensor);
-        Vector<SimObject> objects = AGVsim.testbed.get_objects();
+        AGVsim.agent.setSensor(AGVsim.sensor);
+        Vector<SimObject> objects = AGVsim.testbed.getObjects();
         AGVsim.testbed = new Testbed();
         AGVsim.testbed.set_objects(objects);
         out.println("Engine: created new agent and testbed.");
     }
 
-    void run_1_frame() {
-        AGVsim.agent.act_and_observe();
-        AGVsim.testbed.assert_model_has_changed();
+    void run1Frame() {
+        AGVsim.agent.actAndObserve();
+        AGVsim.testbed.assertModelHasChanged();
     }
 
-    void reset_system() {
-        AGVsim.testbed.initialize_bot_pose();
-        AGVsim.agent.initialize_subjective_bot_pose();
-        AGVsim.agent.set_translational_velocity(AGVsim.controlPanel.get_current_translational_velocity());
-        AGVsim.agent.set_rotational_velocity(AGVsim.controlPanel.get_current_rotational_velocity());
+    void resetSystem() {
+        AGVsim.testbed.initializeBotPose();
+        AGVsim.agent.initializeSubjectiveBotPose();
+        AGVsim.agent.setTranslationalVelocity(AGVsim.controlPanel.getCurrentTranslationalVelocity());
+        AGVsim.agent.setRotationalVelocity(AGVsim.controlPanel.getCurrentRotationalVelocity());
         if (AGVsim.algorithm == 2)
-            AGVsim.agent.initialize_particles();
-        AGVsim.testbed.assert_model_has_changed();
+            AGVsim.agent.initializeParticles();
+        AGVsim.testbed.assertModelHasChanged();
     }
 }
