@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
 
 public final class GuiUtils {
 
@@ -31,6 +33,7 @@ public final class GuiUtils {
         gbconstr.weightx = gbconstr.weighty = 1;
         gbconstr.gridx = posx;
         gbconstr.gridy = posy;
+        gbconstr.fill = getFill(c);
         w.add(c, gbconstr);
     }
 
@@ -41,6 +44,14 @@ public final class GuiUtils {
         gbconstr.weightx = gbconstr.weighty = 1;
         gbconstr.gridx = posx;
         gbconstr.gridy = posy;
+        gbconstr.fill = getFill(c);
         p.add(c, gbconstr);
+    }
+
+    private static int getFill(Component c) {
+        if (c instanceof JTextField || c instanceof JSlider) {
+            return GridBagConstraints.HORIZONTAL;
+        }
+        return GridBagConstraints.NONE;
     }
 }
