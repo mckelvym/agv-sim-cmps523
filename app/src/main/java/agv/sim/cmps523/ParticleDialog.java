@@ -11,18 +11,18 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 class ParticleDialog extends JDialog {
-    static String[] nuparticles = {
+    static String[] numParticles = {
             "100", "1000", "10000"
     };
-    static JComboBox<String> nuparticles_combo = new JComboBox<>(nuparticles);
-    static int number_particles;
-    JButton close = new JButton("OK");
+    static JComboBox<String> numParticlesCombo = new JComboBox<>(numParticles);
+    static int numberParticles;
+    JButton closeButton = new JButton("OK");
 
     ParticleDialog() {
-        nuparticles_combo.setSelectedIndex(0);
-        close.addActionListener(e -> {
-            final Object selectedItem = nuparticles_combo.getSelectedItem();
-            number_particles = Integer.parseInt((String.valueOf(selectedItem)));
+        numParticlesCombo.setSelectedIndex(0);
+        closeButton.addActionListener(e -> {
+            final Object selectedItem = numParticlesCombo.getSelectedItem();
+            numberParticles = Integer.parseInt((String.valueOf(selectedItem)));
             dispose();
         });
 
@@ -31,8 +31,8 @@ class ParticleDialog extends JDialog {
         this.setLayout(new GridBagLayout());
 
         GuiUtils.add_to_gridbag(this, new JLabel("Choose Number of Particles: "), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, nuparticles_combo, base_x, base_y + 1, 1, 1);
-        GuiUtils.add_to_gridbag(this, close, base_x, base_y + 2, 1, 1);
+        GuiUtils.add_to_gridbag(this, numParticlesCombo, base_x, base_y + 1, 1, 1);
+        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y + 2, 1, 1);
 
         this.pack();
         GuiUtils.center_on_screen(this);

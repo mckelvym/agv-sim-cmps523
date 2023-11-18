@@ -14,17 +14,17 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 public class AlgorithmControlPanel extends JDialog {
-    static String[] bayesian_filter = {
+    static String[] bayesianFilter = {
             "None", "Extended Kalman Filter (EKF)", "Monte Carlo Localization (MCL)"
     };
-    static JComboBox<String> bayesian_filter_combo = new JComboBox<>(bayesian_filter);
+    static JComboBox<String> bayesianFilterCombo = new JComboBox<>(bayesianFilter);
     JButton close = new JButton("OK");
 
     AlgorithmControlPanel() {
-        bayesian_filter_combo.setSelectedIndex(0);
-        bayesian_filter_combo.addActionListener(new AlgorithmChoiceHandler());
+        bayesianFilterCombo.setSelectedIndex(0);
+        bayesianFilterCombo.addActionListener(new AlgorithmChoiceHandler());
         close.addActionListener(e -> {
-            if (!Objects.equals(bayesian_filter_combo.getSelectedItem(), "None"))
+            if (!Objects.equals(bayesianFilterCombo.getSelectedItem(), "None"))
                 dispose();
         });
 
@@ -33,7 +33,7 @@ public class AlgorithmControlPanel extends JDialog {
         this.setLayout(new GridBagLayout());
 
         GuiUtils.add_to_gridbag(this, new JLabel("Choose Bayesian Filter: "), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, bayesian_filter_combo, base_x, base_y + 1, 1, 1);
+        GuiUtils.add_to_gridbag(this, bayesianFilterCombo, base_x, base_y + 1, 1, 1);
         GuiUtils.add_to_gridbag(this, close, base_x, base_y + 2, 1, 1);
 
         this.pack();

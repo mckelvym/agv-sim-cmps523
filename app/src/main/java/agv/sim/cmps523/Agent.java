@@ -12,57 +12,57 @@ import java.util.Vector;
 public class Agent {
     private final Matrix control;
     Sensor sensor;
-    boolean enable_correction;
-    int nuparticles = 100;
+    boolean enableCorrection;
+    int numParticles = 100;
     Particle[] particles;
     // agent noise
-    double a1_noise = 0.0; // default value
-    double a2_noise = 0.0; // default value
-    double a3_noise = 0.0; // default value
-    double a4_noise = 0.0; // default value
-    double a5_noise = 0.0; // default value
-    double a6_noise = 0.0; // default value
+    double a1Noise = 0.0; // default value
+    double a2Noise = 0.0; // default value
+    double a3Noise = 0.0; // default value
+    double a4Noise = 0.0; // default value
+    double a5Noise = 0.0; // default value
+    double a6Noise = 0.0; // default value
     Matrix Qt;
-    boolean config_orientation = false;
+    boolean configOrientation = false;
     private Matrix pose;
-    private Matrix sensor_pose;
+    private Matrix sensorPose;
     private Matrix SIGMA;
-    private Matrix lhsSIGMA_bar, rhsSIGMA_bar;
-    private double subjective_bot_location_x0 = 180; // initial subjective bot loc x
-    private double subjective_bot_location_y0 = 200; // initial subjective bot loc y
-    private double subjective_bot_orientation0 = Math.PI / 2;
+    private Matrix lhsSIGMABar, rhsSIGMABar;
+    private double subjectiveBotLocationX0 = 180; // initial subjective bot loc x
+    private double subjectiveBotLocationY0 = 200; // initial subjective bot loc y
+    private double subjectiveBotOrientation0 = Math.PI / 2;
 
     public Agent() {
         pose = new Matrix(3, 1);
-        sensor_pose = new Matrix(3, 1);
+        sensorPose = new Matrix(3, 1);
         control = new Matrix(2, 1);
         SIGMA = new Matrix(3, 3);
-        lhsSIGMA_bar = rhsSIGMA_bar = SIGMA;
+        lhsSIGMABar = rhsSIGMABar = SIGMA;
         Qt = new Matrix(3, 3);
         initialize_subjective_bot_pose();
         initialize_agent_noise();
         initialize_particles();
-        enable_correction = true;
+        enableCorrection = true;
     }
 
     void initialize_particles() {
-        nuparticles = ParticleDialog.number_particles;
-        particles = new Particle[nuparticles];
-        out.println("Initting " + nuparticles + " particles.");
-        for (int i = 0; i < nuparticles; i++) {
+        numParticles = ParticleDialog.numberParticles;
+        particles = new Particle[numParticles];
+        out.println("Initting " + numParticles + " particles.");
+        for (int i = 0; i < numParticles; i++) {
             particles[i] = new Particle(
-                    Utils.gaussian(subjective_bot_location_x0, 1),
-                    Utils.gaussian(subjective_bot_location_y0, 1),
-                    Utils.gaussian(subjective_bot_orientation0, Math.toRadians(1))
+                    Utils.gaussian(subjectiveBotLocationX0, 1),
+                    Utils.gaussian(subjectiveBotLocationY0, 1),
+                    Utils.gaussian(subjectiveBotOrientation0, Math.toRadians(1))
             );
         }
     }
 
     void initialize_agent_noise() {
-        a1_noise = NoiseControlPanel.get_alpha_noise(1);
-        a2_noise = NoiseControlPanel.get_alpha_noise(2);
-        a3_noise = NoiseControlPanel.get_alpha_noise(3);
-        a4_noise = NoiseControlPanel.get_alpha_noise(4);
+        a1Noise = NoiseControlPanel.get_alpha_noise(1);
+        a2Noise = NoiseControlPanel.get_alpha_noise(2);
+        a3Noise = NoiseControlPanel.get_alpha_noise(3);
+        a4Noise = NoiseControlPanel.get_alpha_noise(4);
         for (int i = 0; i <= 2; i++) {
             Qt.set(i, i, NoiseControlPanel.get_sensor_noise(i + 1));
             String index;
@@ -75,17 +75,17 @@ public class Agent {
             out.println("Agent: Qt noise sigma[" + index + "]^2 = " + Qt.get(i, i));
         }
         if (AGVsim.algorithm == 1) {
-            out.println("Agent: alpha noise: " + a1_noise + " " + a2_noise + " " + a3_noise + " " + a4_noise);
+            out.println("Agent: alpha noise: " + a1Noise + " " + a2Noise + " " + a3Noise + " " + a4Noise);
         } else {
-            a5_noise = NoiseControlPanel.get_alpha_noise(5);
-            a6_noise = NoiseControlPanel.get_alpha_noise(6);
-            out.println("Agent: alpha noise: " + a1_noise + " " + a2_noise + " " + a3_noise + " " + a4_noise + " " + a5_noise + " " + a6_noise);
+            a5Noise = NoiseControlPanel.get_alpha_noise(5);
+            a6Noise = NoiseControlPanel.get_alpha_noise(6);
+            out.println("Agent: alpha noise: " + a1Noise + " " + a2Noise + " " + a3Noise + " " + a4Noise + " " + a5Noise + " " + a6Noise);
         }
     }
 
     void initialize_subjective_bot_pose() {
-        set_position(subjective_bot_location_x0, subjective_bot_location_y0);
-        set_orientation(subjective_bot_orientation0);
+        set_position(subjectiveBotLocationX0, subjectiveBotLocationY0);
+        set_orientation(subjectiveBotOrientation0);
         control.set(0, 0, 0);
         control.set(1, 0, 0);
         SIGMA.set(0, 0, 0.0);
@@ -104,7 +104,7 @@ public class Agent {
     void ekf() {
         AGVsim.testbed.move(control);
 
-        double dt = Engine.delta_t;        // delta time
+        double dt = Engine.deltaT;        // delta time
         double v = (control.get(0, 0));            // v from robot motion - translational velocity
         double w = (control.get(1, 0));            // omega from robot motion - rotataional velocity
         double v_over_w = (w != 0.0) ? v / w : 0;
@@ -156,9 +156,9 @@ public class Agent {
 
         // LINE 5, motion noise covariance matrix in control space
         Mt = Matrix.identity(2, 2);
-        out.println("Agent: alpha noise: " + a1_noise + " " + a2_noise + " " + a3_noise + " " + a4_noise);
-        Mt.set(0, 0, Utils.square(a1_noise * v + a2_noise * w));
-        Mt.set(1, 1, Utils.square(a3_noise * v + a4_noise * w));
+        out.println("Agent: alpha noise: " + a1Noise + " " + a2Noise + " " + a3Noise + " " + a4Noise);
+        Mt.set(0, 0, Utils.square(a1Noise * v + a2Noise * w));
+        Mt.set(1, 1, Utils.square(a3Noise * v + a4Noise * w));
 
         // LINE 6, motion update from motion model
         Mut_update = new Matrix(3, 1);
@@ -174,19 +174,19 @@ public class Agent {
         // LINE 7, motion covariance matrix update from motion model
         // lhs of plus: predicted belief based on Jacobian control actions and SIGMA
         // rhs of plus: mapping between motion noise in control space to motion noise in state space.
-        lhsSIGMA_bar = Gt.times(SIGMA.times(GtT));
-        rhsSIGMA_bar = Vt.times(Mt.times(VtT));
+        lhsSIGMABar = Gt.times(SIGMA.times(GtT));
+        rhsSIGMABar = Vt.times(Mt.times(VtT));
 
-        SIGMAt_bar = lhsSIGMA_bar.plus(rhsSIGMA_bar);
+        SIGMAt_bar = lhsSIGMABar.plus(rhsSIGMABar);
 
-        sensor_pose = Mut_bar;
+        sensorPose = Mut_bar;
         if (sensor != null)
             sensor.sense(AGVsim.testbed);
 
         // LINE 8, covariance matrix for error in laser range finder
         // setup in function initialize_agent_noise();
 
-        if (sensor != null && enable_correction) {
+        if (sensor != null && enableCorrection) {
             out.println("Correction Step");
 
             // LINE 9, for each actual observation...
@@ -209,8 +209,8 @@ public class Agent {
                 double sqrt_q = Math.sqrt(q);
                 Matrix z = new Matrix(3, 1);
                 Matrix z_t_hat = new Matrix(3, 1);
-                z.set(0, 0, z_t_i.actual_range);
-                z.set(1, 0, z_t_i.actual_angle);
+                z.set(0, 0, z_t_i.actualRange);
+                z.set(1, 0, z_t_i.actualAngle);
                 z.set(2, 0, z_t_i.signature);
                 z_t_hat.set(0, 0, sqrt_q);
                 z_t_hat.set(1, 0, Math.atan2(mjy_muty, mjx_mutx) - Mut_bar.get(2, 0));
@@ -271,7 +271,7 @@ public class Agent {
 
         // LINE 19
         pose = Mut_bar;
-        sensor_pose = pose;
+        sensorPose = pose;
 
         // LINE 20
         SIGMA = SIGMAt_bar;
@@ -283,11 +283,11 @@ public class Agent {
         SensorReading z_t_i;
         Vector<SensorReading> z_t = sensor.get_hits();
         z_t_i = closest_hit(z_t);
-        double[] weights = new double[nuparticles];
-        double Minv = 1.0 / (double) nuparticles;
+        double[] weights = new double[numParticles];
+        double Minv = 1.0 / (double) numParticles;
 
-        Particle[] new_particles = new Particle[nuparticles];
-        for (int m = 0; m < nuparticles; m++) {
+        Particle[] new_particles = new Particle[numParticles];
+        for (int m = 0; m < numParticles; m++) {
             new_particles[m] = sample_motion_model_velocity(control, particles[m]);
             weights[m] = 0.0;
             if (z_t.size() >= 1)
@@ -296,25 +296,25 @@ public class Agent {
             else weights[m] = Minv;
             out.println("Weight[" + m + "]=" + weights[m]);
         }
-        if (this.enable_correction)
+        if (this.enableCorrection)
             particles = low_variance_sampler(new_particles, weights);
 
         pose = new Matrix(3, 1);
-        for (int m = 0; m < nuparticles; m++) {
+        for (int m = 0; m < numParticles; m++) {
             pose.set(0, 0, pose.get(0, 0) + particles[m].x());
             pose.set(1, 0, pose.get(1, 0) + particles[m].y());
             pose.set(2, 0, pose.get(2, 0) + particles[m].theta());
         }
-        pose.set(0, 0, pose.get(0, 0) / nuparticles);
-        pose.set(1, 0, pose.get(1, 0) / nuparticles);
-        pose.set(2, 0, Utils.clamp_angle(pose.get(2, 0) / nuparticles));
+        pose.set(0, 0, pose.get(0, 0) / numParticles);
+        pose.set(1, 0, pose.get(1, 0) / numParticles);
+        pose.set(2, 0, Utils.clamp_angle(pose.get(2, 0) / numParticles));
     }
 
     SensorReading closest_hit(Vector<SensorReading> hits) {
         SensorReading sr = new SensorReading();
         double range = sensor.get_max_range();
         for (int i = 0; i < hits.size(); i++) {
-            if (hits.elementAt(i).actual_range < range)
+            if (hits.elementAt(i).actualRange < range)
                 sr = hits.elementAt(i);
         }
         return sr;
@@ -324,14 +324,14 @@ public class Agent {
     // chi_t is the particle set
     // weights are the associated weights for each particle
     Particle[] low_variance_sampler(Particle[] chi_t, double[] weights) {
-        Particle[] new_particles = new Particle[nuparticles];
-        double Minv = 1.0 / (double) nuparticles;
+        Particle[] new_particles = new Particle[numParticles];
+        double Minv = 1.0 / (double) numParticles;
         double r = Utils.rand(0.0, Minv);
         double c = weights[0];
         int i = 1;
-        for (int m = 1; m <= nuparticles; m++) {
+        for (int m = 1; m <= numParticles; m++) {
             double U = r + (m - 1) * Minv;
-            while (U > c && i < nuparticles) {
+            while (U > c && i < numParticles) {
                 out.println("U=" + U + " c=" + c + " m=" + m + " r=" + r + " i=" + i);
                 i++;
                 c = c + weights[i - 1];
@@ -365,12 +365,12 @@ public class Agent {
         // LINE 5
         // f.actual_range represents r_i_t
         // Qt.get(0, 0) represents sigma_r, for example.
-        out.println("p1=" + Utils.prob(f.actual_range - r_hat, Math.sqrt(Qt.get(0, 0)))
-                + "r_hat=" + r_hat + " r_act=" + f.actual_range + "Q_sig_r=" + Math.sqrt(Qt.get(0, 0))
-                + " p2=" + Utils.prob(f.actual_angle - phi_hat, Math.sqrt(Qt.get(1, 1)))
+        out.println("p1=" + Utils.prob(f.actualRange - r_hat, Math.sqrt(Qt.get(0, 0)))
+                + "r_hat=" + r_hat + " r_act=" + f.actualRange + "Q_sig_r=" + Math.sqrt(Qt.get(0, 0))
+                + " p2=" + Utils.prob(f.actualAngle - phi_hat, Math.sqrt(Qt.get(1, 1)))
                 + " p3=" + Utils.prob(0, Math.sqrt(Qt.get(2, 2))));
-        return Utils.prob(f.actual_range - r_hat, Math.sqrt(Qt.get(0, 0))) *
-                Utils.prob(f.actual_angle - phi_hat, Math.sqrt(Qt.get(1, 1))) *
+        return Utils.prob(f.actualRange - r_hat, Math.sqrt(Qt.get(0, 0))) *
+                Utils.prob(f.actualAngle - phi_hat, Math.sqrt(Qt.get(1, 1))) *
                 Utils.prob(0, Math.sqrt(Qt.get(2, 2))); // prob (s_i_t - s_j, sigma_s) ??
     }
 
@@ -382,17 +382,17 @@ public class Agent {
         double w = u_t.get(1, 0);
         double v_abs = Math.abs(v);
         double w_abs = Math.abs(w);
-        double v_hat = v + sample(a1_noise * v_abs + a2_noise * w_abs); // LINE 2
-        double w_hat = w + sample(a3_noise * v_abs + a4_noise * w_abs); // LINE 3
-        double gamma_hat = sample(a5_noise * v_abs + a6_noise * w_abs); // LINE 4
+        double v_hat = v + sample(a1Noise * v_abs + a2Noise * w_abs); // LINE 2
+        double w_hat = w + sample(a3Noise * v_abs + a4Noise * w_abs); // LINE 3
+        double gamma_hat = sample(a5Noise * v_abs + a6Noise * w_abs); // LINE 4
         double theta = x_t_minus_one.angle;
         double v_hat_over_w_hat = v_hat / w_hat;
-        double theta_dtheta = theta + w_hat * Engine.delta_t;
+        double theta_dtheta = theta + w_hat * Engine.deltaT;
         // LINES 5-7
         return new Particle(
                 x_t_minus_one.x - v_hat_over_w_hat * Math.sin(theta) + v_hat_over_w_hat * Math.sin(theta_dtheta),
                 x_t_minus_one.y + v_hat_over_w_hat * Math.cos(theta) - v_hat_over_w_hat * Math.cos(theta_dtheta),
-                theta_dtheta + gamma_hat * Engine.delta_t);
+                theta_dtheta + gamma_hat * Engine.deltaT);
     }
 
     // Give a randomly distributed sample from -val to val
@@ -435,19 +435,19 @@ public class Agent {
     }
 
     double get_sensor_x_position() {
-        return sensor_pose.get(0, 0);
+        return sensorPose.get(0, 0);
     }
 
     double get_sensor_y_position() {
-        return sensor_pose.get(1, 0);
+        return sensorPose.get(1, 0);
     }
 
     double get_initial_x_position() {
-        return subjective_bot_location_x0;
+        return subjectiveBotLocationX0;
     }
 
     double get_initial_y_position() {
-        return subjective_bot_location_y0;
+        return subjectiveBotLocationY0;
     }
 
     double get_orientation() {
@@ -460,30 +460,30 @@ public class Agent {
         else if (orient < -Math.PI * 2)
             orient += Math.PI * 2;
         pose.set(2, 0, orient);
-        sensor_pose.set(2, 0, orient);
+        sensorPose.set(2, 0, orient);
     }
 
     double get_sensor_orientation() {
-        return sensor_pose.get(2, 0);
+        return sensorPose.get(2, 0);
     }
 
     void set_initial_orientation(double orient) {
-        subjective_bot_orientation0 = orient;
-        sensor_pose.set(2, 0, orient);
+        subjectiveBotOrientation0 = orient;
+        sensorPose.set(2, 0, orient);
     }
 
     void set_initial_position(double x, double y) {
-        subjective_bot_location_x0 = x;
-        subjective_bot_location_y0 = y;
-        sensor_pose.set(0, 0, x);
-        sensor_pose.set(1, 0, y);
+        subjectiveBotLocationX0 = x;
+        subjectiveBotLocationY0 = y;
+        sensorPose.set(0, 0, x);
+        sensorPose.set(1, 0, y);
     }
 
     void set_position(double x, double y) {
         pose.set(0, 0, x);
         pose.set(1, 0, y);
-        sensor_pose.set(0, 0, x);
-        sensor_pose.set(1, 0, y);
+        sensorPose.set(0, 0, x);
+        sensorPose.set(1, 0, y);
     }
 
     double get_translational_velocity() {
@@ -505,8 +505,8 @@ public class Agent {
 
     Matrix get_covar_mat(int index) {
         return switch (index) {
-            case 0 -> rhsSIGMA_bar;
-            case 1 -> lhsSIGMA_bar;
+            case 0 -> rhsSIGMABar;
+            case 1 -> lhsSIGMABar;
 //            case 2 -> SIGMA;
             default -> SIGMA;
         };

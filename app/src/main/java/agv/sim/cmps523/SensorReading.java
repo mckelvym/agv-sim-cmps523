@@ -5,42 +5,42 @@
 package agv.sim.cmps523;
 
 public class SensorReading {
-    public double actual_angle;
-    public double actual_range;
-    public double believed_angle;
-    public double believed_range;
+    public double actualAngle;
+    public double actualRange;
+    public double believedAngle;
+    public double believedRange;
     public int signature;
-    public double x_actual_hit;
-    public double y_actual_hit;
-    public double x_believed_hit;
-    public double y_believed_hit;
+    public double xActualHit;
+    public double yActualHit;
+    public double xBelievedHit;
+    public double yBelievedHit;
 
     SensorReading() {
-        actual_angle = 0;
-        actual_range = -1;
-        believed_angle = 0;
-        believed_range = -1;
+        actualAngle = 0;
+        actualRange = -1;
+        believedAngle = 0;
+        believedRange = -1;
         signature = -1;
-        x_actual_hit = 0;
-        y_actual_hit = 0;
-        x_believed_hit = 0;
-        y_believed_hit = 0;
+        xActualHit = 0;
+        yActualHit = 0;
+        xBelievedHit = 0;
+        yBelievedHit = 0;
     }
 
     SensorReading(
             double actual_angle, double actual_range,
-            double believed_angle, double believed_range,
+            double believedAngle, double believedRange,
             int signature,
             double actual_x, double actual_y,
             double believed_x, double believed_y) {
-        this.actual_angle = actual_angle;
-        this.actual_range = actual_range;
-        this.believed_angle = believed_angle;
-        this.believed_range = believed_range;
+        this.actualAngle = actual_angle;
+        this.actualRange = actual_range;
+        this.believedAngle = believedAngle;
+        this.believedRange = believedRange;
         this.signature = signature;
-        this.x_actual_hit = actual_x;
-        this.y_actual_hit = actual_y;
-        this.x_believed_hit = believed_x;
-        this.y_believed_hit = believed_y;
+        this.xActualHit = actual_x;
+        this.yActualHit = actual_y;
+        this.xBelievedHit = believed_x;
+        this.yBelievedHit = believed_y;
     }
 }

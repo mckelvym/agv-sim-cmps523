@@ -17,95 +17,95 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class SensorControlPanel extends JDialog {
-    static final JSlider z_hit_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
-    static final JSlider z_short_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
-    static final JSlider z_max_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
-    static final JSlider z_rand_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
-    static final JSlider sigma_hit_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider lambda_short_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static String[] sensor_max_range = {
+    static final JSlider Z_HIT_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+    static final JSlider Z_SHORT_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+    static final JSlider Z_MAX_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+    static final JSlider Z_RAND_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+    static final JSlider SIGMA_HIT_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider LAMBDA_SHORT_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static String[] sensorMaxRange = {
             "200", "300", "500", "1000"
     };
-    static JComboBox<String> sensor_max_range_combo = new JComboBox<>(sensor_max_range);
-    static String[] sensor_ang_res = {
+    static JComboBox<String> sensorMaxRangeCombo = new JComboBox<>(sensorMaxRange);
+    static String[] sensorAngRes = {
             "5", "2", "1"
     };
-    static JComboBox<String> sensor_ang_res_combo = new JComboBox<>(sensor_ang_res);
-    static String[] sensor_display = {
+    static JComboBox<String> sensorAngResCombo = new JComboBox<>(sensorAngRes);
+    static String[] sensorDisplay = {
             "Yes", "No"
     };
-    static JComboBox<String> sensor_display_combo = new JComboBox<>(sensor_display);
-    static String[] sensor_return_display = {
+    static JComboBox<String> sensorDisplayCombo = new JComboBox<>(sensorDisplay);
+    static String[] sensorReturnDisplay = {
             "Yes", "No"
     };
-    static JComboBox<String> sensor_return_display_combo = new JComboBox<>(sensor_return_display);
-    JButton close = new JButton("Close");
+    static JComboBox<String> sensorReturnDisplayCombo = new JComboBox<>(sensorReturnDisplay);
+    JButton closeButton = new JButton("Close");
 
     SensorControlPanel() {
-        sensor_max_range_combo.setSelectedIndex(2);
-        sensor_max_range_combo.addActionListener(new SensorMaxRangeHandler());
-        sensor_ang_res_combo.setSelectedIndex(0);
-        sensor_ang_res_combo.addActionListener(new SensorAngResHandler());
-        sensor_display_combo.addActionListener(new SensorDisplayHandler());
-        sensor_return_display_combo.addActionListener(new SensorReturnDisplayHandler());
+        sensorMaxRangeCombo.setSelectedIndex(2);
+        sensorMaxRangeCombo.addActionListener(new SensorMaxRangeHandler());
+        sensorAngResCombo.setSelectedIndex(0);
+        sensorAngResCombo.addActionListener(new SensorAngResHandler());
+        sensorDisplayCombo.addActionListener(new SensorDisplayHandler());
+        sensorReturnDisplayCombo.addActionListener(new SensorReturnDisplayHandler());
 
-        z_hit_slider.setMajorTickSpacing(5);
-        z_hit_slider.setPaintTicks(true);
-        z_hit_slider.setPaintLabels(true);
+        Z_HIT_SLIDER.setMajorTickSpacing(5);
+        Z_HIT_SLIDER.setPaintTicks(true);
+        Z_HIT_SLIDER.setPaintLabels(true);
 
-        z_short_slider.setMajorTickSpacing(5);
-        z_short_slider.setPaintTicks(true);
-        z_short_slider.setPaintLabels(true);
+        Z_SHORT_SLIDER.setMajorTickSpacing(5);
+        Z_SHORT_SLIDER.setPaintTicks(true);
+        Z_SHORT_SLIDER.setPaintLabels(true);
 
-        z_max_slider.setMajorTickSpacing(5);
-        z_max_slider.setPaintTicks(true);
-        z_max_slider.setPaintLabels(true);
+        Z_MAX_SLIDER.setMajorTickSpacing(5);
+        Z_MAX_SLIDER.setPaintTicks(true);
+        Z_MAX_SLIDER.setPaintLabels(true);
 
-        z_rand_slider.setMajorTickSpacing(5);
-        z_rand_slider.setPaintTicks(true);
-        z_rand_slider.setPaintLabels(true);
+        Z_RAND_SLIDER.setMajorTickSpacing(5);
+        Z_RAND_SLIDER.setPaintTicks(true);
+        Z_RAND_SLIDER.setPaintLabels(true);
 
-        sigma_hit_slider.setMajorTickSpacing(5);
-        sigma_hit_slider.setPaintTicks(true);
-        sigma_hit_slider.setPaintLabels(true);
+        SIGMA_HIT_SLIDER.setMajorTickSpacing(5);
+        SIGMA_HIT_SLIDER.setPaintTicks(true);
+        SIGMA_HIT_SLIDER.setPaintLabels(true);
 
-        lambda_short_slider.setMajorTickSpacing(10);
-        lambda_short_slider.setPaintTicks(true);
-        lambda_short_slider.setPaintLabels(true);
+        LAMBDA_SHORT_SLIDER.setMajorTickSpacing(10);
+        LAMBDA_SHORT_SLIDER.setPaintTicks(true);
+        LAMBDA_SHORT_SLIDER.setPaintLabels(true);
 
-        z_hit_slider.addChangeListener(new ZHitHandler());
-        z_short_slider.addChangeListener(new ZShortHandler());
-        z_max_slider.addChangeListener(new ZMaxHandler());
-        z_rand_slider.addChangeListener(new ZRandHandler());
-        sigma_hit_slider.addChangeListener(new SigmaHitHandler());
-        lambda_short_slider.addChangeListener(new LambdaShortHandler());
+        Z_HIT_SLIDER.addChangeListener(new ZHitHandler());
+        Z_SHORT_SLIDER.addChangeListener(new ZShortHandler());
+        Z_MAX_SLIDER.addChangeListener(new ZMaxHandler());
+        Z_RAND_SLIDER.addChangeListener(new ZRandHandler());
+        SIGMA_HIT_SLIDER.addChangeListener(new SigmaHitHandler());
+        LAMBDA_SHORT_SLIDER.addChangeListener(new LambdaShortHandler());
 
         Hashtable<Integer, JLabel> z_hit_labels = new Hashtable<>();
         z_hit_labels.put((0), new JLabel("None"));
         z_hit_labels.put((50), new JLabel("Less"));
         z_hit_labels.put((100), new JLabel("More"));
-        z_hit_slider.setLabelTable(z_hit_labels);
+        Z_HIT_SLIDER.setLabelTable(z_hit_labels);
 
         Hashtable<Integer, JLabel> z_short_labels = new Hashtable<>();
         z_short_labels.put((0), new JLabel("None"));
         z_short_labels.put((50), new JLabel("Less"));
         z_short_labels.put((100), new JLabel("More"));
-        z_short_slider.setLabelTable(z_short_labels);
+        Z_SHORT_SLIDER.setLabelTable(z_short_labels);
 
         Hashtable<Integer, JLabel> z_max_labels = new Hashtable<>();
         z_max_labels.put((0), new JLabel("None"));
         z_max_labels.put((50), new JLabel("Less"));
         z_max_labels.put((100), new JLabel("More"));
-        z_max_slider.setLabelTable(z_max_labels);
+        Z_MAX_SLIDER.setLabelTable(z_max_labels);
 
         Hashtable<Integer, JLabel> z_rand_labels = new Hashtable<>();
         z_rand_labels.put((0), new JLabel("None"));
         z_rand_labels.put((50), new JLabel("Less"));
         z_rand_labels.put((100), new JLabel("More"));
-        z_rand_slider.setLabelTable(z_rand_labels);
+        Z_RAND_SLIDER.setLabelTable(z_rand_labels);
 
 
-        close.addActionListener(e -> dispose());
+        closeButton.addActionListener(e -> dispose());
 
         int base_x = 0;
         int base_y = 0;
@@ -114,36 +114,36 @@ public class SensorControlPanel extends JDialog {
         GuiUtils.add_to_gridbag(this, new JLabel("Sensor Configuration"), base_x, base_y, 2, 1);
         base_y += 2;
         GuiUtils.add_to_gridbag(this, new JLabel("Angular Resolution:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensor_ang_res_combo, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, sensorAngResCombo, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Max Range:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensor_max_range_combo, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, sensorMaxRangeCombo, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Display Beams:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensor_display_combo, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, sensorDisplayCombo, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Display Returned Beams:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensor_return_display_combo, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, sensorReturnDisplayCombo, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Z_hit:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, z_hit_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, Z_HIT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Z_short:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, z_short_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, Z_SHORT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Z_max:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, z_max_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, Z_MAX_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Z_rand:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, z_rand_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, Z_RAND_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Sigma_hit:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sigma_hit_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, SIGMA_HIT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Lambda_short:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, lambda_short_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, LAMBDA_SHORT_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, close, base_x, base_y, 2, 1);
+        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y, 2, 1);
 
         this.pack();
         GuiUtils.center_on_screen(this);
@@ -153,20 +153,20 @@ public class SensorControlPanel extends JDialog {
     // Algorithm bearange_finder_model page 158
     public static double get_sensor_noise_probability(int i) {
         return switch (i) {
-            case 0 -> getValueDouble(z_hit_slider);
-            case 1 -> getValueDouble(z_short_slider);
-            case 2 -> getValueDouble(z_max_slider);
-            case 3 -> getValueDouble(z_rand_slider);
+            case 0 -> getValueDouble(Z_HIT_SLIDER);
+            case 1 -> getValueDouble(Z_SHORT_SLIDER);
+            case 2 -> getValueDouble(Z_MAX_SLIDER);
+            case 3 -> getValueDouble(Z_RAND_SLIDER);
             default -> 0.0;
         };
     }
 
     public static double get_sigma_hit() {
-        return getValueDouble(sigma_hit_slider);
+        return getValueDouble(SIGMA_HIT_SLIDER);
     }
 
     public static double get_lambda_short() {
-        return getValueDouble(lambda_short_slider);
+        return getValueDouble(LAMBDA_SHORT_SLIDER);
     }
 
     private static class SensorMaxRangeHandler implements ActionListener {
@@ -188,7 +188,7 @@ public class SensorControlPanel extends JDialog {
     private static class SensorDisplayHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String disp = getJComboBoxSelectedItem(e);
-            AGVsim.testbedview.draw_sensor_beams = disp.equals("Yes");
+            AGVsim.testbedview.drawSensorBeams = disp.equals("Yes");
             AGVsim.testbedview.repaint();
         }
     }
@@ -196,7 +196,7 @@ public class SensorControlPanel extends JDialog {
     private static class SensorReturnDisplayHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String disp = getJComboBoxSelectedItem(e);
-            AGVsim.testbedview.draw_sensor_return_beams = disp.equals("Yes");
+            AGVsim.testbedview.drawSensorReturnBeams = disp.equals("Yes");
             AGVsim.testbedview.repaint();
         }
     }
@@ -229,7 +229,7 @@ public class SensorControlPanel extends JDialog {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             final double valueDouble = getValueDouble(source);
-            AGVsim.agent.sensor.sigma_hit = valueDouble;
+            AGVsim.agent.sensor.sigmaHit = valueDouble;
             out.println("SIGMA_hit = " + valueDouble);
         }
     }
@@ -238,7 +238,7 @@ public class SensorControlPanel extends JDialog {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             final double valueDouble = getValueDouble(source);
-            AGVsim.agent.sensor.lambda_short = valueDouble;
+            AGVsim.agent.sensor.lambdaShort = valueDouble;
             out.println("LAMBDA_short = " + valueDouble);
         }
     }

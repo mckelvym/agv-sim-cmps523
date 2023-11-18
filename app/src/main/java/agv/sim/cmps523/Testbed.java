@@ -13,16 +13,16 @@ import java.util.Vector;
 
 public class Testbed extends Observable {
     // testbed noise
-    static long rand_seed = 314159265;
-    static Random rand_gen = new Random(rand_seed);
-    static double mu_noise = 0.0; // default value
-    static double sigma_v_noise = 2.0; // default value
-    static double sigma_w_noise = 2.0; // default value
-    static boolean config_orientation = false;
+    static long randSeed = 314159265;
+    static Random randGen = new Random(randSeed);
+    static double muNoise = 0.0; // default value
+    static double sigmaVNoise = 2.0; // default value
+    static double sigmaWNoise = 2.0; // default value
+    static boolean configOrientation = false;
     Matrix pose;
-    private double bot_location_x0 = 180;
-    private double bot_location_y0 = 200;
-    private double bot_orientation0 = Math.PI / 2;
+    private double botLocationX0 = 180;
+    private double botLocationY0 = 200;
+    private double botOrientation0 = Math.PI / 2;
     private Vector<SimObject> objects;
 
     public Testbed() {
@@ -41,11 +41,11 @@ public class Testbed extends Observable {
     }
 
     double get_initial_x_position() {
-        return bot_location_x0;
+        return botLocationX0;
     }
 
     double get_initial_y_position() {
-        return bot_location_y0;
+        return botLocationY0;
     }
 
     double get_orientation() {
@@ -66,13 +66,13 @@ public class Testbed extends Observable {
             orient -= Math.PI * 2;
         else if (orient < -Math.PI * 2)
             orient += Math.PI * 2;
-        bot_orientation0 = orient;
+        botOrientation0 = orient;
         AGVsim.sensor.set_orientation(orient);
     }
 
     void set_initial_position(double x, double y) {
-        bot_location_x0 = x;
-        bot_location_y0 = y;
+        botLocationX0 = x;
+        botLocationY0 = y;
         AGVsim.sensor.set_position(x, y);
     }
 
@@ -83,15 +83,15 @@ public class Testbed extends Observable {
     }
 
     void initialize_testbed_noise() {
-        sigma_v_noise = NoiseControlPanel.get_testbed_v_noise();
-        sigma_w_noise = NoiseControlPanel.get_testbed_w_noise();
-        out.println("Testbed: sigma_v_noise = " + sigma_v_noise + " sigma_w_noise = " + sigma_w_noise);
+        sigmaVNoise = NoiseControlPanel.get_testbed_v_noise();
+        sigmaWNoise = NoiseControlPanel.get_testbed_w_noise();
+        out.println("Testbed: sigma_v_noise = " + sigmaVNoise + " sigma_w_noise = " + sigmaWNoise);
     }
 
     // used in Engine.resetSystem()
     void initialize_bot_pose() {
-        set_position(bot_location_x0, bot_location_y0);
-        set_orientation(bot_orientation0);
+        set_position(botLocationX0, botLocationY0);
+        set_orientation(botOrientation0);
 
         AGVsim.logger.save_testbed_pose(pose);
     }
@@ -99,9 +99,9 @@ public class Testbed extends Observable {
     // The agent invokes this method to move within the testbed.
     // Control noise is added to the command.
     public void move(Matrix velocity_control_commands) {
-        double v_noise = sigma_v_noise * rand_gen.nextGaussian() + mu_noise;
-        double w_noise = sigma_w_noise * rand_gen.nextGaussian() + mu_noise;
-        double dt = Engine.delta_t;            // delta time
+        double v_noise = sigmaVNoise * randGen.nextGaussian() + muNoise;
+        double w_noise = sigmaWNoise * randGen.nextGaussian() + muNoise;
+        double dt = Engine.deltaT;            // delta time
         double v = (velocity_control_commands.get(0, 0) + v_noise); // v from robot motion - translational velocity
         double w = (velocity_control_commands.get(1, 0) + w_noise); // omega from robot motion - rotataional velocity
         double x = get_x_position();
@@ -133,13 +133,13 @@ public class Testbed extends Observable {
     public void add_object_without_repaint(int x, int y, double size) {
         objects.add(new SimObject(x, y, size));
         String label = "Object at (" + x + ", " + y + ")";
-        ObjectControlPanel.object_combo.addItem(label);
+        ObjectControlPanel.objectCombo.addItem(label);
     }
 
     public void add_object(int x, int y, double size) {
         objects.add(new SimObject(x, y, size));
         String label = "Object at (" + x + ", " + y + ")";
-        ObjectControlPanel.object_combo.addItem(label);
+        ObjectControlPanel.objectCombo.addItem(label);
         AGVsim.testbedview.repaint();
     }
 

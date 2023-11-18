@@ -12,28 +12,28 @@ import java.util.Objects;
 import javax.swing.*;
 
 public class ObjectControlPanel extends JDialog {
-    static final int size_x = 500, size_y = 250;
-    static final JButton object_remove_button = new JButton("Remove");
-    static JTextField x_loc_field = new JTextField(5);
-    static JTextField y_loc_field = new JTextField(5);
-    static JButton add_button = new JButton("Add");
-    static JButton close_button = new JButton("Close");
-    static String[] object_size = {
+    static final int sizeX = 500, sizeY = 250;
+    static final JButton OBJECT_REMOVE_BUTTON = new JButton("Remove");
+    static JTextField xLocField = new JTextField(5);
+    static JTextField yLocField = new JTextField(5);
+    static JButton addButton = new JButton("Add");
+    static JButton closeButton = new JButton("Close");
+    static String[] objectSize = {
             "1"
     };
-    static JComboBox<String> object_size_combo = new JComboBox<>(object_size);
-    static JComboBox<String> object_combo = new JComboBox<>();
-    static String[] object_id_display = {
+    static JComboBox<String> objectSizeCombo = new JComboBox<>(objectSize);
+    static JComboBox<String> objectCombo = new JComboBox<>();
+    static String[] objectIdDisplay = {
             "Yes", "No"
     };
-    static JComboBox<String> object_id_display_combo = new JComboBox<>(object_id_display);
+    static JComboBox<String> objectIdDisplayCombo = new JComboBox<>(objectIdDisplay);
 
     ObjectControlPanel() {
-        close_button.addActionListener(e -> dispose());
-        add_button.addActionListener(new ObjectAddHandler());
-        object_size_combo.addActionListener(new ObjectSizeHandler());
-        object_remove_button.addActionListener(new ObjectRemoveButtonHandler());
-        object_id_display_combo.addActionListener(new ObjectIdDisplayHandler());
+        closeButton.addActionListener(e -> dispose());
+        addButton.addActionListener(new ObjectAddHandler());
+        objectSizeCombo.addActionListener(new ObjectSizeHandler());
+        OBJECT_REMOVE_BUTTON.addActionListener(new ObjectRemoveButtonHandler());
+        objectIdDisplayCombo.addActionListener(new ObjectIdDisplayHandler());
 
         int base_x = 0;
         int base_y = 0;
@@ -43,25 +43,25 @@ public class ObjectControlPanel extends JDialog {
         GuiUtils.add_to_gridbag(this, new JLabel("Add Point"), base_x, base_y, 2, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("X Location:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, x_loc_field, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, xLocField, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Y Location:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, y_loc_field, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, yLocField, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Size:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, object_size_combo, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, objectSizeCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, add_button, base_x, base_y, 2, 1);
+        GuiUtils.add_to_gridbag(this, addButton, base_x, base_y, 2, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Remove Points"), base_x, base_y, 2, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, object_remove_button, base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, object_combo, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, OBJECT_REMOVE_BUTTON, base_x, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, objectCombo, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Display Object IDs:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, object_id_display_combo, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, objectIdDisplayCombo, base_x + 1, base_y, 1, 1);
         base_y++;
-        GuiUtils.add_to_gridbag(this, close_button, base_x, base_y, 2, 1);
+        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y, 2, 1);
 
         this.pack();
         GuiUtils.center_on_screen(this);
@@ -69,19 +69,19 @@ public class ObjectControlPanel extends JDialog {
     }
 
     public Dimension getMinimumSize() {
-        return new Dimension(size_x, size_y);
+        return new Dimension(sizeX, sizeY);
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(size_x, size_y);
+        return new Dimension(sizeX, sizeY);
     }
 
     private static class ObjectAddHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            int x = Integer.parseInt(x_loc_field.getText());
-            int y = Integer.parseInt(y_loc_field.getText());
+            int x = Integer.parseInt(xLocField.getText());
+            int y = Integer.parseInt(yLocField.getText());
             AGVsim.testbed.add_object(x, y,
-                    Double.parseDouble(String.valueOf(object_size_combo.getSelectedItem())));
+                    Double.parseDouble(String.valueOf(objectSizeCombo.getSelectedItem())));
         }
     }
 
@@ -92,9 +92,9 @@ public class ObjectControlPanel extends JDialog {
 
     private static class ObjectRemoveButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (object_combo.getItemCount() > 0) {
-                int obj_id = object_combo.getSelectedIndex();
-                object_combo.removeItemAt(obj_id);
+            if (objectCombo.getItemCount() > 0) {
+                int obj_id = objectCombo.getSelectedIndex();
+                objectCombo.removeItemAt(obj_id);
                 AGVsim.testbed.remove_object(obj_id + 1);
             }
         }
@@ -103,7 +103,7 @@ public class ObjectControlPanel extends JDialog {
     private static class ObjectIdDisplayHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String disp = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
-            AGVsim.testbedview.draw_object_id = Objects.equals(disp, "Yes");
+            AGVsim.testbedview.drawObjectId = Objects.equals(disp, "Yes");
             AGVsim.testbedview.repaint();
         }
     }

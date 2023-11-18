@@ -8,8 +8,8 @@ import Jama.Matrix;
 import java.util.Random;
 
 public class Utils {
-    static long rand_seed = 271828182;
-    static Random rand_gen = new Random(rand_seed);
+    static long randSeed = 271828182;
+    static Random randGen = new Random(randSeed);
 
     // Squaring a number
     static double square(double val) {
@@ -33,7 +33,7 @@ public class Utils {
 
     // Gaussian distributed value
     static double gaussian(double mu, double sigma) {
-        return sigma * rand_gen.nextGaussian() + mu;
+        return sigma * randGen.nextGaussian() + mu;
     }
 
     // Real gaussian function

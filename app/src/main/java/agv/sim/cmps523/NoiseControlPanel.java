@@ -15,78 +15,78 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class NoiseControlPanel extends JDialog {
-    static final JSlider testbed_v_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 2);
-    static final JSlider testbed_w_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 5, 2);
-    static final JSlider agent_a1_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider agent_a2_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider agent_a3_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider agent_a4_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider agent_a5_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider agent_a6_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider sensor_range_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider sensor_bearing_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    static final JSlider sensor_signature_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    JButton close = new JButton("Close");
+    static final JSlider TESTBED_V_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 10, 2);
+    static final JSlider TESTBED_W_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 5, 2);
+    static final JSlider AGENT_A_1_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider AGENT_A_2_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider AGENT_A_3_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider AGENT_A_4_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider AGENT_A_5_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider AGENT_A_6_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider SENSOR_RANGE_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider SENSOR_BEARING_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    static final JSlider SENSOR_SIGNATURE_NOISE_SLIDER = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    JButton closeButton = new JButton("Close");
 
 
     NoiseControlPanel() {
-        testbed_v_noise_slider.setMajorTickSpacing(2);
-        testbed_v_noise_slider.setPaintTicks(true);
-        testbed_v_noise_slider.setPaintLabels(true);
+        TESTBED_V_NOISE_SLIDER.setMajorTickSpacing(2);
+        TESTBED_V_NOISE_SLIDER.setPaintTicks(true);
+        TESTBED_V_NOISE_SLIDER.setPaintLabels(true);
 
-        testbed_w_noise_slider.setMajorTickSpacing(2);
-        testbed_w_noise_slider.setPaintTicks(true);
-        testbed_w_noise_slider.setPaintLabels(true);
+        TESTBED_W_NOISE_SLIDER.setMajorTickSpacing(2);
+        TESTBED_W_NOISE_SLIDER.setPaintTicks(true);
+        TESTBED_W_NOISE_SLIDER.setPaintLabels(true);
 
-        agent_a1_noise_slider.setMajorTickSpacing(5);
-        agent_a1_noise_slider.setPaintTicks(true);
-        agent_a1_noise_slider.setPaintLabels(true);
+        AGENT_A_1_NOISE_SLIDER.setMajorTickSpacing(5);
+        AGENT_A_1_NOISE_SLIDER.setPaintTicks(true);
+        AGENT_A_1_NOISE_SLIDER.setPaintLabels(true);
 
-        agent_a2_noise_slider.setMajorTickSpacing(5);
-        agent_a2_noise_slider.setPaintTicks(true);
-        agent_a2_noise_slider.setPaintLabels(true);
+        AGENT_A_2_NOISE_SLIDER.setMajorTickSpacing(5);
+        AGENT_A_2_NOISE_SLIDER.setPaintTicks(true);
+        AGENT_A_2_NOISE_SLIDER.setPaintLabels(true);
 
-        agent_a3_noise_slider.setMajorTickSpacing(5);
-        agent_a3_noise_slider.setPaintTicks(true);
-        agent_a3_noise_slider.setPaintLabels(true);
+        AGENT_A_3_NOISE_SLIDER.setMajorTickSpacing(5);
+        AGENT_A_3_NOISE_SLIDER.setPaintTicks(true);
+        AGENT_A_3_NOISE_SLIDER.setPaintLabels(true);
 
-        agent_a4_noise_slider.setMajorTickSpacing(5);
-        agent_a4_noise_slider.setPaintTicks(true);
-        agent_a4_noise_slider.setPaintLabels(true);
+        AGENT_A_4_NOISE_SLIDER.setMajorTickSpacing(5);
+        AGENT_A_4_NOISE_SLIDER.setPaintTicks(true);
+        AGENT_A_4_NOISE_SLIDER.setPaintLabels(true);
 
-        agent_a5_noise_slider.setMajorTickSpacing(5);
-        agent_a5_noise_slider.setPaintTicks(true);
-        agent_a5_noise_slider.setPaintLabels(true);
+        AGENT_A_5_NOISE_SLIDER.setMajorTickSpacing(5);
+        AGENT_A_5_NOISE_SLIDER.setPaintTicks(true);
+        AGENT_A_5_NOISE_SLIDER.setPaintLabels(true);
 
-        agent_a6_noise_slider.setMajorTickSpacing(5);
-        agent_a6_noise_slider.setPaintTicks(true);
-        agent_a6_noise_slider.setPaintLabels(true);
+        AGENT_A_6_NOISE_SLIDER.setMajorTickSpacing(5);
+        AGENT_A_6_NOISE_SLIDER.setPaintTicks(true);
+        AGENT_A_6_NOISE_SLIDER.setPaintLabels(true);
 
-        sensor_range_noise_slider.setMajorTickSpacing(5);
-        sensor_range_noise_slider.setPaintTicks(true);
-        sensor_range_noise_slider.setPaintLabels(true);
+        SENSOR_RANGE_NOISE_SLIDER.setMajorTickSpacing(5);
+        SENSOR_RANGE_NOISE_SLIDER.setPaintTicks(true);
+        SENSOR_RANGE_NOISE_SLIDER.setPaintLabels(true);
 
-        sensor_bearing_noise_slider.setMajorTickSpacing(5);
-        sensor_bearing_noise_slider.setPaintTicks(true);
-        sensor_bearing_noise_slider.setPaintLabels(true);
+        SENSOR_BEARING_NOISE_SLIDER.setMajorTickSpacing(5);
+        SENSOR_BEARING_NOISE_SLIDER.setPaintTicks(true);
+        SENSOR_BEARING_NOISE_SLIDER.setPaintLabels(true);
 
-        sensor_signature_noise_slider.setMajorTickSpacing(5);
-        sensor_signature_noise_slider.setPaintTicks(true);
-        sensor_signature_noise_slider.setPaintLabels(true);
+        SENSOR_SIGNATURE_NOISE_SLIDER.setMajorTickSpacing(5);
+        SENSOR_SIGNATURE_NOISE_SLIDER.setPaintTicks(true);
+        SENSOR_SIGNATURE_NOISE_SLIDER.setPaintLabels(true);
 
-        testbed_v_noise_slider.addChangeListener(new TestbedVNoiseHandler());
-        testbed_w_noise_slider.addChangeListener(new TestbedWNoiseHandler());
-        agent_a1_noise_slider.addChangeListener(new AgentA1NoiseHandler());
-        agent_a2_noise_slider.addChangeListener(new AgentA2NoiseHandler());
-        agent_a3_noise_slider.addChangeListener(new AgentA3NoiseHandler());
-        agent_a4_noise_slider.addChangeListener(new AgentA4NoiseHandler());
-        agent_a5_noise_slider.addChangeListener(new AgentA5NoiseHandler());
-        agent_a6_noise_slider.addChangeListener(new AgentA6NoiseHandler());
-        sensor_range_noise_slider.addChangeListener(new SensorRangeNoiseHandler());
-        sensor_bearing_noise_slider.addChangeListener(new SensorBearingNoiseHandler());
-        sensor_signature_noise_slider.addChangeListener(new SensorSignatureNoiseHandler());
+        TESTBED_V_NOISE_SLIDER.addChangeListener(new TestbedVNoiseHandler());
+        TESTBED_W_NOISE_SLIDER.addChangeListener(new TestbedWNoiseHandler());
+        AGENT_A_1_NOISE_SLIDER.addChangeListener(new AgentA1NoiseHandler());
+        AGENT_A_2_NOISE_SLIDER.addChangeListener(new AgentA2NoiseHandler());
+        AGENT_A_3_NOISE_SLIDER.addChangeListener(new AgentA3NoiseHandler());
+        AGENT_A_4_NOISE_SLIDER.addChangeListener(new AgentA4NoiseHandler());
+        AGENT_A_5_NOISE_SLIDER.addChangeListener(new AgentA5NoiseHandler());
+        AGENT_A_6_NOISE_SLIDER.addChangeListener(new AgentA6NoiseHandler());
+        SENSOR_RANGE_NOISE_SLIDER.addChangeListener(new SensorRangeNoiseHandler());
+        SENSOR_BEARING_NOISE_SLIDER.addChangeListener(new SensorBearingNoiseHandler());
+        SENSOR_SIGNATURE_NOISE_SLIDER.addChangeListener(new SensorSignatureNoiseHandler());
 
-        close.addActionListener(e -> dispose());
+        closeButton.addActionListener(e -> dispose());
 
         int base_x = 0;
         int base_y = 0;
@@ -95,42 +95,42 @@ public class NoiseControlPanel extends JDialog {
         GuiUtils.add_to_gridbag(this, new JLabel("Noise Configuration"), base_x, base_y, 2, 1);
         base_y += 2;
         GuiUtils.add_to_gridbag(this, new JLabel("Testbed Translational Noise (cm/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, testbed_v_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, TESTBED_V_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Testbed Rotational Noise (deg/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, testbed_w_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, TESTBED_W_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 1 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, agent_a1_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, AGENT_A_1_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 2 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, agent_a2_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, AGENT_A_2_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 3 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, agent_a3_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, AGENT_A_3_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 4 noise (%):"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, agent_a4_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, AGENT_A_4_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         if (AGVsim.algorithm == 2) {
             base_y++;
             GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 5 noise (%):"), base_x, base_y, 1, 1);
-            GuiUtils.add_to_gridbag(this, agent_a5_noise_slider, base_x + 1, base_y, 1, 1);
+            GuiUtils.add_to_gridbag(this, AGENT_A_5_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
             base_y++;
             GuiUtils.add_to_gridbag(this, new JLabel("Agent alpha 6 noise (%):"), base_x, base_y, 1, 1);
-            GuiUtils.add_to_gridbag(this, agent_a6_noise_slider, base_x + 1, base_y, 1, 1);
+            GuiUtils.add_to_gridbag(this, AGENT_A_6_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         }
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Sensor range noise sigma:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensor_range_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, SENSOR_RANGE_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Sensor bearing noise sigma:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensor_bearing_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, SENSOR_BEARING_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, new JLabel("Sensor signature noise sigma:"), base_x, base_y, 1, 1);
-        GuiUtils.add_to_gridbag(this, sensor_signature_noise_slider, base_x + 1, base_y, 1, 1);
+        GuiUtils.add_to_gridbag(this, SENSOR_SIGNATURE_NOISE_SLIDER, base_x + 1, base_y, 1, 1);
 
         base_y++;
-        GuiUtils.add_to_gridbag(this, close, base_x, base_y, 2, 1);
+        GuiUtils.add_to_gridbag(this, closeButton, base_x, base_y, 2, 1);
 
         this.pack();
         GuiUtils.center_on_screen(this);
@@ -138,22 +138,22 @@ public class NoiseControlPanel extends JDialog {
     }
 
     public static double get_testbed_v_noise() {
-        return getValueDouble(testbed_v_noise_slider);
+        return getValueDouble(TESTBED_V_NOISE_SLIDER);
     }
 
     public static double get_testbed_w_noise() {
-        return Math.toRadians(getValueDouble(testbed_w_noise_slider));
+        return Math.toRadians(getValueDouble(TESTBED_W_NOISE_SLIDER));
     }
 
     public static double get_alpha_noise(int i) {
         double scale = 100.0;
         return switch (i) {
-            case 1 -> getValueDouble(agent_a1_noise_slider) / scale;
-            case 2 -> getValueDouble(agent_a2_noise_slider) / scale;
-            case 3 -> getValueDouble(agent_a3_noise_slider) / scale;
-            case 4 -> getValueDouble(agent_a4_noise_slider) / scale;
-            case 5 -> getValueDouble(agent_a5_noise_slider) / scale;
-            case 6 -> getValueDouble(agent_a6_noise_slider) / scale;
+            case 1 -> getValueDouble(AGENT_A_1_NOISE_SLIDER) / scale;
+            case 2 -> getValueDouble(AGENT_A_2_NOISE_SLIDER) / scale;
+            case 3 -> getValueDouble(AGENT_A_3_NOISE_SLIDER) / scale;
+            case 4 -> getValueDouble(AGENT_A_4_NOISE_SLIDER) / scale;
+            case 5 -> getValueDouble(AGENT_A_5_NOISE_SLIDER) / scale;
+            case 6 -> getValueDouble(AGENT_A_6_NOISE_SLIDER) / scale;
             default -> -1.0;
         };
     }
@@ -163,15 +163,15 @@ public class NoiseControlPanel extends JDialog {
 
         switch (i) {
             case 1 -> {
-                val = getValueDouble(sensor_range_noise_slider);
+                val = getValueDouble(SENSOR_RANGE_NOISE_SLIDER);
                 return val * val;
             }
             case 2 -> {
-                val = getValueDouble(sensor_bearing_noise_slider);
+                val = getValueDouble(SENSOR_BEARING_NOISE_SLIDER);
                 return val * val;
             }
             case 3 -> {
-                val = getValueDouble(sensor_signature_noise_slider);
+                val = getValueDouble(SENSOR_SIGNATURE_NOISE_SLIDER);
                 return val * val;
             }
             default -> {
@@ -183,7 +183,7 @@ public class NoiseControlPanel extends JDialog {
     private static class TestbedVNoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            Testbed.sigma_v_noise = getValueDouble(source);
+            Testbed.sigmaVNoise = getValueDouble(source);
             System.out.println("NoiseControlPanel: testbed translational velocity noise = " + source.getValue());
         }
     }
@@ -191,7 +191,7 @@ public class NoiseControlPanel extends JDialog {
     private static class TestbedWNoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            Testbed.sigma_w_noise = Math.toRadians(getValueDouble(source));
+            Testbed.sigmaWNoise = Math.toRadians(getValueDouble(source));
             System.out.println("NoiseControlPanel: testbed rotational velocity noise = " + source.getValue());
         }
     }
@@ -199,7 +199,7 @@ public class NoiseControlPanel extends JDialog {
     private static class AgentA1NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.agent.a1_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a1Noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a1 noise = " + source.getValue() + "%");
         }
     }
@@ -207,7 +207,7 @@ public class NoiseControlPanel extends JDialog {
     private static class AgentA2NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.agent.a2_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a2Noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a2 noise = " + source.getValue() + "%");
         }
     }
@@ -215,7 +215,7 @@ public class NoiseControlPanel extends JDialog {
     private static class AgentA3NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.agent.a3_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a3Noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a3 noise = " + source.getValue() + "%");
         }
     }
@@ -223,7 +223,7 @@ public class NoiseControlPanel extends JDialog {
     private static class AgentA4NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.agent.a4_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a4Noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a4 noise = " + source.getValue() + "%");
         }
     }
@@ -231,7 +231,7 @@ public class NoiseControlPanel extends JDialog {
     private static class AgentA5NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.agent.a5_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a5Noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a5 noise = " + source.getValue() + "%");
         }
     }
@@ -239,7 +239,7 @@ public class NoiseControlPanel extends JDialog {
     private static class AgentA6NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.agent.a6_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a6Noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a6 noise = " + source.getValue() + "%");
         }
     }

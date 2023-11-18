@@ -16,7 +16,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 public class AGVsim extends JFrame {
-    static final ControlPanel control_panel = new ControlPanel();
+    static final ControlPanel controlPanel = new ControlPanel();
     static Logger logger = new Logger();
     static Sensor sensor = new Sensor();
     static Testbed testbed = new Testbed(); // actual world
@@ -60,16 +60,16 @@ public class AGVsim extends JFrame {
         setupMenuBar();
 
         // set size of window
-        int size_x = ControlPanel.size_x +
-                TestbedView.size_x;
-        int size_y = ControlPanel.size_y +
-                TestbedView.size_y;
+        int size_x = ControlPanel.sizeX +
+                TestbedView.sizeX;
+        int size_y = ControlPanel.sizeY +
+                TestbedView.sizeY;
         setSize(size_x, size_y);                  // see dims in TestbedView.java
 
         // add components to window
         cp = getContentPane();  // set the panel container
         cp.setLayout(new BorderLayout()); // use border layout
-        cp.add("North", control_panel);    // put Control in north panel
+        cp.add("North", controlPanel);    // put Control in north panel
         cp.add("Center", testbedview);
         //setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         pack();

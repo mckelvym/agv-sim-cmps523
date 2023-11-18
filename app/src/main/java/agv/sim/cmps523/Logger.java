@@ -12,13 +12,13 @@ import java.util.Vector;
 
 
 public class Logger {
-    String data_directory;
-    String agent_data_file;
-    String testbed_data_file;
-    String misc_data_file;
+    String dataDirectory;
+    String agentDataFile;
+    String testbedDataFile;
+    String miscDataFile;
 
-    Vector<Matrix> agent_poses;
-    Vector<Matrix> testbed_poses;
+    Vector<Matrix> agentPoses;
+    Vector<Matrix> testbedPoses;
     Vector<Double> time;
 
     Logger() {
@@ -48,33 +48,33 @@ public class Logger {
     }
 
     void init() {
-        data_directory = "src/data";
-        agent_data_file = "agent_data.m";
-        testbed_data_file = "testbed_data.m";
-        misc_data_file = "misc_data.m";
+        dataDirectory = "src/data";
+        agentDataFile = "agent_data.m";
+        testbedDataFile = "testbed_data.m";
+        miscDataFile = "misc_data.m";
 
-        if (!(new File(data_directory)).mkdir()) {
-            System.err.println("Unable to create directory: " + data_directory);
+        if (!(new File(dataDirectory)).mkdir()) {
+            System.err.println("Unable to create directory: " + dataDirectory);
         }
 
-        agent_poses = new Vector<>();
-        testbed_poses = new Vector<>();
+        agentPoses = new Vector<>();
+        testbedPoses = new Vector<>();
         time = new Vector<>();
         for (int i = 0; i < 3; i++)
             time.add(0.0);
 
         String src = "src/main/resources";
-        Logger.copy_file_to_directory("plot_pose_error.m", src, data_directory);
-        Logger.copy_file_to_directory("plot_pose_orientation_error.m", src, data_directory);
-        Logger.copy_file_to_directory("plot_poses.m", src, data_directory);
+        Logger.copy_file_to_directory("plot_pose_error.m", src, dataDirectory);
+        Logger.copy_file_to_directory("plot_pose_orientation_error.m", src, dataDirectory);
+        Logger.copy_file_to_directory("plot_poses.m", src, dataDirectory);
     }
 
     void save_agent_pose(Matrix m) {
-        agent_poses.add(m.copy());
+        agentPoses.add(m.copy());
     }
 
     void save_testbed_pose(Matrix m) {
-        testbed_poses.add(m.copy());
+        testbedPoses.add(m.copy());
     }
 
     void save_time(double tstamp) {
@@ -84,19 +84,19 @@ public class Logger {
     void save_data() {
         out.print("Saving data..");
         try {
-            BufferedWriter agent_data = Logger.new_buffered_writer(data_directory, agent_data_file);
-            BufferedWriter testbed_data = Logger.new_buffered_writer(data_directory, testbed_data_file);
-            BufferedWriter misc_data = Logger.new_buffered_writer(data_directory, misc_data_file);
+            BufferedWriter agent_data = Logger.new_buffered_writer(dataDirectory, agentDataFile);
+            BufferedWriter testbed_data = Logger.new_buffered_writer(dataDirectory, testbedDataFile);
+            BufferedWriter misc_data = Logger.new_buffered_writer(dataDirectory, miscDataFile);
 
-            this.write_pose_vector_to_matlab_file(agent_data, agent_poses, "agent_poses");
-            this.write_pose_vector_to_matlab_file(testbed_data, testbed_poses, "testbed_poses");
+            this.write_pose_vector_to_matlab_file(agent_data, agentPoses, "agent_poses");
+            this.write_pose_vector_to_matlab_file(testbed_data, testbedPoses, "testbed_poses");
             this.write_array_to_matlab_file(misc_data, time, "time");
 
             Vector<Double> pose_diffs = new Vector<>();
             Vector<Double> pose_orient_diffs = new Vector<>();
-            for (int i = 0; i < agent_poses.size(); i++) {
-                pose_diffs.add(Utils.dist(agent_poses.elementAt(i), testbed_poses.elementAt(i)));
-                final double degrees = Math.toDegrees(testbed_poses.elementAt(i).get(2, 0) - agent_poses.elementAt(i).get(2, 0));
+            for (int i = 0; i < agentPoses.size(); i++) {
+                pose_diffs.add(Utils.dist(agentPoses.elementAt(i), testbedPoses.elementAt(i)));
+                final double degrees = Math.toDegrees(testbedPoses.elementAt(i).get(2, 0) - agentPoses.elementAt(i).get(2, 0));
                 pose_orient_diffs.add(degrees);
             }
             this.write_array_to_matlab_file(agent_data, pose_diffs, "pose_error");

@@ -12,26 +12,26 @@ import java.util.Vector;
 
 public class Sensor {
 
-    private final double range_resolution;
-    private final Vector<SensorReading> sensor_hits;
+    private final double rangeResolution;
+    private final Vector<SensorReading> sensorHits;
     private final Matrix pose;
-    private final int fov_degrees;
-    private final double min_range;
+    private final int fovDegrees;
+    private final double minRange;
     Matrix noise;
-    double sigma_hit;
-    double lambda_short;
-    private double max_range;
-    private double angular_resolution;
-    private SensorReading[] sensor_readings;
+    double sigmaHit;
+    double lambdaShort;
+    private double maxRange;
+    private double angularResolution;
+    private SensorReading[] sensorReadings;
 
     Sensor() {
         pose = new Matrix(3, 1);
-        fov_degrees = 180;
-        min_range = 0;
-        max_range = 500;
-        sensor_hits = new Vector<>();
-        range_resolution = 1.0;
-        angular_resolution = Math.toRadians(5.0);
+        fovDegrees = 180;
+        minRange = 0;
+        maxRange = 500;
+        sensorHits = new Vector<>();
+        rangeResolution = 1.0;
+        angularResolution = Math.toRadians(5.0);
         init_readings();
     }
 
@@ -52,15 +52,15 @@ public class Sensor {
     }
 
     void init_readings() {
-        sensor_readings = new SensorReading[(int) ((fov_degrees) / Math.toDegrees(angular_resolution) + 1)];
-        for (int i = 0; i < sensor_readings.length; i++)
-            sensor_readings[i] = new SensorReading();
+        sensorReadings = new SensorReading[(int) ((fovDegrees) / Math.toDegrees(angularResolution) + 1)];
+        for (int i = 0; i < sensorReadings.length; i++)
+            sensorReadings[i] = new SensorReading();
         noise = Matrix.identity(1, 4);
         for (int i = 0; i < 4; i++) {
             noise.set(0, i, SensorControlPanel.get_sensor_noise_probability(i));
         }
-        sigma_hit = SensorControlPanel.get_sigma_hit();
-        lambda_short = SensorControlPanel.get_lambda_short();
+        sigmaHit = SensorControlPanel.get_sigma_hit();
+        lambdaShort = SensorControlPanel.get_lambda_short();
         normalize_noise();
     }
 
@@ -92,20 +92,20 @@ public class Sensor {
     }
 
     void set_angular_resolution(double ang_res_degrees) {
-        if (ang_res_degrees > 0 && ang_res_degrees <= fov_degrees) {
-            angular_resolution = Math.toRadians(ang_res_degrees);
-            sensor_hits.clear();
+        if (ang_res_degrees > 0 && ang_res_degrees <= fovDegrees) {
+            angularResolution = Math.toRadians(ang_res_degrees);
+            sensorHits.clear();
             init_readings();
         }
     }
 
     double get_max_range() {
-        return max_range;
+        return maxRange;
     }
 
     void set_max_range(double max_range) {
-        if (max_range > min_range) {
-            this.max_range = max_range;
+        if (max_range > minRange) {
+            this.maxRange = max_range;
         }
     }
 
@@ -113,11 +113,11 @@ public class Sensor {
     double p_hit(double measured_range, double actual_range) {
         double p = 0.0;
         if (measured_range >= 0 &&
-                measured_range <= max_range &&
-                sigma_hit > 0.0) {
+                measured_range <= maxRange &&
+                sigmaHit > 0.0) {
             // p = Utils.gaussian(actual_range, sigma_hit);
-            p = 1 / (Math.sqrt(2 * Math.PI * Utils.square(sigma_hit))) *
-                    Math.exp(-0.5 * Utils.square(measured_range - actual_range) / Utils.square(sigma_hit));
+            p = 1 / (Math.sqrt(2 * Math.PI * Utils.square(sigmaHit))) *
+                    Math.exp(-0.5 * Utils.square(measured_range - actual_range) / Utils.square(sigmaHit));
         }
 
         return p;
@@ -128,9 +128,9 @@ public class Sensor {
         double p = 0.0;
         if (measured_range >= 0 &&
                 measured_range <= actual_range &&
-                lambda_short > 0.0) {
-            double eta = 1.0 / (1 - Math.exp(-lambda_short * actual_range));
-            p = eta * lambda_short * Math.exp(-lambda_short * measured_range);
+                lambdaShort > 0.0) {
+            double eta = 1.0 / (1 - Math.exp(-lambdaShort * actual_range));
+            p = eta * lambdaShort * Math.exp(-lambdaShort * measured_range);
         }
 
         return p;
@@ -139,7 +139,7 @@ public class Sensor {
     // Page 156
     double p_max(double measured_range) {
         double p = 0.0;
-        if (measured_range == max_range)
+        if (measured_range == maxRange)
             p = 1.0;
 
         return p;
@@ -148,8 +148,8 @@ public class Sensor {
     // Page 157
     double p_rand(double measured_range) {
         double p = 0.0;
-        if (measured_range <= max_range)
-            p = 1.0 / max_range;
+        if (measured_range <= maxRange)
+            p = 1.0 / maxRange;
 
         return p;
     }
@@ -157,24 +157,24 @@ public class Sensor {
     void sense(Testbed testbed) {
         double actual_beam;
         double believed_beam;
-        actual_beam = get_orientation() - Math.toRadians(fov_degrees / 2.0);
-        believed_beam = AGVsim.agent.get_sensor_orientation() - Math.toRadians(fov_degrees / 2.0);
+        actual_beam = get_orientation() - Math.toRadians(fovDegrees / 2.0);
+        believed_beam = AGVsim.agent.get_sensor_orientation() - Math.toRadians(fovDegrees / 2.0);
         out.println("Sensor: bot orientation vs. sensor orientation: " + Math.toDegrees(get_orientation()) + " " + Math.toDegrees(AGVsim.agent.get_sensor_orientation()));
 
-        sensor_hits.clear();
-        for (int beanum = 0; beanum < sensor_readings.length; beanum++) {
+        sensorHits.clear();
+        for (int beanum = 0; beanum < sensorReadings.length; beanum++) {
             new ProcessBeam(testbed, actual_beam, believed_beam, beanum);
-            actual_beam += angular_resolution;
-            believed_beam += angular_resolution;
+            actual_beam += angularResolution;
+            believed_beam += angularResolution;
         }
     }
 
     Vector<SensorReading> get_hits() {
-        return sensor_hits;
+        return sensorHits;
     }
 
     SensorReading[] get_readings() {
-        return sensor_readings;
+        return sensorReadings;
     }
 
     private class ProcessBeam {
@@ -190,7 +190,7 @@ public class Sensor {
             actual_angle = actual_beam;
             believed_angle = believed_beam;
             hit = false;
-            for (range = min_range; range <= max_range; range += range_resolution) {
+            for (range = minRange; range <= maxRange; range += rangeResolution) {
                 if (hit)
                     break;
                 actual_beax = get_x_position() + range * Math.cos(actual_angle);
@@ -212,9 +212,9 @@ public class Sensor {
                         believed_beax = (AGVsim.agent.get_sensor_x_position() + believed_range * Math.cos(believed_angle));
                         believed_beay = (AGVsim.agent.get_sensor_y_position() + believed_range * Math.sin(believed_angle));
                         out.println("Sensor: actual angle vs believed angle: " + Math.toDegrees(actual_angle) + " " + Math.toDegrees(believed_angle));
-                        sensor_hits.add(new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), believed_range, o,
+                        sensorHits.add(new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), believed_range, o,
                                 testbed.object_at(o).x, testbed.object_at(o).y, believed_beax, believed_beay));
-                        sensor_readings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), believed_range, o,
+                        sensorReadings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), believed_range, o,
                                 testbed.object_at(o).x, testbed.object_at(o).y, believed_beax, believed_beay);
                         break;
                     }
@@ -225,7 +225,7 @@ public class Sensor {
                 actual_beay = get_y_position() + range * Math.sin(actual_angle);
                 believed_beax = AGVsim.agent.get_sensor_x_position() + range * Math.cos(believed_angle);
                 believed_beay = AGVsim.agent.get_sensor_y_position() + range * Math.sin(believed_angle);
-                sensor_readings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), range, -1,
+                sensorReadings[beaindex] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.agent.get_sensor_orientation(), range, -1,
                         actual_beax, actual_beay, believed_beax, believed_beay);
             }
         }
