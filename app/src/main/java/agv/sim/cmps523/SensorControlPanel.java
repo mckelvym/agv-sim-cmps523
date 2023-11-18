@@ -4,6 +4,8 @@
 // File: SensorControlPanel.java
 package agv.sim.cmps523;
 
+import static agv.sim.cmps523.GuiUtils.getValueDouble;
+
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -157,30 +159,30 @@ public class SensorControlPanel extends JDialog {
     public static double get_sensor_noise_probability(int i) {
         switch (i) {
             case 0:
-                return (new Double(z_hit_slider.getValue()).doubleValue());
+                return getValueDouble(z_hit_slider);
             case 1:
-                return (new Double(z_short_slider.getValue()).doubleValue());
+                return getValueDouble(z_short_slider);
             case 2:
-                return (new Double(z_max_slider.getValue()).doubleValue());
+                return getValueDouble(z_max_slider);
             case 3:
-                return (new Double(z_rand_slider.getValue()).doubleValue());
+                return getValueDouble(z_rand_slider);
             default:
                 return 0.0;
         }
     }
 
     public static double get_sigma_hit() {
-        return (new Double(sigma_hit_slider.getValue()).doubleValue());
+        return getValueDouble(sigma_hit_slider);
     }
 
     public static double get_lambda_short() {
-        return (new Double(lambda_short_slider.getValue()).doubleValue());
+        return getValueDouble(lambda_short_slider);
     }
 
     private class SensorMaxRangeHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String range = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            AGVsim.m_agent.m_sensor.set_max_range((new Double(range)).doubleValue());
+            AGVsim.m_agent.m_sensor.set_max_range(Double.valueOf(range));
             System.out.println("sensor range=" + range);
         }
     }
@@ -188,7 +190,7 @@ public class SensorControlPanel extends JDialog {
     private class SensorAngResHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String res = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            AGVsim.m_agent.m_sensor.set_angular_resolution((new Double(res)).doubleValue());
+            AGVsim.m_agent.m_sensor.set_angular_resolution(Double.valueOf(res));
             System.out.println("sensor angular resolution=" + res);
         }
     }
@@ -236,16 +238,18 @@ public class SensorControlPanel extends JDialog {
     private class SigmaHitHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_sensor.sigma_hit = new Double(source.getValue()).doubleValue();
-            cout.println("SIGMA_hit = " + new Double(source.getValue()).doubleValue());
+            final double valueDouble = getValueDouble(source);
+            AGVsim.m_agent.m_sensor.sigma_hit = valueDouble;
+            cout.println("SIGMA_hit = " + valueDouble);
         }
     }
 
     private class LambdaShortHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_sensor.lambda_short = new Double(source.getValue()).doubleValue();
-            cout.println("LAMBDA_short = " + new Double(source.getValue()).doubleValue());
+            final double valueDouble = getValueDouble(source);
+            AGVsim.m_agent.m_sensor.lambda_short = valueDouble;
+            cout.println("LAMBDA_short = " + valueDouble);
         }
     }
 }

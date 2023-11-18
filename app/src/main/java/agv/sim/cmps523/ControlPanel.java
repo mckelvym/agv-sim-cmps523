@@ -126,15 +126,15 @@ public class ControlPanel extends JPanel {
     }
 
     public double get_current_time_delta() {
-        return 1.0 / new Double(time_delta_slider.getValue()).doubleValue();
+        return 1.0 / Integer.valueOf(time_delta_slider.getValue()).doubleValue();
     }
 
     public double get_current_translational_velocity() {
-        return new Double(translational_velocity_slider.getValue()).doubleValue();
+        return Integer.valueOf(translational_velocity_slider.getValue()).doubleValue();
     }
 
     public double get_current_rotational_velocity() {
-        return Math.toRadians(-(new Double(rotational_velocity_slider.getValue()).doubleValue()));
+        return Math.toRadians(-(Integer.valueOf(rotational_velocity_slider.getValue()).doubleValue()));
     }
 
     // Getter and Setter functions for the paused property
@@ -166,7 +166,7 @@ public class ControlPanel extends JPanel {
     private class TranslationalVelocityChoiceHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            double vel = new Double(source.getValue()).doubleValue();
+            double vel = Integer.valueOf(source.getValue()).doubleValue();
             AGVsim.m_agent.set_translational_velocity(vel);
             System.out.println("ControlPanel: translational velocity = " + vel);
             AGVsim.m_testbedview.repaint();
@@ -176,7 +176,7 @@ public class ControlPanel extends JPanel {
     private class RotationalVelocityChoiceHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            double vel = Math.toRadians(-(new Double(source.getValue()).doubleValue()));
+            double vel = Math.toRadians(-(Integer.valueOf(source.getValue()).doubleValue()));
             if (vel == 0.0) {
                 source.setValue(1);
                 vel = Math.toRadians(1.0);
@@ -190,7 +190,7 @@ public class ControlPanel extends JPanel {
     private class TimeDeltaChoiceHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            Engine.m_delta_t = 1.0 / (new Double(source.getValue()).doubleValue());
+            Engine.m_delta_t = 1.0 / (Integer.valueOf(source.getValue()).doubleValue());
             System.out.println("ControlPanel: time delta = " + Engine.m_delta_t);
         }
     }

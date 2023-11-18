@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -27,25 +28,25 @@ public final class GuiUtils {
     }
 
     static public void add_to_gridbag(Window w, Component c, int posx, int posy, int width, int height) {
-        GridBagConstraints gbconstr = new GridBagConstraints();
-        gbconstr.gridwidth = width;
-        gbconstr.gridheight = height;
-        gbconstr.weightx = gbconstr.weighty = 1;
-        gbconstr.gridx = posx;
-        gbconstr.gridy = posy;
-        gbconstr.fill = getFill(c);
-        w.add(c, gbconstr);
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridwidth = width;
+        gridBagConstraints.gridheight = height;
+        gridBagConstraints.weightx = gridBagConstraints.weighty = 1;
+        gridBagConstraints.gridx = posx;
+        gridBagConstraints.gridy = posy;
+        gridBagConstraints.fill = getFill(c);
+        w.add(c, gridBagConstraints);
     }
 
     static public void add_to_gridbag(JPanel p, Component c, int posx, int posy, int width, int height) {
-        GridBagConstraints gbconstr = new GridBagConstraints();
-        gbconstr.gridwidth = width;
-        gbconstr.gridheight = height;
-        gbconstr.weightx = gbconstr.weighty = 1;
-        gbconstr.gridx = posx;
-        gbconstr.gridy = posy;
-        gbconstr.fill = getFill(c);
-        p.add(c, gbconstr);
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridwidth = width;
+        gridBagConstraints.gridheight = height;
+        gridBagConstraints.weightx = gridBagConstraints.weighty = 1;
+        gridBagConstraints.gridx = posx;
+        gridBagConstraints.gridy = posy;
+        gridBagConstraints.fill = getFill(c);
+        p.add(c, gridBagConstraints);
     }
 
     private static int getFill(Component c) {
@@ -53,5 +54,21 @@ public final class GuiUtils {
             return GridBagConstraints.HORIZONTAL;
         }
         return GridBagConstraints.NONE;
+    }
+
+    /**
+     * @param jComboBox
+     * @return selected value cast to string then parsed as double.
+     */
+    public static double getValueDouble(JComboBox jComboBox) {
+        return Double.valueOf(String.valueOf(jComboBox.getSelectedItem()));
+    }
+
+    /**
+     * @param jSlider
+     * @return value cast to double
+     */
+    public static double getValueDouble(JSlider jSlider) {
+        return Integer.valueOf(jSlider.getValue()).doubleValue();
     }
 }

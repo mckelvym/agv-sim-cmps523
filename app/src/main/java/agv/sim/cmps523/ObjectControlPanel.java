@@ -87,7 +87,7 @@ public class ObjectControlPanel extends JDialog {
             int x = (Integer.valueOf(x_loc_field.getText())).intValue();
             int y = (Integer.valueOf(y_loc_field.getText())).intValue();
             AGVsim.m_testbed.add_object(x, y,
-                    (new Double((String) object_size_combo.getSelectedItem())).doubleValue());
+                    Double.valueOf(String.valueOf(object_size_combo.getSelectedItem())));
             //x_loc_field.setText("");
             //y_loc_field.setText("");
         }

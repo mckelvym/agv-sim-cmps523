@@ -4,6 +4,8 @@
 // File: TestbedView.java
 package agv.sim.cmps523;
 
+import static agv.sim.cmps523.GuiUtils.getValueDouble;
+
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import java.awt.*;
@@ -377,7 +379,7 @@ public class TestbedView extends JPanel implements Observer {
                 AGVsim.m_testbed.add_object(
                         x(e.getX()) * cmp,
                         y(e.getY()) * cmp,
-                        (new Double((String) ObjectControlPanel.object_size_combo.getSelectedItem())).doubleValue());
+                        getValueDouble(ObjectControlPanel.object_size_combo));
             } else if (mode.equals("Bot Actual")) {
                 if (Testbed.m_config_orientation) {
                     double x = (x(e.getX()) * cmp - AGVsim.m_testbed.get_initial_x_position());
