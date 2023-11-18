@@ -1,6 +1,9 @@
 *~
 *.class
 .obsidian
+app/src/data/
+app/src/test/
+.idea
 
 # Ignore Gradle project-specific cache directory
 .gradle
