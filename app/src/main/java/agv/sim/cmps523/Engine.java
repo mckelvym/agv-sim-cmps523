@@ -4,11 +4,11 @@
 // File: Engine.java
 package agv.sim.cmps523;
 
-import java.io.PrintStream;
+import static java.lang.System.out;
+
 import java.util.Vector;
 
 public class Engine {
-    static final PrintStream cout = System.out;
     static int m_fps = Integer.parseInt((String) ControlPanel.framerate_combo.getSelectedItem()); // default, sync w/ choice 2 of cPanel
     static double m_delta_t = 0.1; //AGVsim.m_control_panel.get_current_time_delta();
 
@@ -31,7 +31,7 @@ public class Engine {
         Vector<SimObject> objects = AGVsim.m_testbed.get_objects();
         AGVsim.m_testbed = new Testbed();
         AGVsim.m_testbed.set_objects(objects);
-        cout.println("Engine: created new agent and testbed.");
+        out.println("Engine: created new agent and testbed.");
     }
 
     void run_1_frame() {

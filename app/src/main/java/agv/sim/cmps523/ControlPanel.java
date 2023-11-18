@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.PrintStream;
 import java.util.Hashtable;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -20,7 +19,6 @@ import javax.swing.event.ChangeListener;
 
 public class ControlPanel extends JPanel {
     static final int size_x = 300, size_y = 150;
-    static final PrintStream cout = System.out;
     static final JButton build_button = new JButton("Build model");
     static final JSlider translational_velocity_slider = new JSlider(JSlider.HORIZONTAL, 1, 15, 10);
     static final JSlider rotational_velocity_slider = new JSlider(JSlider.HORIZONTAL, -10, 10, 5);

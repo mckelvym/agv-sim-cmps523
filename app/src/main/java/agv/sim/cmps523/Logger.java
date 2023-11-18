@@ -4,14 +4,14 @@
 // File: Logger.java
 package agv.sim.cmps523;
 
+import static java.lang.System.out;
+
 import Jama.Matrix;
 import java.io.*;
 import java.util.Vector;
 
 
 public class Logger {
-    static final PrintStream cout = System.out; // console out
-
     String data_directory;
     String agent_data_file;
     String testbed_data_file;
@@ -83,7 +83,7 @@ public class Logger {
     }
 
     void save_data() {
-        cout.print("Saving data..");
+        out.print("Saving data..");
         try {
             BufferedWriter agent_data = Logger.new_buffered_writer(data_directory, agent_data_file);
             BufferedWriter testbed_data = Logger.new_buffered_writer(data_directory, testbed_data_file);
@@ -119,7 +119,7 @@ public class Logger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        cout.println("done.");
+        out.println("done.");
     }
 
     void write_pose_vector_to_matlab_file(BufferedWriter writer, Vector poses, String var) throws IOException {
@@ -152,7 +152,7 @@ public class Logger {
 
     void write_double_array_to_matlab_file(BufferedWriter writer, double[] array1, double[] array2, String var) throws IOException {
         if (array1.length != array2.length) {
-            cout.println("Error writing arrays.. not same size");
+            out.println("Error writing arrays.. not same size");
             return;
         }
 

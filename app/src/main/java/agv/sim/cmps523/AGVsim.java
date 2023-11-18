@@ -4,20 +4,20 @@
 // File: AGVsim.java
 package agv.sim.cmps523;
 
+import static java.lang.System.out;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.PrintStream;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 public class AGVsim extends JFrame {
-    static final PrintStream cout = System.out; // console out
     static final ControlPanel m_control_panel = new ControlPanel();
     private static final long serialVersionUID = 1L;
     static Logger m_logger = new Logger();
@@ -96,7 +96,7 @@ public class AGVsim extends JFrame {
             public void windowClosed(WindowEvent arg0) {
                 if (!started) {
                     started = true;
-                    cout.println("Starting up..");
+                    out.println("Starting up..");
                     new AGVsim("AGV Sim");
                     m_engine.build_architecture();
                 }

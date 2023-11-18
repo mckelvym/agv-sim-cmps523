@@ -4,14 +4,14 @@
 // File: Sensor.java
 package agv.sim.cmps523;
 
+import static java.lang.System.out;
+
 import Jama.Matrix;
-import java.io.PrintStream;
 import java.util.Vector;
 
 
 public class Sensor {
 
-    static final PrintStream cout = System.out; // console out
     private final double m_range_resolution;
     private final Vector<SensorReading> m_sensor_hits;
     Matrix m_noise;
@@ -75,7 +75,7 @@ public class Sensor {
             m_pose = pose;
             init_readings();
         } else
-            cout.println("Error: Couldn't set sensor pose");
+            out.println("Error: Couldn't set sensor pose");
     }
 
     double get_x_position() {
@@ -187,7 +187,7 @@ public class Sensor {
         double believed_beam;
         actual_beam = get_orientation() - Math.toRadians(m_fov_degrees / 2.0);
         believed_beam = AGVsim.m_agent.get_sensor_orientation() - Math.toRadians(m_fov_degrees / 2.0);
-        cout.println("Sensor: bot orientation vs. sensor orientation: " + Math.toDegrees(get_orientation()) + " " + Math.toDegrees(AGVsim.m_agent.get_sensor_orientation()));
+        out.println("Sensor: bot orientation vs. sensor orientation: " + Math.toDegrees(get_orientation()) + " " + Math.toDegrees(AGVsim.m_agent.get_sensor_orientation()));
 
         m_sensor_hits.clear();
         m_beams_completed = 0;
@@ -237,12 +237,12 @@ public class Sensor {
                         //m_noise.print(20,3);
                         //noise_matrix.transpose().print(20,3);
                         double p = (m_noise.times(noise_matrix)).get(0, 0);
-                        cout.println("p=" + p);
+                        out.println("p=" + p);
 
                         believed_range = range * (1 - p);
                         believed_beam_x = (AGVsim.m_agent.get_sensor_x_position() + believed_range * Math.cos(believed_angle));
                         believed_beam_y = (AGVsim.m_agent.get_sensor_y_position() + believed_range * Math.sin(believed_angle));
-                        cout.println("Sensor: actual angle vs believed angle: " + Math.toDegrees(actual_angle) + " " + Math.toDegrees(believed_angle));
+                        out.println("Sensor: actual angle vs believed angle: " + Math.toDegrees(actual_angle) + " " + Math.toDegrees(believed_angle));
                         m_sensor_hits.add(new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.m_agent.get_sensor_orientation(), believed_range, o,
                                 testbed.object_at(o).m_x, testbed.object_at(o).m_y, believed_beam_x, believed_beam_y));
                         m_sensor_readings[beam_index] = new SensorReading(actual_angle - get_orientation(), range, believed_angle - AGVsim.m_agent.get_sensor_orientation(), believed_range, o,

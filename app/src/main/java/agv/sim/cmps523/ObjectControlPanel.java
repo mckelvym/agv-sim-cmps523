@@ -8,12 +8,10 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.PrintStream;
 import javax.swing.*;
 
 public class ObjectControlPanel extends JDialog {
     static final int size_x = 500, size_y = 250;
-    static final PrintStream cout = System.out; // console out
     static final JButton object_remove_button = new JButton("Remove");
     private static final long serialVersionUID = 1L;
     static JTextField x_loc_field = new JTextField(5);

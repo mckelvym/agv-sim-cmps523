@@ -5,6 +5,7 @@
 package agv.sim.cmps523;
 
 import static agv.sim.cmps523.GuiUtils.getValueDouble;
+import static java.lang.System.out;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
@@ -15,7 +16,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 
 public class TestbedView extends JPanel implements Observer {
     static final int size_x = 800, size_y = 400;
-    static final PrintStream cout = System.out; // console out
     private static final long serialVersionUID = 1L;
     static double pcm = 1.0 / 2.0; // 1 cm per 2 pixels
     static int cmp = 2; // 2px per 1 cm
@@ -193,10 +192,10 @@ public class TestbedView extends JPanel implements Observer {
             Matrix eigenvalue_matrix = eigenvalue_decomposition.getD();
 
             if (i == -1) {
-                cout.println("Covar"); covariance_matrix.print(20, 2);
-                cout.println("EVec");
+                out.println("Covar"); covariance_matrix.print(20, 2);
+                out.println("EVec");
                 eigenvector_matrix.print(20, 2);
-                cout.println("EVal");
+                out.println("EVal");
                 eigenvalue_matrix.print(20, 2);
             }
 
@@ -224,7 +223,7 @@ public class TestbedView extends JPanel implements Observer {
 
 
             if (false)
-                cout.println("Ellipse orient: " + Math.toDegrees(angle) + " eigs: " + sqrt_eig[0] + " " + sqrt_eig[1]);
+                out.println("Ellipse orient: " + Math.toDegrees(angle) + " eigs: " + sqrt_eig[0] + " " + sqrt_eig[1]);
             AffineTransform affine_transform = g2.getTransform();
             m_ellipse.setFrame(
                     -sqrt_eig[0] / 2,

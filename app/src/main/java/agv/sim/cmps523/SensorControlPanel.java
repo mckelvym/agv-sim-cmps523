@@ -5,18 +5,17 @@
 package agv.sim.cmps523;
 
 import static agv.sim.cmps523.GuiUtils.getValueDouble;
+import static java.lang.System.out;
 
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.PrintStream;
 import java.util.Hashtable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class SensorControlPanel extends JDialog {
-    static final PrintStream cout = System.out;
     static final JSlider z_hit_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
     static final JSlider z_short_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
     static final JSlider z_max_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
@@ -240,7 +239,7 @@ public class SensorControlPanel extends JDialog {
             JSlider source = (JSlider) e.getSource();
             final double valueDouble = getValueDouble(source);
             AGVsim.m_agent.m_sensor.sigma_hit = valueDouble;
-            cout.println("SIGMA_hit = " + valueDouble);
+            out.println("SIGMA_hit = " + valueDouble);
         }
     }
 
@@ -249,7 +248,7 @@ public class SensorControlPanel extends JDialog {
             JSlider source = (JSlider) e.getSource();
             final double valueDouble = getValueDouble(source);
             AGVsim.m_agent.m_sensor.lambda_short = valueDouble;
-            cout.println("LAMBDA_short = " + valueDouble);
+            out.println("LAMBDA_short = " + valueDouble);
         }
     }
 }

@@ -5,11 +5,9 @@
 package agv.sim.cmps523;
 
 import Jama.Matrix;
-import java.io.PrintStream;
 import java.util.Random;
 
 public class Utils {
-    static final PrintStream cout = System.out; // console out
     static long m_rand_seed = 271828182;
     static Random m_rand_gen = new Random(m_rand_seed);
 

@@ -4,14 +4,14 @@
 // File: Testbed.java
 package agv.sim.cmps523;
 
+import static java.lang.System.out;
+
 import Jama.Matrix;
-import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Random;
 import java.util.Vector;
 
 public class Testbed extends Observable {
-    static final PrintStream cout = System.out; // console out
     // testbed noise
     static long m_rand_seed = 314159265;
     static Random m_rand_gen = new Random(m_rand_seed);
@@ -89,7 +89,7 @@ public class Testbed extends Observable {
     void initialize_testbed_noise() {
         m_sigma_v_noise = NoiseControlPanel.get_testbed_v_noise();
         m_sigma_w_noise = NoiseControlPanel.get_testbed_w_noise();
-        cout.println("Testbed: sigma_v_noise = " + m_sigma_v_noise + " sigma_w_noise = " + m_sigma_w_noise);
+        out.println("Testbed: sigma_v_noise = " + m_sigma_v_noise + " sigma_w_noise = " + m_sigma_w_noise);
     }
 
     // used in Engine.resetSystem()
@@ -124,7 +124,7 @@ public class Testbed extends Observable {
                     x + (v * dt) * Math.cos(theta),
                     y + (v * dt) * Math.sin(theta)
             );
-        cout.println("Pose: " + get_x_position() + " " + get_y_position() + " " + Math.toDegrees(get_orientation()));
+        out.println("Pose: " + get_x_position() + " " + get_y_position() + " " + Math.toDegrees(get_orientation()));
 
         AGVsim.m_logger.save_testbed_pose(m_pose);
     }
