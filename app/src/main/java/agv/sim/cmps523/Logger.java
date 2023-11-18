@@ -12,14 +12,14 @@ import java.util.Vector;
 
 
 public class Logger {
-    String dataDirectory;
-    String agentDataFile;
-    String testbedDataFile;
-    String miscDataFile;
+    private String dataDirectory;
+    private String agentDataFile;
+    private String testbedDataFile;
+    private String miscDataFile;
 
-    Vector<Matrix> agentPoses;
-    Vector<Matrix> testbedPoses;
-    Vector<Double> time;
+    private Vector<Matrix> agentPoses;
+    private Vector<Matrix> testbedPoses;
+    private Vector<Double> time;
 
     Logger() {
         this.init();
@@ -48,61 +48,61 @@ public class Logger {
     }
 
     void init() {
-        dataDirectory = "src/data";
-        agentDataFile = "agent_data.m";
-        testbedDataFile = "testbed_data.m";
-        miscDataFile = "misc_data.m";
+        setDataDirectory("src/data");
+        setAgentDataFile("agent_data.m");
+        setTestbedDataFile("testbed_data.m");
+        setMiscDataFile("misc_data.m");
 
 
-        final File dataDirectoryFile = new File(dataDirectory);
+        final File dataDirectoryFile = new File(getDataDirectory());
         if (!dataDirectoryFile.isDirectory()) {
             if (!dataDirectoryFile.mkdir()) {
-                System.err.println("Unable to create directory: " + dataDirectory);
+                System.err.println("Unable to create directory: " + getDataDirectory());
             }
         } else {
             System.out.println(dataDirectoryFile.getAbsolutePath() + " exists.");
         }
 
-        agentPoses = new Vector<>();
-        testbedPoses = new Vector<>();
-        time = new Vector<>();
+        setAgentPoses(new Vector<>());
+        setTestbedPoses(new Vector<>());
+        setTime(new Vector<>());
         for (int i = 0; i < 3; i++)
-            time.add(0.0);
+            getTime().add(0.0);
 
         String src = "src/main/resources";
-        Logger.copyFileToDirectory("plot_pose_error.m", src, dataDirectory);
-        Logger.copyFileToDirectory("plot_pose_orientation_error.m", src, dataDirectory);
-        Logger.copyFileToDirectory("plot_poses.m", src, dataDirectory);
+        Logger.copyFileToDirectory("plot_pose_error.m", src, getDataDirectory());
+        Logger.copyFileToDirectory("plot_pose_orientation_error.m", src, getDataDirectory());
+        Logger.copyFileToDirectory("plot_poses.m", src, getDataDirectory());
     }
 
     void saveAgentPose(Matrix m) {
-        agentPoses.add(m.copy());
+        getAgentPoses().add(m.copy());
     }
 
     void saveTestbedPose(Matrix m) {
-        testbedPoses.add(m.copy());
+        getTestbedPoses().add(m.copy());
     }
 
     void saveTime(double tstamp) {
-        time.add(tstamp);
+        getTime().add(tstamp);
     }
 
     void saveData() {
         out.print("Saving data..");
         try {
-            BufferedWriter agent_data = Logger.newBufferedWriter(dataDirectory, agentDataFile);
-            BufferedWriter testbed_data = Logger.newBufferedWriter(dataDirectory, testbedDataFile);
-            BufferedWriter misc_data = Logger.newBufferedWriter(dataDirectory, miscDataFile);
+            BufferedWriter agent_data = Logger.newBufferedWriter(getDataDirectory(), getAgentDataFile());
+            BufferedWriter testbed_data = Logger.newBufferedWriter(getDataDirectory(), getTestbedDataFile());
+            BufferedWriter misc_data = Logger.newBufferedWriter(getDataDirectory(), getMiscDataFile());
 
-            this.writePoseVectorToMatlabFile(agent_data, agentPoses, "agent_poses");
-            this.writePoseVectorToMatlabFile(testbed_data, testbedPoses, "testbed_poses");
-            this.writeArrayToMatlabFile(misc_data, time, "time");
+            this.writePoseVectorToMatlabFile(agent_data, getAgentPoses(), "agent_poses");
+            this.writePoseVectorToMatlabFile(testbed_data, getTestbedPoses(), "testbed_poses");
+            this.writeArrayToMatlabFile(misc_data, getTime(), "time");
 
             Vector<Double> pose_diffs = new Vector<>();
             Vector<Double> pose_orient_diffs = new Vector<>();
-            for (int i = 0; i < agentPoses.size(); i++) {
-                pose_diffs.add(Utils.dist(agentPoses.elementAt(i), testbedPoses.elementAt(i)));
-                final double degrees = Math.toDegrees(testbedPoses.elementAt(i).get(2, 0) - agentPoses.elementAt(i).get(2, 0));
+            for (int i = 0; i < getAgentPoses().size(); i++) {
+                pose_diffs.add(Utils.dist(getAgentPoses().elementAt(i), getTestbedPoses().elementAt(i)));
+                final double degrees = Math.toDegrees(getTestbedPoses().elementAt(i).get(2, 0) - getAgentPoses().elementAt(i).get(2, 0));
                 pose_orient_diffs.add(degrees);
             }
             this.writeArrayToMatlabFile(agent_data, pose_diffs, "pose_error");
@@ -110,9 +110,9 @@ public class Logger {
 
             Vector<Double> objx = new Vector<>();
             Vector<Double> objy = new Vector<>();
-            for (int i = 0; i < AGVsim.testbed.numObjects(); i++) {
-                objx.add(AGVsim.testbed.objectAt(i).x());
-                objy.add(AGVsim.testbed.objectAt(i).y());
+            for (int i = 0; i < AGVsim.getTestbed().numObjects(); i++) {
+                objx.add(AGVsim.getTestbed().objectAt(i).x());
+                objy.add(AGVsim.getTestbed().objectAt(i).y());
             }
 
             this.writeArrayToMatlabFile(misc_data, objx, "objects_loc_x");
@@ -170,5 +170,61 @@ public class Logger {
             writer.write(" " + v);
         }
         writer.write("\n]; %end auto output of double array " + var);
+    }
+
+    public String getDataDirectory() {
+        return dataDirectory;
+    }
+
+    public void setDataDirectory(String dataDirectory) {
+        this.dataDirectory = dataDirectory;
+    }
+
+    public String getAgentDataFile() {
+        return agentDataFile;
+    }
+
+    public void setAgentDataFile(String agentDataFile) {
+        this.agentDataFile = agentDataFile;
+    }
+
+    public String getTestbedDataFile() {
+        return testbedDataFile;
+    }
+
+    public void setTestbedDataFile(String testbedDataFile) {
+        this.testbedDataFile = testbedDataFile;
+    }
+
+    public String getMiscDataFile() {
+        return miscDataFile;
+    }
+
+    public void setMiscDataFile(String miscDataFile) {
+        this.miscDataFile = miscDataFile;
+    }
+
+    public Vector<Matrix> getAgentPoses() {
+        return agentPoses;
+    }
+
+    public void setAgentPoses(Vector<Matrix> agentPoses) {
+        this.agentPoses = agentPoses;
+    }
+
+    public Vector<Matrix> getTestbedPoses() {
+        return testbedPoses;
+    }
+
+    public void setTestbedPoses(Vector<Matrix> testbedPoses) {
+        this.testbedPoses = testbedPoses;
+    }
+
+    public Vector<Double> getTime() {
+        return time;
+    }
+
+    public void setTime(Vector<Double> time) {
+        this.time = time;
     }
 }

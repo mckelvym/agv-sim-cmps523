@@ -5,25 +5,49 @@
 package agv.sim.cmps523;
 
 public class Particle {
-    public double x;
-    public double y;
-    public double angle;
+    private double x;
+    private double y;
+    private double angle;
 
     Particle(double x, double y, double angle) {
-        this.x = x;
-        this.y = y;
-        this.angle = angle;
+        this.setX(x);
+        this.setY(y);
+        this.setAngle(angle);
     }
 
     double x() {
-        return x;
+        return getX();
     }
 
     double y() {
-        return y;
+        return getY();
     }
 
     double theta() {
+        return getAngle();
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getAngle() {
         return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 }

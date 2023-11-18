@@ -8,8 +8,8 @@ import Jama.Matrix;
 import java.util.Random;
 
 public class Utils {
-    static long randSeed = 271828182;
-    static Random randGen = new Random(randSeed);
+    private static long randSeed = 271828182;
+    private static Random randGen = new Random(getRandSeed());
 
     // Squaring a number
     static double square(double val) {
@@ -33,7 +33,7 @@ public class Utils {
 
     // Gaussian distributed value
     static double gaussian(double mu, double sigma) {
-        return sigma * randGen.nextGaussian() + mu;
+        return sigma * getRandGen().nextGaussian() + mu;
     }
 
     // Real gaussian function
@@ -76,5 +76,21 @@ public class Utils {
 
     static double dist(Object pose1, Object pose2) {
         return Utils.dist((Matrix) pose1, (Matrix) pose2);
+    }
+
+    public static long getRandSeed() {
+        return randSeed;
+    }
+
+    public static void setRandSeed(long randSeed) {
+        Utils.randSeed = randSeed;
+    }
+
+    public static Random getRandGen() {
+        return randGen;
+    }
+
+    public static void setRandGen(Random randGen) {
+        Utils.randGen = randGen;
     }
 }

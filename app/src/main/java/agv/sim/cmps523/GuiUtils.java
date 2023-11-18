@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 public final class GuiUtils {
 
-    static public void centerOnScreen(Window w) {
+    public static void centerOnScreen(Window w) {
         int scr_width, scr_height, win_width, win_height;
         Dimension dim;
         dim = w.getToolkit().getScreenSize();
@@ -28,7 +28,7 @@ public final class GuiUtils {
         w.setLocation((scr_width - win_width) / 2, (scr_height - win_height) / 2);
     }
 
-    static public void addToGridbag(Window w, Component c, int posx, int posy, int width, int height) {
+    public static void addToGridbag(Window w, Component c, int posx, int posy, int width, int height) {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = width;
         gridBagConstraints.gridheight = height;
@@ -39,7 +39,7 @@ public final class GuiUtils {
         w.add(c, gridBagConstraints);
     }
 
-    static public void addToGridbag(JPanel p, Component c, int posx, int posy, int width, int height) {
+    public static void addToGridbag(JPanel p, Component c, int posx, int posy, int width, int height) {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = width;
         gridBagConstraints.gridheight = height;

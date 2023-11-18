@@ -11,18 +11,18 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 class ParticleDialog extends JDialog {
-    static String[] numParticles = {
+    private static String[] numParticles = {
             "100", "1000", "10000"
     };
-    static JComboBox<String> numParticlesCombo = new JComboBox<>(numParticles);
-    static int numberParticles;
-    JButton closeButton = new JButton("OK");
+    private static JComboBox<String> numParticlesCombo = new JComboBox<>(getNumParticles());
+    private static int numberParticles;
+    private JButton closeButton = new JButton("OK");
 
     ParticleDialog() {
-        numParticlesCombo.setSelectedIndex(0);
-        closeButton.addActionListener(e -> {
-            final Object selectedItem = numParticlesCombo.getSelectedItem();
-            numberParticles = Integer.parseInt((String.valueOf(selectedItem)));
+        getNumParticlesCombo().setSelectedIndex(0);
+        getCloseButton().addActionListener(e -> {
+            final Object selectedItem = getNumParticlesCombo().getSelectedItem();
+            setNumberParticles(Integer.parseInt((String.valueOf(selectedItem))));
             dispose();
         });
 
@@ -31,11 +31,43 @@ class ParticleDialog extends JDialog {
         this.setLayout(new GridBagLayout());
 
         GuiUtils.addToGridbag(this, new JLabel("Choose Number of Particles: "), base_x, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, numParticlesCombo, base_x, base_y + 1, 1, 1);
-        GuiUtils.addToGridbag(this, closeButton, base_x, base_y + 2, 1, 1);
+        GuiUtils.addToGridbag(this, getNumParticlesCombo(), base_x, base_y + 1, 1, 1);
+        GuiUtils.addToGridbag(this, getCloseButton(), base_x, base_y + 2, 1, 1);
 
         this.pack();
         GuiUtils.centerOnScreen(this);
         this.setVisible(true);
+    }
+
+    public static String[] getNumParticles() {
+        return numParticles;
+    }
+
+    public static void setNumParticles(String[] numParticles) {
+        ParticleDialog.numParticles = numParticles;
+    }
+
+    public static JComboBox<String> getNumParticlesCombo() {
+        return numParticlesCombo;
+    }
+
+    public static void setNumParticlesCombo(JComboBox<String> numParticlesCombo) {
+        ParticleDialog.numParticlesCombo = numParticlesCombo;
+    }
+
+    public static int getNumberParticles() {
+        return numberParticles;
+    }
+
+    public static void setNumberParticles(int numberParticles) {
+        ParticleDialog.numberParticles = numberParticles;
+    }
+
+    public JButton getCloseButton() {
+        return closeButton;
+    }
+
+    public void setCloseButton(JButton closeButton) {
+        this.closeButton = closeButton;
     }
 }

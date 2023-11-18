@@ -18,122 +18,243 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class ControlPanel extends JPanel {
-    static final int sizeX = 300, sizeY = 150;
-    static final JButton BUILD_BUTTON = new JButton("Build model");
-    static final JSlider TRANSLATIONAL_VELOCITY_SLIDER = new JSlider(JSlider.HORIZONTAL, 1, 15, 10);
-    static final JSlider ROTATIONAL_VELOCITY_SLIDER = new JSlider(JSlider.HORIZONTAL, -10, 10, 5);
-    static final JSlider TIME_DELTA_SLIDER = new JSlider(JSlider.HORIZONTAL, 1, 100, 10);
-    static double currTime = 0;
-    static String[] frameRates = {
+    private static final int sizeX = 300;
+    private static final int sizeY = 150;
+    private static final JButton BUILD_BUTTON = new JButton("Build model");
+    private static final JSlider TRANSLATIONAL_VELOCITY_SLIDER = new JSlider(JSlider.HORIZONTAL, 1, 15, 10);
+    private static final JSlider ROTATIONAL_VELOCITY_SLIDER = new JSlider(JSlider.HORIZONTAL, -10, 10, 5);
+    private static final JSlider TIME_DELTA_SLIDER = new JSlider(JSlider.HORIZONTAL, 1, 100, 10);
+    private static double currTime = 0;
+    private static String[] frameRates = {
             "1", "2", "5", "10", "15",
             "20", "30", "45", "60"
     };
-    static final JComboBox<String> FRAMERATE_COMBO = new JComboBox<>(frameRates);
-    static String[] mouseMode = {
+    private static final JComboBox<String> FRAMERATE_COMBO = new JComboBox<>(getFrameRates());
+    private static String[] mouseMode = {
             "Add Object",
             "Bot Actual",
             "Bot Belief"
     };
-    static JComboBox<String> mouseModeCombo = new JComboBox<>(mouseMode);
-    static JCheckBox enableCorrectionCheckbox = new JCheckBox("Enable Correction/Resampling");
-    boolean isPaused = false; // Is simulation paused?
-    JButton resetButton;
-    JButton stepButton;
-    JButton runButton;
-    JButton pauseButton;
-    Font helvetica11Bold = new Font("Helvetica", Font.BOLD, 11);
-    JToolBar simulationToolbar;
+    private static JComboBox<String> mouseModeCombo = new JComboBox<>(getMouseMode());
+    private static JCheckBox enableCorrectionCheckbox = new JCheckBox("Enable Correction/Resampling");
+    private boolean isPaused = false; // Is simulation paused?
+    private JButton resetButton;
+    private JButton stepButton;
+    private JButton runButton;
+    private JButton pauseButton;
+    private Font helvetica11Bold = new Font("Helvetica", Font.BOLD, 11);
+    private JToolBar simulationToolbar;
 
     public ControlPanel() {
         super();    // Create the panel
 
-        enableCorrectionCheckbox.setSelected(true);
+        getEnableCorrectionCheckbox().setSelected(true);
 
-        BUILD_BUTTON.addActionListener(new BuildButtonHandler());
-        FRAMERATE_COMBO.setSelectedIndex(6);                        // set default selection to 5 fps
-        FRAMERATE_COMBO.addActionListener(new FrameRateHandler());    // listen for user framerate choices
-        TRANSLATIONAL_VELOCITY_SLIDER.addChangeListener(new TranslationalVelocityChoiceHandler());
-        ROTATIONAL_VELOCITY_SLIDER.addChangeListener(new RotationalVelocityChoiceHandler());
-        TIME_DELTA_SLIDER.addChangeListener(new TimeDeltaChoiceHandler());
-        enableCorrectionCheckbox.addItemListener(new CorrectionCheckBoxHandler());
+        getBuildButton().addActionListener(new BuildButtonHandler());
+        getFramerateCombo().setSelectedIndex(6);                        // set default selection to 5 fps
+        getFramerateCombo().addActionListener(new FrameRateHandler());    // listen for user framerate choices
+        getTranslationalVelocitySlider().addChangeListener(new TranslationalVelocityChoiceHandler());
+        getRotationalVelocitySlider().addChangeListener(new RotationalVelocityChoiceHandler());
+        getTimeDeltaSlider().addChangeListener(new TimeDeltaChoiceHandler());
+        getEnableCorrectionCheckbox().addItemListener(new CorrectionCheckBoxHandler());
 
-        TRANSLATIONAL_VELOCITY_SLIDER.setMajorTickSpacing(2);
-        TRANSLATIONAL_VELOCITY_SLIDER.setPaintTicks(true);
-        TRANSLATIONAL_VELOCITY_SLIDER.setPaintLabels(true);
-        ROTATIONAL_VELOCITY_SLIDER.setMajorTickSpacing(5);
-        ROTATIONAL_VELOCITY_SLIDER.setPaintTicks(true);
-        ROTATIONAL_VELOCITY_SLIDER.setPaintLabels(true);
-        TIME_DELTA_SLIDER.setMajorTickSpacing(10);
-        TIME_DELTA_SLIDER.setPaintTicks(false);
-        TIME_DELTA_SLIDER.setPaintLabels(true);
+        getTranslationalVelocitySlider().setMajorTickSpacing(2);
+        getTranslationalVelocitySlider().setPaintTicks(true);
+        getTranslationalVelocitySlider().setPaintLabels(true);
+        getRotationalVelocitySlider().setMajorTickSpacing(5);
+        getRotationalVelocitySlider().setPaintTicks(true);
+        getRotationalVelocitySlider().setPaintLabels(true);
+        getTimeDeltaSlider().setMajorTickSpacing(10);
+        getTimeDeltaSlider().setPaintTicks(false);
+        getTimeDeltaSlider().setPaintLabels(true);
         Hashtable<Integer, JLabel> rotational_velocity_slider_label_table = new Hashtable<>();
         rotational_velocity_slider_label_table.put(-10, new JLabel("10"));
         rotational_velocity_slider_label_table.put(0, new JLabel("0"));
         rotational_velocity_slider_label_table.put(10, new JLabel("-10"));
-        ROTATIONAL_VELOCITY_SLIDER.setLabelTable((rotational_velocity_slider_label_table));
+        getRotationalVelocitySlider().setLabelTable((rotational_velocity_slider_label_table));
         Hashtable<Integer, JLabel> time_delta_slider_label_table = new Hashtable<>();
         time_delta_slider_label_table.put(1, new JLabel("1.0"));
         time_delta_slider_label_table.put(100, new JLabel("0.01"));
-        TIME_DELTA_SLIDER.setLabelTable((time_delta_slider_label_table));
+        getTimeDeltaSlider().setLabelTable((time_delta_slider_label_table));
 
-        simulationToolbar = new JToolBar();
-        simulationToolbar.setBorder(new BevelBorder(BevelBorder.RAISED));
-        resetButton = simulationToolbar.add(new ResetButtonAction("Reset"));  // add reset button
-        resetButton.setFont(helvetica11Bold);                                // Helvetica font
-        stepButton = simulationToolbar.add(new StepButtonAction("Step"));        // add step button
-        stepButton.setFont(helvetica11Bold);                                    // Helvetica font
-        runButton = simulationToolbar.add(new RunButtonAction("Run"));        // add play button
-        runButton.setFont(helvetica11Bold);                                    // Helvetica font
-        pauseButton = simulationToolbar.add(new PauseButtonAction("Pause"));  // add pause button
-        pauseButton.setFont(helvetica11Bold);                                // Helvetica font
-        pauseButton.setEnabled(false); // turn pause button off to begin with
-        stepButton.setEnabled(false);    // disable step button
-        runButton.setEnabled(false);    // disable play button
+        setSimulationToolbar(new JToolBar());
+        getSimulationToolbar().setBorder(new BevelBorder(BevelBorder.RAISED));
+        setResetButton(getSimulationToolbar().add(new ResetButtonAction("Reset")));  // add reset button
+        getResetButton().setFont(getHelvetica11Bold());                                // Helvetica font
+        setStepButton(getSimulationToolbar().add(new StepButtonAction("Step")));        // add step button
+        getStepButton().setFont(getHelvetica11Bold());                                    // Helvetica font
+        setRunButton(getSimulationToolbar().add(new RunButtonAction("Run")));        // add play button
+        getRunButton().setFont(getHelvetica11Bold());                                    // Helvetica font
+        setPauseButton(getSimulationToolbar().add(new PauseButtonAction("Pause")));  // add pause button
+        getPauseButton().setFont(getHelvetica11Bold());                                // Helvetica font
+        getPauseButton().setEnabled(false); // turn pause button off to begin with
+        getStepButton().setEnabled(false);    // disable step button
+        getRunButton().setEnabled(false);    // disable play button
 
         int base_x = 0;
         int base_y = 0;
         this.setLayout(new GridBagLayout());
-        GuiUtils.addToGridbag(this, simulationToolbar, base_x, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, BUILD_BUTTON, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, getSimulationToolbar(), base_x, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, getBuildButton(), base_x + 1, base_y, 1, 1);
         GuiUtils.addToGridbag(this, new JLabel("Click Mode:"), base_x + 2, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, mouseModeCombo, base_x + 3, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, getMouseModeCombo(), base_x + 3, base_y, 1, 1);
         base_y++;
         GuiUtils.addToGridbag(this, new JLabel("Translational Velocity (cm/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, TRANSLATIONAL_VELOCITY_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, getTranslationalVelocitySlider(), base_x + 1, base_y, 1, 1);
         GuiUtils.addToGridbag(this, new JLabel("Time Delta:"), base_x + 2, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, TIME_DELTA_SLIDER, base_x + 3, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, getTimeDeltaSlider(), base_x + 3, base_y, 1, 1);
         base_y++;
         GuiUtils.addToGridbag(this, new JLabel("Rotational Velocity (deg/sec):"), base_x, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, ROTATIONAL_VELOCITY_SLIDER, base_x + 1, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, getRotationalVelocitySlider(), base_x + 1, base_y, 1, 1);
         GuiUtils.addToGridbag(this, new JLabel("FPS:"), base_x + 2, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, FRAMERATE_COMBO, base_x + 3, base_y, 1, 1);
+        GuiUtils.addToGridbag(this, getFramerateCombo(), base_x + 3, base_y, 1, 1);
         base_y++;
-        GuiUtils.addToGridbag(this, enableCorrectionCheckbox, base_x, base_y, 2, 1);
+        GuiUtils.addToGridbag(this, getEnableCorrectionCheckbox(), base_x, base_y, 2, 1);
+    }
+
+    public static int getSizeX() {
+        return sizeX;
+    }
+
+    public static int getSizeY() {
+        return sizeY;
+    }
+
+    public static JButton getBuildButton() {
+        return BUILD_BUTTON;
+    }
+
+    public static JSlider getTranslationalVelocitySlider() {
+        return TRANSLATIONAL_VELOCITY_SLIDER;
+    }
+
+    public static JSlider getRotationalVelocitySlider() {
+        return ROTATIONAL_VELOCITY_SLIDER;
+    }
+
+    public static JSlider getTimeDeltaSlider() {
+        return TIME_DELTA_SLIDER;
+    }
+
+    public static double getCurrTime() {
+        return currTime;
+    }
+
+    public static void setCurrTime(double currTime) {
+        ControlPanel.currTime = currTime;
+    }
+
+    public static String[] getFrameRates() {
+        return frameRates;
+    }
+
+    public static void setFrameRates(String[] frameRates) {
+        ControlPanel.frameRates = frameRates;
+    }
+
+    public static JComboBox<String> getFramerateCombo() {
+        return FRAMERATE_COMBO;
+    }
+
+    public static String[] getMouseMode() {
+        return mouseMode;
+    }
+
+    public static void setMouseMode(String[] mouseMode) {
+        ControlPanel.mouseMode = mouseMode;
+    }
+
+    public static JComboBox<String> getMouseModeCombo() {
+        return mouseModeCombo;
+    }
+
+    public static void setMouseModeCombo(JComboBox<String> mouseModeCombo) {
+        ControlPanel.mouseModeCombo = mouseModeCombo;
+    }
+
+    public static JCheckBox getEnableCorrectionCheckbox() {
+        return enableCorrectionCheckbox;
+    }
+
+    public static void setEnableCorrectionCheckbox(JCheckBox enableCorrectionCheckbox) {
+        ControlPanel.enableCorrectionCheckbox = enableCorrectionCheckbox;
     }
 
     public Dimension getMinimumSize() {
-        return new Dimension(sizeX, sizeY);
+        return new Dimension(getSizeX(), getSizeY());
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(sizeX, sizeY);
+        return new Dimension(getSizeX(), getSizeY());
     }
 
     public double getCurrentTranslationalVelocity() {
-        return Integer.valueOf(TRANSLATIONAL_VELOCITY_SLIDER.getValue()).doubleValue();
+        return Integer.valueOf(getTranslationalVelocitySlider().getValue()).doubleValue();
     }
 
     public double getCurrentRotationalVelocity() {
-        return Math.toRadians(-(Integer.valueOf(ROTATIONAL_VELOCITY_SLIDER.getValue()).doubleValue()));
+        return Math.toRadians(-(Integer.valueOf(getRotationalVelocitySlider().getValue()).doubleValue()));
     }
 
     // Getter and Setter functions for the paused property
     public boolean isNotPaused() {
-        return !isPaused;
+        return !isPaused();
+    }
+
+    public boolean isPaused() {
+        return isPaused;
     }
 
     public void setPaused(boolean val) {
         isPaused = val;
+    }
+
+    public JButton getResetButton() {
+        return resetButton;
+    }
+
+    public void setResetButton(JButton resetButton) {
+        this.resetButton = resetButton;
+    }
+
+    public JButton getStepButton() {
+        return stepButton;
+    }
+
+    public void setStepButton(JButton stepButton) {
+        this.stepButton = stepButton;
+    }
+
+    public JButton getRunButton() {
+        return runButton;
+    }
+
+    public void setRunButton(JButton runButton) {
+        this.runButton = runButton;
+    }
+
+    public JButton getPauseButton() {
+        return pauseButton;
+    }
+
+    public void setPauseButton(JButton pauseButton) {
+        this.pauseButton = pauseButton;
+    }
+
+    public Font getHelvetica11Bold() {
+        return helvetica11Bold;
+    }
+
+    public void setHelvetica11Bold(Font helvetica11Bold) {
+        this.helvetica11Bold = helvetica11Bold;
+    }
+
+    public JToolBar getSimulationToolbar() {
+        return simulationToolbar;
+    }
+
+    public void setSimulationToolbar(JToolBar simulationToolbar) {
+        this.simulationToolbar = simulationToolbar;
     }
 
     // FrameRateHandler listens to frame rate combo box for user's selection.
@@ -143,13 +264,13 @@ public class ControlPanel extends JPanel {
             String s = GuiUtils.getJComboBoxSelectedItem(e);
             int speed = Integer.parseInt(s);
             System.out.println("ControlPanel: fps = " + speed);
-            Engine.fps = speed;
+            Engine.setFps(speed);
         }
     }
 
     private static class BuildButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            AGVsim.engine.buildArchitecture();
+            AGVsim.getEngine().buildArchitecture();
         }
     }
 
@@ -157,9 +278,9 @@ public class ControlPanel extends JPanel {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             double vel = Integer.valueOf(source.getValue()).doubleValue();
-            AGVsim.agent.setTranslationalVelocity(vel);
+            AGVsim.getAgent().setTranslationalVelocity(vel);
             System.out.println("ControlPanel: translational velocity = " + vel);
-            AGVsim.testbedview.repaint();
+            AGVsim.getTestbedview().repaint();
         }
     }
 
@@ -171,17 +292,17 @@ public class ControlPanel extends JPanel {
                 source.setValue(1);
                 vel = Math.toRadians(1.0);
             }
-            AGVsim.agent.setRotationalVelocity(vel);
+            AGVsim.getAgent().setRotationalVelocity(vel);
             System.out.println("ControlPanel: rotational velocity = " + Math.toDegrees(vel));
-            AGVsim.testbedview.repaint();
+            AGVsim.getTestbedview().repaint();
         }
     }
 
     private static class TimeDeltaChoiceHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            Engine.deltaT = 1.0 / (Integer.valueOf(source.getValue()).doubleValue());
-            System.out.println("ControlPanel: time delta = " + Engine.deltaT);
+            Engine.setDeltaT(1.0 / (Integer.valueOf(source.getValue()).doubleValue()));
+            System.out.println("ControlPanel: time delta = " + Engine.getDeltaT());
         }
     }
 
@@ -193,16 +314,16 @@ public class ControlPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) { // When reset is pressed
-            AGVsim.engine.resetSystem();                // reset the system
+            AGVsim.getEngine().resetSystem();                // reset the system
             //reset_button.setEnabled(false);
-            AGVsim.logger.init();
-            currTime = 0;
+            AGVsim.getLogger().init();
+            setCurrTime(0);
         }
     }
 
     private static class CorrectionCheckBoxHandler implements ItemListener {
         public void itemStateChanged(ItemEvent e) {
-            AGVsim.agent.enableCorrection = e.getStateChange() != ItemEvent.DESELECTED;
+            AGVsim.getAgent().setEnableCorrection(e.getStateChange() != ItemEvent.DESELECTED);
         }
     }
 
@@ -214,8 +335,8 @@ public class ControlPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) { //When step button is pressed
-            AGVsim.engine.run1Frame();
-            resetButton.setEnabled(true);    //reactivate reset button
+            AGVsim.getEngine().run1Frame();
+            getResetButton().setEnabled(true);    //reactivate reset button
         }
     }                        //run simulation one step
 
@@ -234,18 +355,18 @@ public class ControlPanel extends JPanel {
 
         private class RunButtonThread extends Thread { //Thread to run simulation
             public void run() {
-                resetButton.setEnabled(false);   // disable reset button
-                stepButton.setEnabled(false);    // disable step button
-                runButton.setEnabled(false);        // disable play button
-                pauseButton.setEnabled(true);    // only the pause button is left enabled
+                getResetButton().setEnabled(false);   // disable reset button
+                getStepButton().setEnabled(false);    // disable step button
+                getRunButton().setEnabled(false);        // disable play button
+                getPauseButton().setEnabled(true);    // only the pause button is left enabled
                 setPaused(false);            // unpause the program
                 long beforeTime = System.currentTimeMillis(); // from Davision, KGPJ, p. 23
                 int nuruns = 0;
                 while (isNotPaused() && nuruns < 9000) {        //while program is running
-                    AGVsim.engine.run1Frame();    //run program 1 step and delay
-                    AGVsim.logger.saveTime(currTime);
-                    currTime += Engine.deltaT;
-                    long delay = 1000 / Engine.fps; //according to  framerate
+                    AGVsim.getEngine().run1Frame();    //run program 1 step and delay
+                    AGVsim.getLogger().saveTime(getCurrTime());
+                    setCurrTime(getCurrTime() + Engine.getDeltaT());
+                    long delay = 1000 / Engine.getFps(); //according to  framerate
                     long timeDiff = System.currentTimeMillis() - beforeTime;
                     long sleepTime = delay - timeDiff;
                     if (sleepTime < 0) sleepTime = 5; // be nice
@@ -258,8 +379,8 @@ public class ControlPanel extends JPanel {
                     beforeTime = System.currentTimeMillis();
                     nuruns++;
                 }
-                resetButton.setEnabled(true); //reenable reset button when program is repaused
-                stepButton.setEnabled(true);    //reenable step button when program is repaused
+                getResetButton().setEnabled(true); //reenable reset button when program is repaused
+                getStepButton().setEnabled(true);    //reenable step button when program is repaused
             }
         }
     }    // Start the thread to run the simulation
@@ -273,8 +394,8 @@ public class ControlPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) { // If pause button is clicked
             setPaused(true);            // pause the simulation
-            runButton.setEnabled(true);        // enable the play button
-            pauseButton.setEnabled(false);    // disable the pause button
+            getRunButton().setEnabled(true);        // enable the play button
+            getPauseButton().setEnabled(false);    // disable the pause button
         }
     }
 }

@@ -9,43 +9,59 @@ import static java.lang.System.out;
 import java.util.Vector;
 
 public class Engine {
-    static int fps = Integer.parseInt(String.valueOf(ControlPanel.FRAMERATE_COMBO.getSelectedItem())); // default, sync w/ choice 2 of cPanel
-    static double deltaT = 0.1; //AGVsim.control_panel.get_current_time_delta();
+    private static int fps = Integer.parseInt(String.valueOf(ControlPanel.getFramerateCombo().getSelectedItem())); // default, sync w/ choice 2 of cPanel
+    private static double deltaT = 0.1; //AGVsim.control_panel.get_current_time_delta();
 
     public Engine() {
     }
 
+    public static int getFps() {
+        return fps;
+    }
+
+    public static void setFps(int fps) {
+        Engine.fps = fps;
+    }
+
+    public static double getDeltaT() {
+        return deltaT;
+    }
+
+    public static void setDeltaT(double deltaT) {
+        Engine.deltaT = deltaT;
+    }
+
     public void buildArchitecture() {
         buildTestbedSkeleton();
-        AGVsim.testbed.addObserver(AGVsim.testbedview);
+        AGVsim.getTestbed().addObserver(AGVsim.getTestbedview());
         resetSystem();
-        if (AGVsim.controlPanel.isNotPaused())  // ensure simulation is paused
-            AGVsim.controlPanel.pauseButton.doClick();
-        AGVsim.controlPanel.stepButton.setEnabled(true); // enable step button
-        AGVsim.controlPanel.runButton.setEnabled(true);  // enable run button
+        if (AGVsim.getControlPanel().isNotPaused())  // ensure simulation is paused
+            AGVsim.getControlPanel().getPauseButton().doClick();
+        AGVsim.getControlPanel().getStepButton().setEnabled(true); // enable step button
+        AGVsim.getControlPanel().getRunButton().setEnabled(true);  // enable run button
     }
 
     void buildTestbedSkeleton() {
-        AGVsim.agent = new Agent();
-        AGVsim.agent.setSensor(AGVsim.sensor);
-        Vector<SimObject> objects = AGVsim.testbed.getObjects();
-        AGVsim.testbed = new Testbed();
-        AGVsim.testbed.set_objects(objects);
+        AGVsim.setAgent(new Agent());
+        AGVsim.getAgent().setSensor(AGVsim.getSensor());
+        Vector<SimObject> objects = AGVsim.getTestbed().getObjects();
+        AGVsim.setTestbed(new Testbed());
+        AGVsim.getTestbed().set_objects(objects);
         out.println("Engine: created new agent and testbed.");
     }
 
     void run1Frame() {
-        AGVsim.agent.actAndObserve();
-        AGVsim.testbed.assertModelHasChanged();
+        AGVsim.getAgent().actAndObserve();
+        AGVsim.getTestbed().assertModelHasChanged();
     }
 
     void resetSystem() {
-        AGVsim.testbed.initializeBotPose();
-        AGVsim.agent.initializeSubjectiveBotPose();
-        AGVsim.agent.setTranslationalVelocity(AGVsim.controlPanel.getCurrentTranslationalVelocity());
-        AGVsim.agent.setRotationalVelocity(AGVsim.controlPanel.getCurrentRotationalVelocity());
-        if (AGVsim.algorithm == 2)
-            AGVsim.agent.initializeParticles();
-        AGVsim.testbed.assertModelHasChanged();
+        AGVsim.getTestbed().initializeBotPose();
+        AGVsim.getAgent().initializeSubjectiveBotPose();
+        AGVsim.getAgent().setTranslationalVelocity(AGVsim.getControlPanel().getCurrentTranslationalVelocity());
+        AGVsim.getAgent().setRotationalVelocity(AGVsim.getControlPanel().getCurrentRotationalVelocity());
+        if (AGVsim.getAlgorithm() == 2)
+            AGVsim.getAgent().initializeParticles();
+        AGVsim.getTestbed().assertModelHasChanged();
     }
 }

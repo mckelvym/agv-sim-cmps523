@@ -11,6 +11,7 @@
 - Restore most 'println' statements
 - Rename methods
 - Rename members
+- Encapsulate fields and add getters, setters
 - Additional cleanup
 
 ## 1.0.0 - 2009-05-11

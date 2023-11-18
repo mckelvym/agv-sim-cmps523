@@ -14,17 +14,17 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 public class AlgorithmControlPanel extends JDialog {
-    static String[] bayesianFilter = {
+    private static String[] bayesianFilter = {
             "None", "Extended Kalman Filter (EKF)", "Monte Carlo Localization (MCL)"
     };
-    static JComboBox<String> bayesianFilterCombo = new JComboBox<>(bayesianFilter);
-    JButton close = new JButton("OK");
+    private static JComboBox<String> bayesianFilterCombo = new JComboBox<>(getBayesianFilter());
+    private JButton close = new JButton("OK");
 
     AlgorithmControlPanel() {
-        bayesianFilterCombo.setSelectedIndex(0);
-        bayesianFilterCombo.addActionListener(new AlgorithmChoiceHandler());
-        close.addActionListener(e -> {
-            if (!Objects.equals(bayesianFilterCombo.getSelectedItem(), "None"))
+        getBayesianFilterCombo().setSelectedIndex(0);
+        getBayesianFilterCombo().addActionListener(new AlgorithmChoiceHandler());
+        getClose().addActionListener(e -> {
+            if (!Objects.equals(getBayesianFilterCombo().getSelectedItem(), "None"))
                 dispose();
         });
 
@@ -33,12 +33,36 @@ public class AlgorithmControlPanel extends JDialog {
         this.setLayout(new GridBagLayout());
 
         GuiUtils.addToGridbag(this, new JLabel("Choose Bayesian Filter: "), base_x, base_y, 1, 1);
-        GuiUtils.addToGridbag(this, bayesianFilterCombo, base_x, base_y + 1, 1, 1);
-        GuiUtils.addToGridbag(this, close, base_x, base_y + 2, 1, 1);
+        GuiUtils.addToGridbag(this, getBayesianFilterCombo(), base_x, base_y + 1, 1, 1);
+        GuiUtils.addToGridbag(this, getClose(), base_x, base_y + 2, 1, 1);
 
         this.pack();
         GuiUtils.centerOnScreen(this);
         this.setVisible(true);
+    }
+
+    public static String[] getBayesianFilter() {
+        return bayesianFilter;
+    }
+
+    public static void setBayesianFilter(String[] bayesianFilter) {
+        AlgorithmControlPanel.bayesianFilter = bayesianFilter;
+    }
+
+    public static JComboBox<String> getBayesianFilterCombo() {
+        return bayesianFilterCombo;
+    }
+
+    public static void setBayesianFilterCombo(JComboBox<String> bayesianFilterCombo) {
+        AlgorithmControlPanel.bayesianFilterCombo = bayesianFilterCombo;
+    }
+
+    public JButton getClose() {
+        return close;
+    }
+
+    public void setClose(JButton close) {
+        this.close = close;
     }
 
 
@@ -46,7 +70,7 @@ public class AlgorithmControlPanel extends JDialog {
         public void actionPerformed(ActionEvent e) {
             int choice = ((JComboBox<?>) e.getSource()).getSelectedIndex();
             if (choice > 0) {
-                AGVsim.algorithm = choice;
+                AGVsim.setAlgorithm(choice);
                 if (choice > 1)
                     new ParticleDialog();
             }

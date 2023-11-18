@@ -5,20 +5,45 @@
 package agv.sim.cmps523;
 
 public class SimObject {
-    public double x, y;
-    public double size;
+    private double x;
+    private double y;
+    private double size;
 
     public SimObject(double x, double y, double size) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
+        this.setX(x);
+        this.setY(y);
+        this.setSize(size);
     }
 
     double x() {
-        return x;
+        return getX();
     }
 
     double y() {
+        return getY();
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
         return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getSize() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
     }
 }
