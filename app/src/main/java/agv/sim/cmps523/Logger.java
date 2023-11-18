@@ -53,8 +53,14 @@ public class Logger {
         testbedDataFile = "testbed_data.m";
         miscDataFile = "misc_data.m";
 
-        if (!(new File(dataDirectory)).mkdir()) {
-            System.err.println("Unable to create directory: " + dataDirectory);
+
+        final File dataDirectoryFile = new File(dataDirectory);
+        if (!dataDirectoryFile.isDirectory()) {
+            if (!dataDirectoryFile.mkdir()) {
+                System.err.println("Unable to create directory: " + dataDirectory);
+            }
+        } else {
+            System.out.println(dataDirectoryFile.getAbsolutePath() + " exists.");
         }
 
         agentPoses = new Vector<>();
