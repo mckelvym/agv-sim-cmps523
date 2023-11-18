@@ -8,12 +8,12 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 import javax.swing.*;
 
 public class ObjectControlPanel extends JDialog {
     static final int size_x = 500, size_y = 250;
     static final JButton object_remove_button = new JButton("Remove");
-    private static final long serialVersionUID = 1L;
     static JTextField x_loc_field = new JTextField(5);
     static JTextField y_loc_field = new JTextField(5);
     static JButton add_button = new JButton("Add");
@@ -29,11 +29,7 @@ public class ObjectControlPanel extends JDialog {
     static JComboBox<String> object_id_display_combo = new JComboBox<>(object_id_display);
 
     ObjectControlPanel() {
-        close_button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        close_button.addActionListener(e -> dispose());
         add_button.addActionListener(new ObjectAddHandler());
         object_size_combo.addActionListener(new ObjectSizeHandler());
         object_remove_button.addActionListener(new ObjectRemoveButtonHandler());
@@ -80,37 +76,35 @@ public class ObjectControlPanel extends JDialog {
         return new Dimension(size_x, size_y);
     }
 
-    private class ObjectAddHandler implements ActionListener {
+    private static class ObjectAddHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            int x = (Integer.valueOf(x_loc_field.getText())).intValue();
-            int y = (Integer.valueOf(y_loc_field.getText())).intValue();
-            AGVsim.m_testbed.add_object(x, y,
-                    Double.valueOf(String.valueOf(object_size_combo.getSelectedItem())));
-            //x_loc_field.setText("");
-            //y_loc_field.setText("");
+            int x = Integer.parseInt(x_loc_field.getText());
+            int y = Integer.parseInt(y_loc_field.getText());
+            AGVsim.testbed.add_object(x, y,
+                    Double.parseDouble(String.valueOf(object_size_combo.getSelectedItem())));
         }
     }
 
-    private class ObjectSizeHandler implements ActionListener {
+    private static class ObjectSizeHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         }
     }
 
-    private class ObjectRemoveButtonHandler implements ActionListener {
+    private static class ObjectRemoveButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (object_combo.getItemCount() > 0) {
                 int obj_id = object_combo.getSelectedIndex();
                 object_combo.removeItemAt(obj_id);
-                AGVsim.m_testbed.remove_object(obj_id + 1);
+                AGVsim.testbed.remove_object(obj_id + 1);
             }
         }
     }
 
-    private class ObjectIdDisplayHandler implements ActionListener {
+    private static class ObjectIdDisplayHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String disp = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            AGVsim.m_testbedview.m_draw_object_id = disp.equals("Yes");
-            AGVsim.m_testbedview.repaint();
+            String disp = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+            AGVsim.testbedview.draw_object_id = Objects.equals(disp, "Yes");
+            AGVsim.testbedview.repaint();
         }
     }
 }

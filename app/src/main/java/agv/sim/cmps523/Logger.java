@@ -19,8 +19,6 @@ public class Logger {
 
     Vector<Matrix> agent_poses;
     Vector<Matrix> testbed_poses;
-    Vector pose_error;
-    Vector pose_orientation_error;
     Vector<Double> time;
 
     Logger() {
@@ -28,8 +26,7 @@ public class Logger {
     }
 
     static BufferedWriter new_buffered_writer(String directory, String filename) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(directory, filename)));
-        return writer;
+        return new BufferedWriter(new FileWriter(new File(directory, filename)));
     }
 
     static void copy_file_to_directory(String file, String sdir, String ddir) {
@@ -56,7 +53,9 @@ public class Logger {
         testbed_data_file = "testbed_data.m";
         misc_data_file = "misc_data.m";
 
-        (new File(data_directory)).mkdir();
+        if (!(new File(data_directory)).mkdir()) {
+            System.err.println("Unable to create directory: " + data_directory);
+        }
 
         agent_poses = new Vector<>();
         testbed_poses = new Vector<>();
@@ -105,9 +104,9 @@ public class Logger {
 
             Vector<Double> objx = new Vector<>();
             Vector<Double> objy = new Vector<>();
-            for (int i = 0; i < AGVsim.m_testbed.num_objects(); i++) {
-                objx.add(AGVsim.m_testbed.object_at(i).x());
-                objy.add(AGVsim.m_testbed.object_at(i).y());
+            for (int i = 0; i < AGVsim.testbed.nuobjects(); i++) {
+                objx.add(AGVsim.testbed.object_at(i).x());
+                objy.add(AGVsim.testbed.object_at(i).y());
             }
 
             this.write_array_to_matlab_file(misc_data, objx, "objects_loc_x");
@@ -122,30 +121,30 @@ public class Logger {
         out.println("done.");
     }
 
-    void write_pose_vector_to_matlab_file(BufferedWriter writer, Vector poses, String var) throws IOException {
+    void write_pose_vector_to_matlab_file(BufferedWriter writer, Vector<Matrix> poses, String var) throws IOException {
         writer.write("\n%begin auto output of array " + var + " (length: " + poses.size() + ")\n" + var + " = [\n");
         for (int i = 0; i < poses.size(); i++) {
-            writer.write(" " + ((Matrix) poses.elementAt(i)).get(0, 0));
+            writer.write(" " + poses.elementAt(i).get(0, 0));
         }
         writer.write(" ; ");
         for (int i = 0; i < poses.size(); i++) {
-            writer.write(" " + ((Matrix) poses.elementAt(i)).get(1, 0));
+            writer.write(" " + poses.elementAt(i).get(1, 0));
         }
         writer.write("\n]; %end auto output of array " + var);
     }
 
     void write_array_to_matlab_file(BufferedWriter writer, double[] array, String var) throws IOException {
         writer.write("\n%begin auto output of array " + var + " (length: " + array.length + ")\n" + var + " = [\n");
-        for (int i = 0; i < array.length; i++) {
-            writer.write(" " + array[i]);
+        for (final double v : array) {
+            writer.write(" " + v);
         }
         writer.write("\n]; %end auto output of array " + var);
     }
 
-    void write_array_to_matlab_file(BufferedWriter writer, Vector array, String var) throws IOException {
+    void write_array_to_matlab_file(BufferedWriter writer, Vector<Double> array, String var) throws IOException {
         writer.write("\n%begin auto output of array " + var + " (length: " + array.size() + ")\n" + var + " = [\n");
         for (int i = 0; i < array.size(); i++) {
-            writer.write(" " + ((Double) (array.elementAt(i))).doubleValue());
+            writer.write(" " + array.elementAt(i));
         }
         writer.write("\n]; %end auto output of array " + var);
     }
@@ -157,12 +156,12 @@ public class Logger {
         }
 
         writer.write("\n%begin auto output of double array " + var + " (length: " + array1.length + ")\n" + var + " = [\n");
-        for (int i = 0; i < array1.length; i++) {
-            writer.write(" " + array1[i]);
+        for (final double v : array1) {
+            writer.write(" " + v);
         }
         writer.write(" ; ");
-        for (int i = 0; i < array2.length; i++) {
-            writer.write(" " + array2[i]);
+        for (final double v : array2) {
+            writer.write(" " + v);
         }
         writer.write("\n]; %end auto output of double array " + var);
     }

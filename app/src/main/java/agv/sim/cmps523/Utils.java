@@ -8,8 +8,8 @@ import Jama.Matrix;
 import java.util.Random;
 
 public class Utils {
-    static long m_rand_seed = 271828182;
-    static Random m_rand_gen = new Random(m_rand_seed);
+    static long rand_seed = 271828182;
+    static Random rand_gen = new Random(rand_seed);
 
     // Squaring a number
     static double square(double val) {
@@ -33,7 +33,7 @@ public class Utils {
 
     // Gaussian distributed value
     static double gaussian(double mu, double sigma) {
-        return sigma * m_rand_gen.nextGaussian() + mu;
+        return sigma * rand_gen.nextGaussian() + mu;
     }
 
     // Real gaussian function
@@ -50,7 +50,7 @@ public class Utils {
         while (angle > Math.PI * 2 || angle < -Math.PI * 2) {
             if (angle > Math.PI * 2)
                 angle -= Math.PI * 2;
-            else if (angle < -Math.PI * 2)
+            else
                 angle += Math.PI * 2;
         }
         return angle;

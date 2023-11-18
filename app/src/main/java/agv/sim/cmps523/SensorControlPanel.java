@@ -4,6 +4,7 @@
 // File: SensorControlPanel.java
 package agv.sim.cmps523;
 
+import static agv.sim.cmps523.GuiUtils.getJComboBoxSelectedItem;
 import static agv.sim.cmps523.GuiUtils.getValueDouble;
 import static java.lang.System.out;
 
@@ -22,7 +23,6 @@ public class SensorControlPanel extends JDialog {
     static final JSlider z_rand_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
     static final JSlider sigma_hit_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
     static final JSlider lambda_short_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    private static final long serialVersionUID = 1L;
     static String[] sensor_max_range = {
             "200", "300", "500", "1000"
     };
@@ -81,35 +81,31 @@ public class SensorControlPanel extends JDialog {
         lambda_short_slider.addChangeListener(new LambdaShortHandler());
 
         Hashtable<Integer, JLabel> z_hit_labels = new Hashtable<>();
-        z_hit_labels.put(Integer.valueOf(0), new JLabel("None"));
-        z_hit_labels.put(Integer.valueOf(50), new JLabel("Less"));
-        z_hit_labels.put(Integer.valueOf(100), new JLabel("More"));
+        z_hit_labels.put((0), new JLabel("None"));
+        z_hit_labels.put((50), new JLabel("Less"));
+        z_hit_labels.put((100), new JLabel("More"));
         z_hit_slider.setLabelTable(z_hit_labels);
 
         Hashtable<Integer, JLabel> z_short_labels = new Hashtable<>();
-        z_short_labels.put(Integer.valueOf(0), new JLabel("None"));
-        z_short_labels.put(Integer.valueOf(50), new JLabel("Less"));
-        z_short_labels.put(Integer.valueOf(100), new JLabel("More"));
+        z_short_labels.put((0), new JLabel("None"));
+        z_short_labels.put((50), new JLabel("Less"));
+        z_short_labels.put((100), new JLabel("More"));
         z_short_slider.setLabelTable(z_short_labels);
 
         Hashtable<Integer, JLabel> z_max_labels = new Hashtable<>();
-        z_max_labels.put(Integer.valueOf(0), new JLabel("None"));
-        z_max_labels.put(Integer.valueOf(50), new JLabel("Less"));
-        z_max_labels.put(Integer.valueOf(100), new JLabel("More"));
+        z_max_labels.put((0), new JLabel("None"));
+        z_max_labels.put((50), new JLabel("Less"));
+        z_max_labels.put((100), new JLabel("More"));
         z_max_slider.setLabelTable(z_max_labels);
 
         Hashtable<Integer, JLabel> z_rand_labels = new Hashtable<>();
-        z_rand_labels.put(Integer.valueOf(0), new JLabel("None"));
-        z_rand_labels.put(Integer.valueOf(50), new JLabel("Less"));
-        z_rand_labels.put(Integer.valueOf(100), new JLabel("More"));
+        z_rand_labels.put((0), new JLabel("None"));
+        z_rand_labels.put((50), new JLabel("Less"));
+        z_rand_labels.put((100), new JLabel("More"));
         z_rand_slider.setLabelTable(z_rand_labels);
 
 
-        close.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        close.addActionListener(e -> dispose());
 
         int base_x = 0;
         int base_y = 0;
@@ -154,20 +150,15 @@ public class SensorControlPanel extends JDialog {
         this.setVisible(true);
     }
 
-    // Algorithm beam_range_finder_model page 158
+    // Algorithm bearange_finder_model page 158
     public static double get_sensor_noise_probability(int i) {
-        switch (i) {
-            case 0:
-                return getValueDouble(z_hit_slider);
-            case 1:
-                return getValueDouble(z_short_slider);
-            case 2:
-                return getValueDouble(z_max_slider);
-            case 3:
-                return getValueDouble(z_rand_slider);
-            default:
-                return 0.0;
-        }
+        return switch (i) {
+            case 0 -> getValueDouble(z_hit_slider);
+            case 1 -> getValueDouble(z_short_slider);
+            case 2 -> getValueDouble(z_max_slider);
+            case 3 -> getValueDouble(z_rand_slider);
+            default -> 0.0;
+        };
     }
 
     public static double get_sigma_hit() {
@@ -178,76 +169,76 @@ public class SensorControlPanel extends JDialog {
         return getValueDouble(lambda_short_slider);
     }
 
-    private class SensorMaxRangeHandler implements ActionListener {
+    private static class SensorMaxRangeHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String range = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            AGVsim.m_agent.m_sensor.set_max_range(Double.valueOf(range));
+            String range = getJComboBoxSelectedItem(e);
+            AGVsim.agent.sensor.set_max_range(Double.parseDouble(range));
             System.out.println("sensor range=" + range);
         }
     }
 
-    private class SensorAngResHandler implements ActionListener {
+    private static class SensorAngResHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String res = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            AGVsim.m_agent.m_sensor.set_angular_resolution(Double.valueOf(res));
+            String res = getJComboBoxSelectedItem(e);
+            AGVsim.agent.sensor.set_angular_resolution(Double.parseDouble(res));
             System.out.println("sensor angular resolution=" + res);
         }
     }
 
-    private class SensorDisplayHandler implements ActionListener {
+    private static class SensorDisplayHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String disp = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            AGVsim.m_testbedview.m_draw_sensor_beams = disp.equals("Yes");
-            AGVsim.m_testbedview.repaint();
+            String disp = getJComboBoxSelectedItem(e);
+            AGVsim.testbedview.draw_sensor_beams = disp.equals("Yes");
+            AGVsim.testbedview.repaint();
         }
     }
 
-    private class SensorReturnDisplayHandler implements ActionListener {
+    private static class SensorReturnDisplayHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String disp = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            AGVsim.m_testbedview.m_draw_sensor_return_beams = disp.equals("Yes");
-            AGVsim.m_testbedview.repaint();
+            String disp = getJComboBoxSelectedItem(e);
+            AGVsim.testbedview.draw_sensor_return_beams = disp.equals("Yes");
+            AGVsim.testbedview.repaint();
         }
     }
 
-    private class ZHitHandler implements ChangeListener {
+    private static class ZHitHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
-            AGVsim.m_agent.m_sensor.normalize_noise();
+            AGVsim.agent.sensor.normalize_noise();
         }
     }
 
-    private class ZShortHandler implements ChangeListener {
+    private static class ZShortHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
-            AGVsim.m_agent.m_sensor.normalize_noise();
+            AGVsim.agent.sensor.normalize_noise();
         }
     }
 
-    private class ZMaxHandler implements ChangeListener {
+    private static class ZMaxHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
-            AGVsim.m_agent.m_sensor.normalize_noise();
+            AGVsim.agent.sensor.normalize_noise();
         }
     }
 
-    private class ZRandHandler implements ChangeListener {
+    private static class ZRandHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
-            AGVsim.m_agent.m_sensor.normalize_noise();
+            AGVsim.agent.sensor.normalize_noise();
         }
     }
 
-    private class SigmaHitHandler implements ChangeListener {
+    private static class SigmaHitHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             final double valueDouble = getValueDouble(source);
-            AGVsim.m_agent.m_sensor.sigma_hit = valueDouble;
+            AGVsim.agent.sensor.sigma_hit = valueDouble;
             out.println("SIGMA_hit = " + valueDouble);
         }
     }
 
-    private class LambdaShortHandler implements ChangeListener {
+    private static class LambdaShortHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             final double valueDouble = getValueDouble(source);
-            AGVsim.m_agent.m_sensor.lambda_short = valueDouble;
+            AGVsim.agent.sensor.lambda_short = valueDouble;
             out.println("LAMBDA_short = " + valueDouble);
         }
     }

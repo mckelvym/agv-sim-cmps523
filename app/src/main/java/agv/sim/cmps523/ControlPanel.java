@@ -23,7 +23,6 @@ public class ControlPanel extends JPanel {
     static final JSlider translational_velocity_slider = new JSlider(JSlider.HORIZONTAL, 1, 15, 10);
     static final JSlider rotational_velocity_slider = new JSlider(JSlider.HORIZONTAL, -10, 10, 5);
     static final JSlider time_delta_slider = new JSlider(JSlider.HORIZONTAL, 1, 100, 10);
-    private static final long serialVersionUID = 1L;
     static double curr_time = 0;
     static String[] frame_rates = {
             "1", "2", "5", "10", "15",
@@ -68,13 +67,13 @@ public class ControlPanel extends JPanel {
         time_delta_slider.setPaintTicks(false);
         time_delta_slider.setPaintLabels(true);
         Hashtable<Integer, JLabel> rotational_velocity_slider_label_table = new Hashtable<>();
-        rotational_velocity_slider_label_table.put(Integer.valueOf(-10), new JLabel("10"));
-        rotational_velocity_slider_label_table.put(Integer.valueOf(0), new JLabel("0"));
-        rotational_velocity_slider_label_table.put(Integer.valueOf(10), new JLabel("-10"));
+        rotational_velocity_slider_label_table.put(-10, new JLabel("10"));
+        rotational_velocity_slider_label_table.put(0, new JLabel("0"));
+        rotational_velocity_slider_label_table.put(10, new JLabel("-10"));
         rotational_velocity_slider.setLabelTable((rotational_velocity_slider_label_table));
         Hashtable<Integer, JLabel> time_delta_slider_label_table = new Hashtable<>();
-        time_delta_slider_label_table.put(Integer.valueOf(1), new JLabel("1.0"));
-        time_delta_slider_label_table.put(Integer.valueOf(100), new JLabel("0.01"));
+        time_delta_slider_label_table.put(1, new JLabel("1.0"));
+        time_delta_slider_label_table.put(100, new JLabel("0.01"));
         time_delta_slider.setLabelTable((time_delta_slider_label_table));
 
         simulation_toolbar = new JToolBar();
@@ -110,9 +109,6 @@ public class ControlPanel extends JPanel {
         GuiUtils.add_to_gridbag(this, framerate_combo, base_x + 3, base_y, 1, 1);
         base_y++;
         GuiUtils.add_to_gridbag(this, enable_correction_checkbox, base_x, base_y, 2, 1);
-        //GuiUtils.addToGridBagLayout(this, new JLabel("Max Sensor Range:"), base_x+2, base_y, 1, 1);
-        //GuiUtils.addToGridBagLayout(this, sensor_max_range_combo, base_x+3, base_y, 1, 1);
-
     }
 
     public Dimension getMinimumSize() {
@@ -121,10 +117,6 @@ public class ControlPanel extends JPanel {
 
     public Dimension getPreferredSize() {
         return new Dimension(size_x, size_y);
-    }
-
-    public double get_current_time_delta() {
-        return 1.0 / Integer.valueOf(time_delta_slider.getValue()).doubleValue();
     }
 
     public double get_current_translational_velocity() {
@@ -136,8 +128,8 @@ public class ControlPanel extends JPanel {
     }
 
     // Getter and Setter functions for the paused property
-    public boolean is_paused() {
-        return is_paused;
+    public boolean isNotPaused() {
+        return !is_paused;
     }
 
     public void set_paused(boolean val) {
@@ -146,32 +138,32 @@ public class ControlPanel extends JPanel {
 
     // FrameRateHandler listens to frame rate combo box for user's selection.
     // This listener changes the integer frameRate which is used when playing the simulation
-    private class FrameRateHandler implements ActionListener {
+    private static class FrameRateHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String s = (String) (((JComboBox) e.getSource()).getSelectedItem());
+            String s = GuiUtils.getJComboBoxSelectedItem(e);
             int speed = Integer.parseInt(s);
             System.out.println("ControlPanel: fps = " + speed);
-            Engine.m_fps = speed;
+            Engine.fps = speed;
         }
     }
 
-    private class BuildButtonHandler implements ActionListener {
+    private static class BuildButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            AGVsim.m_engine.build_architecture();
+            AGVsim.engine.build_architecture();
         }
     }
 
-    private class TranslationalVelocityChoiceHandler implements ChangeListener {
+    private static class TranslationalVelocityChoiceHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             double vel = Integer.valueOf(source.getValue()).doubleValue();
-            AGVsim.m_agent.set_translational_velocity(vel);
+            AGVsim.agent.set_translational_velocity(vel);
             System.out.println("ControlPanel: translational velocity = " + vel);
-            AGVsim.m_testbedview.repaint();
+            AGVsim.testbedview.repaint();
         }
     }
 
-    private class RotationalVelocityChoiceHandler implements ChangeListener {
+    private static class RotationalVelocityChoiceHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             double vel = Math.toRadians(-(Integer.valueOf(source.getValue()).doubleValue()));
@@ -179,53 +171,56 @@ public class ControlPanel extends JPanel {
                 source.setValue(1);
                 vel = Math.toRadians(1.0);
             }
-            AGVsim.m_agent.set_rotational_velocity(vel);
+            AGVsim.agent.set_rotational_velocity(vel);
             System.out.println("ControlPanel: rotational velocity = " + Math.toDegrees(vel));
-            AGVsim.m_testbedview.repaint();
+            AGVsim.testbedview.repaint();
         }
     }
 
-    private class TimeDeltaChoiceHandler implements ChangeListener {
+    private static class TimeDeltaChoiceHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            Engine.m_delta_t = 1.0 / (Integer.valueOf(source.getValue()).doubleValue());
-            System.out.println("ControlPanel: time delta = " + Engine.m_delta_t);
+            Engine.delta_t = 1.0 / (Integer.valueOf(source.getValue()).doubleValue());
+            System.out.println("ControlPanel: time delta = " + Engine.delta_t);
         }
     }
 
     // ResetButtonAction contains the orders for when the reset button is pressed
-    private class ResetButtonAction extends AbstractAction {
-        private static final long serialVersionUID = 1L;
+    private static class ResetButtonAction extends AbstractAction {
 
         public ResetButtonAction(String text) {
             super(text);
         }
 
         public void actionPerformed(ActionEvent e) { // When reset is pressed
-            AGVsim.m_engine.reset_system();                // reset the system
+            AGVsim.engine.reset_system();                // reset the system
             //reset_button.setEnabled(false);
-            AGVsim.m_logger.init();
+            AGVsim.logger.init();
             curr_time = 0;
+        }
+    }
+
+    private static class CorrectionCheckBoxHandler implements ItemListener {
+        public void itemStateChanged(ItemEvent e) {
+            AGVsim.agent.enable_correction = e.getStateChange() != ItemEvent.DESELECTED;
         }
     }
 
     //class StepButtonAction contains the orders for when the step button is pressed
     private class StepButtonAction extends AbstractAction {
-        private static final long serialVersionUID = 1L;
 
         public StepButtonAction(String text) {
             super(text);
         }
 
         public void actionPerformed(ActionEvent e) { //When step button is pressed
-            AGVsim.m_engine.run_1_frame();
+            AGVsim.engine.run_1_frame();
             reset_button.setEnabled(true);    //reactivate reset button
         }
     }                        //run simulation one step
 
     //class RunButtonAction contains the orders for when the play button is pressed
     private class RunButtonAction extends AbstractAction {
-        private static final long serialVersionUID = 1L;
 
         public RunButtonAction(String text) {
             super(text);
@@ -245,12 +240,12 @@ public class ControlPanel extends JPanel {
                 pause_button.setEnabled(true);    // only the pause button is left enabled
                 set_paused(false);            // unpause the program
                 long beforeTime = System.currentTimeMillis(); // from Davision, KGPJ, p. 23
-                int num_runs = 0;
-                while (!is_paused() && num_runs < 9000) {        //while program is running
-                    AGVsim.m_engine.run_1_frame();    //run program 1 step and delay
-                    AGVsim.m_logger.save_time(curr_time);
-                    curr_time += Engine.m_delta_t;
-                    long delay = 1000 / Engine.m_fps; //according to  framerate
+                int nuruns = 0;
+                while (isNotPaused() && nuruns < 9000) {        //while program is running
+                    AGVsim.engine.run_1_frame();    //run program 1 step and delay
+                    AGVsim.logger.save_time(curr_time);
+                    curr_time += Engine.delta_t;
+                    long delay = 1000 / Engine.fps; //according to  framerate
                     long timeDiff = System.currentTimeMillis() - beforeTime;
                     long sleepTime = delay - timeDiff;
                     if (sleepTime < 0) sleepTime = 5; // be nice
@@ -258,9 +253,10 @@ public class ControlPanel extends JPanel {
                         Thread.sleep(sleepTime);
                     } //sleep until delay is ready for next cycle
                     catch (Exception e) {
+                        e.printStackTrace();
                     }
                     beforeTime = System.currentTimeMillis();
-                    num_runs++;
+                    nuruns++;
                 }
                 reset_button.setEnabled(true); //reenable reset button when program is repaused
                 step_button.setEnabled(true);    //reenable step button when program is repaused
@@ -270,7 +266,6 @@ public class ControlPanel extends JPanel {
 
     //class PauseButtonAction contains the orders for when the pause button is pressed
     private class PauseButtonAction extends AbstractAction {
-        private static final long serialVersionUID = 1L;
 
         public PauseButtonAction(String text) {
             super(text);
@@ -280,12 +275,6 @@ public class ControlPanel extends JPanel {
             set_paused(true);            // pause the simulation
             run_button.setEnabled(true);        // enable the play button
             pause_button.setEnabled(false);    // disable the pause button
-        }
-    }
-
-    private class CorrectionCheckBoxHandler implements ItemListener {
-        public void itemStateChanged(ItemEvent e) {
-            AGVsim.m_agent.m_enable_correction = e.getStateChange() != ItemEvent.DESELECTED;
         }
     }
 }

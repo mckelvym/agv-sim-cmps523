@@ -7,13 +7,13 @@ package agv.sim.cmps523;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 public class AlgorithmControlPanel extends JDialog {
-    private static final long serialVersionUID = 1L;
     static String[] bayesian_filter = {
             "None", "Extended Kalman Filter (EKF)", "Monte Carlo Localization (MCL)"
     };
@@ -23,11 +23,9 @@ public class AlgorithmControlPanel extends JDialog {
     AlgorithmControlPanel() {
         bayesian_filter_combo.setSelectedIndex(0);
         bayesian_filter_combo.addActionListener(new AlgorithmChoiceHandler());
-        close.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (!bayesian_filter_combo.getSelectedItem().equals("None"))
-                    dispose();
-            }
+        close.addActionListener(e -> {
+            if (!Objects.equals(bayesian_filter_combo.getSelectedItem(), "None"))
+                dispose();
         });
 
         int base_x = 0;
@@ -44,9 +42,9 @@ public class AlgorithmControlPanel extends JDialog {
     }
 
 
-    private class AlgorithmChoiceHandler implements ActionListener {
+    private static class AlgorithmChoiceHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            int choice = ((JComboBox) e.getSource()).getSelectedIndex();
+            int choice = ((JComboBox<?>) e.getSource()).getSelectedIndex();
             if (choice > 0) {
                 AGVsim.algorithm = choice;
                 if (choice > 1)

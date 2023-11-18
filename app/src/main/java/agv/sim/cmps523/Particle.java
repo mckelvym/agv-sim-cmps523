@@ -5,31 +5,25 @@
 package agv.sim.cmps523;
 
 public class Particle {
-    public double m_x;
-    public double m_y;
-    public double m_angle;
+    public double x;
+    public double y;
+    public double angle;
 
     Particle(double x, double y, double angle) {
-        m_x = x;
-        m_y = y;
-        m_angle = angle;
-    }
-
-    void set(double x, double y, double angle) {
-        m_x = x;
-        m_y = y;
-        m_angle = angle;
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
     }
 
     double x() {
-        return m_x;
+        return x;
     }
 
     double y() {
-        return m_y;
+        return y;
     }
 
     double theta() {
-        return m_angle;
+        return angle;
     }
 }

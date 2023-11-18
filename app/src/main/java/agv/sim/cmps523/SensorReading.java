@@ -5,26 +5,26 @@
 package agv.sim.cmps523;
 
 public class SensorReading {
-    public double m_actual_angle;
-    public double m_actual_range;
-    public double m_believed_angle;
-    public double m_believed_range;
-    public int m_signature;
-    public double m_x_actual_hit;
-    public double m_y_actual_hit;
-    public double m_x_believed_hit;
-    public double m_y_believed_hit;
+    public double actual_angle;
+    public double actual_range;
+    public double believed_angle;
+    public double believed_range;
+    public int signature;
+    public double x_actual_hit;
+    public double y_actual_hit;
+    public double x_believed_hit;
+    public double y_believed_hit;
 
     SensorReading() {
-        m_actual_angle = 0;
-        m_actual_range = -1;
-        m_believed_angle = 0;
-        m_believed_range = -1;
-        m_signature = -1;
-        m_x_actual_hit = 0;
-        m_y_actual_hit = 0;
-        m_x_believed_hit = 0;
-        m_y_believed_hit = 0;
+        actual_angle = 0;
+        actual_range = -1;
+        believed_angle = 0;
+        believed_range = -1;
+        signature = -1;
+        x_actual_hit = 0;
+        y_actual_hit = 0;
+        x_believed_hit = 0;
+        y_believed_hit = 0;
     }
 
     SensorReading(
@@ -33,18 +33,14 @@ public class SensorReading {
             int signature,
             double actual_x, double actual_y,
             double believed_x, double believed_y) {
-        this.m_actual_angle = actual_angle;
-        this.m_actual_range = actual_range;
-        this.m_believed_angle = believed_angle;
-        this.m_believed_range = believed_range;
-        this.m_signature = signature;
-        this.m_x_actual_hit = actual_x;
-        this.m_y_actual_hit = actual_y;
-        this.m_x_believed_hit = believed_x;
-        this.m_y_believed_hit = believed_y;
-    }
-
-    public boolean is_valid() {
-        return m_actual_range > -1;
+        this.actual_angle = actual_angle;
+        this.actual_range = actual_range;
+        this.believed_angle = believed_angle;
+        this.believed_range = believed_range;
+        this.signature = signature;
+        this.x_actual_hit = actual_x;
+        this.y_actual_hit = actual_y;
+        this.x_believed_hit = believed_x;
+        this.y_believed_hit = believed_y;
     }
 }

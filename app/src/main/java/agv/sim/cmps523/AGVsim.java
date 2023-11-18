@@ -8,8 +8,6 @@ import static java.lang.System.out;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
@@ -18,14 +16,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 public class AGVsim extends JFrame {
-    static final ControlPanel m_control_panel = new ControlPanel();
-    private static final long serialVersionUID = 1L;
-    static Logger m_logger = new Logger();
-    static Sensor m_sensor = new Sensor();
-    static Testbed m_testbed = new Testbed(); // actual world
-    static Agent m_agent = new Agent();   // subjective model
-    static TestbedView m_testbedview = new TestbedView();
-    static Engine m_engine = new Engine();
+    static final ControlPanel control_panel = new ControlPanel();
+    static Logger logger = new Logger();
+    static Sensor sensor = new Sensor();
+    static Testbed testbed = new Testbed(); // actual world
+    static Agent agent = new Agent();   // subjective model
+    static TestbedView testbedview = new TestbedView();
+    static Engine engine = new Engine();
     static int algorithm = 0;
     static boolean started = false;
 
@@ -34,7 +31,7 @@ public class AGVsim extends JFrame {
 
         this.addWindowListener(new WindowListener() {
             public void windowClosing(WindowEvent e) {
-                m_logger.save_data();
+                logger.save_data();
                 System.exit(0);
             }
 
@@ -72,8 +69,8 @@ public class AGVsim extends JFrame {
         // add components to window
         cp = getContentPane();  // set the panel container
         cp.setLayout(new BorderLayout()); // use border layout
-        cp.add("North", m_control_panel);    // put Control in north panel
-        cp.add("Center", m_testbedview);
+        cp.add("North", control_panel);    // put Control in north panel
+        cp.add("Center", testbedview);
         //setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         pack();
 
@@ -98,7 +95,7 @@ public class AGVsim extends JFrame {
                     started = true;
                     out.println("Starting up..");
                     new AGVsim("AGV Sim");
-                    m_engine.build_architecture();
+                    engine.build_architecture();
                 }
             }
 
@@ -115,9 +112,9 @@ public class AGVsim extends JFrame {
             }
         });
 
-        m_testbed.add_object_without_repaint(600, 700, 1);
-        m_testbed.add_object_without_repaint(700, 200, 1);
-        m_testbed.add_object_without_repaint(100, 180, 1);
+        testbed.add_object_without_repaint(600, 700, 1);
+        testbed.add_object_without_repaint(700, 200, 1);
+        testbed.add_object_without_repaint(100, 180, 1);
     }
 
     private void setupMenuBar() {
@@ -135,27 +132,11 @@ public class AGVsim extends JFrame {
 
         this.setJMenuBar(menu_bar);
 
-        menu_options_exit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        menu_options_exit.addActionListener(e -> System.exit(0));
 
-        menu_objects_configure.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new ObjectControlPanel();
-            }
-        });
+        menu_objects_configure.addActionListener(e -> new ObjectControlPanel());
 
-        menu_sensor_configure.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new SensorControlPanel();
-            }
-        });
-        menu_noise_configure.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new NoiseControlPanel();
-            }
-        });
+        menu_sensor_configure.addActionListener(e -> new SensorControlPanel());
+        menu_noise_configure.addActionListener(e -> new NoiseControlPanel());
     }
 }

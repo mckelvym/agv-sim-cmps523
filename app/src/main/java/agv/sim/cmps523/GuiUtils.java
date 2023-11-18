@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -57,18 +58,22 @@ public final class GuiUtils {
     }
 
     /**
-     * @param jComboBox
+     * @param jComboBox {@link JComboBox}
      * @return selected value cast to string then parsed as double.
      */
-    public static double getValueDouble(JComboBox jComboBox) {
-        return Double.valueOf(String.valueOf(jComboBox.getSelectedItem()));
+    public static double getValueDouble(JComboBox<?> jComboBox) {
+        return Double.parseDouble(String.valueOf(jComboBox.getSelectedItem()));
     }
 
     /**
-     * @param jSlider
+     * @param jSlider {@link JSlider}
      * @return value cast to double
      */
     public static double getValueDouble(JSlider jSlider) {
         return Integer.valueOf(jSlider.getValue()).doubleValue();
+    }
+
+    public static String getJComboBoxSelectedItem(ActionEvent e) {
+        return String.valueOf(((JComboBox<?>) e.getSource()).getSelectedItem());
     }
 }

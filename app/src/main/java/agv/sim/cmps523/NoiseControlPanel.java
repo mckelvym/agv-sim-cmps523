@@ -7,8 +7,6 @@ package agv.sim.cmps523;
 import static agv.sim.cmps523.GuiUtils.getValueDouble;
 
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -28,7 +26,6 @@ public class NoiseControlPanel extends JDialog {
     static final JSlider sensor_range_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
     static final JSlider sensor_bearing_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
     static final JSlider sensor_signature_noise_slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    private static final long serialVersionUID = 1L;
     JButton close = new JButton("Close");
 
 
@@ -89,11 +86,7 @@ public class NoiseControlPanel extends JDialog {
         sensor_bearing_noise_slider.addChangeListener(new SensorBearingNoiseHandler());
         sensor_signature_noise_slider.addChangeListener(new SensorSignatureNoiseHandler());
 
-        close.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        close.addActionListener(e -> dispose());
 
         int base_x = 0;
         int base_y = 0;
@@ -154,129 +147,126 @@ public class NoiseControlPanel extends JDialog {
 
     public static double get_alpha_noise(int i) {
         double scale = 100.0;
-        switch (i) {
-            case 1:
-                return getValueDouble(agent_a1_noise_slider) / scale;
-            case 2:
-                return getValueDouble(agent_a2_noise_slider) / scale;
-            case 3:
-                return getValueDouble(agent_a3_noise_slider) / scale;
-            case 4:
-                return getValueDouble(agent_a4_noise_slider) / scale;
-            case 5:
-                return getValueDouble(agent_a5_noise_slider) / scale;
-            case 6:
-                return getValueDouble(agent_a6_noise_slider) / scale;
-            default:
-                return -1.0;
-        }
+        return switch (i) {
+            case 1 -> getValueDouble(agent_a1_noise_slider) / scale;
+            case 2 -> getValueDouble(agent_a2_noise_slider) / scale;
+            case 3 -> getValueDouble(agent_a3_noise_slider) / scale;
+            case 4 -> getValueDouble(agent_a4_noise_slider) / scale;
+            case 5 -> getValueDouble(agent_a5_noise_slider) / scale;
+            case 6 -> getValueDouble(agent_a6_noise_slider) / scale;
+            default -> -1.0;
+        };
     }
 
     public static double get_sensor_noise(int i) {
         double val = 0.0;
 
         switch (i) {
-            case 1:
+            case 1 -> {
                 val = getValueDouble(sensor_range_noise_slider);
                 return val * val;
-            case 2:
+            }
+            case 2 -> {
                 val = getValueDouble(sensor_bearing_noise_slider);
                 return val * val;
-            case 3:
+            }
+            case 3 -> {
                 val = getValueDouble(sensor_signature_noise_slider);
                 return val * val;
-            default:
+            }
+            default -> {
                 return val;
+            }
         }
     }
 
-    private class TestbedVNoiseHandler implements ChangeListener {
+    private static class TestbedVNoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            Testbed.m_sigma_v_noise = getValueDouble(source);
+            Testbed.sigma_v_noise = getValueDouble(source);
             System.out.println("NoiseControlPanel: testbed translational velocity noise = " + source.getValue());
         }
     }
 
-    private class TestbedWNoiseHandler implements ChangeListener {
+    private static class TestbedWNoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            Testbed.m_sigma_w_noise = Math.toRadians(getValueDouble(source));
+            Testbed.sigma_w_noise = Math.toRadians(getValueDouble(source));
             System.out.println("NoiseControlPanel: testbed rotational velocity noise = " + source.getValue());
         }
     }
 
-    private class AgentA1NoiseHandler implements ChangeListener {
+    private static class AgentA1NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_a1_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a1_noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a1 noise = " + source.getValue() + "%");
         }
     }
 
-    private class AgentA2NoiseHandler implements ChangeListener {
+    private static class AgentA2NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_a2_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a2_noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a2 noise = " + source.getValue() + "%");
         }
     }
 
-    private class AgentA3NoiseHandler implements ChangeListener {
+    private static class AgentA3NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_a3_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a3_noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a3 noise = " + source.getValue() + "%");
         }
     }
 
-    private class AgentA4NoiseHandler implements ChangeListener {
+    private static class AgentA4NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_a4_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a4_noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a4 noise = " + source.getValue() + "%");
         }
     }
 
-    private class AgentA5NoiseHandler implements ChangeListener {
+    private static class AgentA5NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_a5_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a5_noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a5 noise = " + source.getValue() + "%");
         }
     }
 
-    private class AgentA6NoiseHandler implements ChangeListener {
+    private static class AgentA6NoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            AGVsim.m_agent.m_a6_noise = getValueDouble(source) / 100.0;
+            AGVsim.agent.a6_noise = getValueDouble(source) / 100.0;
             System.out.println("NoiseControlPanel: a6 noise = " + source.getValue() + "%");
         }
     }
 
-    private class SensorRangeNoiseHandler implements ChangeListener {
+    private static class SensorRangeNoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             double val = getValueDouble(source);
-            AGVsim.m_agent.Qt.set(0, 0, val * val);
+            AGVsim.agent.Qt.set(0, 0, val * val);
             System.out.println("NoiseControlPanel: sensor range noise sigma^2 = " + val);
         }
     }
 
-    private class SensorBearingNoiseHandler implements ChangeListener {
+    private static class SensorBearingNoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             double val = getValueDouble(source);
-            AGVsim.m_agent.Qt.set(1, 1, val * val);
+            AGVsim.agent.Qt.set(1, 1, val * val);
             System.out.println("NoiseControlPanel: sensor bearing noise sigma^2 = " + val);
         }
     }
 
-    private class SensorSignatureNoiseHandler implements ChangeListener {
+    private static class SensorSignatureNoiseHandler implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             double val = getValueDouble(source);
-            AGVsim.m_agent.Qt.set(2, 2, val * val);
+            AGVsim.agent.Qt.set(2, 2, val * val);
             System.out.println("NoiseControlPanel: sensor signature noise sigma^2 = " + val);
         }
     }
