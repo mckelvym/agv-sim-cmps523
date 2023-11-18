@@ -49,7 +49,7 @@ public class Agent {
     void initialize_particles() {
         m_num_particles = ParticleDialog.number_particles;
         m_particles = new Particle[m_num_particles];
-        //cout.println("Initting " + m_num_particles + " particles.");
+        cout.println("Initting " + m_num_particles + " particles.");
         for (int i = 0; i < m_num_particles; i++) {
             m_particles[i] = new Particle(
                     Utils.gaussian(m_subjective_bot_location_x0, 1),
@@ -80,14 +80,14 @@ public class Agent {
                 index = "bearing";
             else
                 index = "signature";
-            //cout.println("Agent: Qt noise sigma[" + index + "]^2 = " + Qt.get(i,i));
+            cout.println("Agent: Qt noise sigma[" + index + "]^2 = " + Qt.get(i, i));
         }
         if (AGVsim.algorithm == 1) {
-            //cout.println("Agent: alpha noise: " + m_a1_noise + " " + m_a2_noise + " " + m_a3_noise + " " + m_a4_noise);
+            cout.println("Agent: alpha noise: " + m_a1_noise + " " + m_a2_noise + " " + m_a3_noise + " " + m_a4_noise);
         } else {
             m_a5_noise = NoiseControlPanel.get_alpha_noise(5);
             m_a6_noise = NoiseControlPanel.get_alpha_noise(6);
-            //cout.println("Agent: alpha noise: " + m_a1_noise + " " + m_a2_noise + " " + m_a3_noise + " " + m_a4_noise + " " + m_a5_noise + " " + m_a6_noise );
+            cout.println("Agent: alpha noise: " + m_a1_noise + " " + m_a2_noise + " " + m_a3_noise + " " + m_a4_noise + " " + m_a5_noise + " " + m_a6_noise);
         }
     }
 
@@ -164,7 +164,7 @@ public class Agent {
 
         // LINE 5, motion noise covariance matrix in control space
         Mt = Matrix.identity(2, 2);
-        //cout.println("Agent: alpha noise: " + m_a1_noise + " " + m_a2_noise + " " + m_a3_noise + " " + m_a4_noise);
+        cout.println("Agent: alpha noise: " + m_a1_noise + " " + m_a2_noise + " " + m_a3_noise + " " + m_a4_noise);
         Mt.set(0, 0, Utils.square(m_a1_noise * v + m_a2_noise * w));
         Mt.set(1, 1, Utils.square(m_a3_noise * v + m_a4_noise * w));
 
@@ -177,7 +177,7 @@ public class Agent {
         Mut_bar = m_pose;
         Mut_bar = Mut_bar.plus(Mut_update);
         Mut_bar.set(2, 0, Utils.clamp_angle(Mut_bar.get(2, 0)));
-        //cout.println("Believed Pose: " + Mu_bar.get(0,0) + " " + Mu_bar.get(1, 0) + " " + Math.toDegrees(Mu_bar.get(2, 0)));
+        cout.println("Believed Pose: " + Mut_bar.get(0, 0) + " " + Mut_bar.get(1, 0) + " " + Math.toDegrees(Mut_bar.get(2, 0)));
 
         // LINE 7, motion covariance matrix update from motion model
         // lhs of plus: predicted belief based on Jacobian control actions and SIGMA
@@ -195,13 +195,13 @@ public class Agent {
         // setup in function initialize_agent_noise();
 
         if (m_sensor != null && m_enable_correction) {
-            //cout.println("Correction Step");
+            cout.println("Correction Step");
 
             // LINE 9, for each actual observation...
             SensorReading z_t_i;
             Vector z_t = m_sensor.get_hits();
             for (int i = 0; i < z_t.size(); i++) {
-                //cout.println("Processing hit..");
+                cout.println("Processing hit..");
 
                 // LINE 10, unique identifier of landmark from correspondence table
                 z_t_i = (SensorReading) z_t.elementAt(i);
@@ -211,7 +211,7 @@ public class Agent {
                 double mjx_mutx = AGVsim.m_testbed.object_at(j).m_x - Mut_bar.get(0, 0);
                 double mjy_muty = AGVsim.m_testbed.object_at(j).m_y - Mut_bar.get(1, 0);
                 double q = Utils.square(mjx_mutx) + Utils.square(mjy_muty);
-                //cout.println("xdist=" + mjx_mutx + " ydist=" + mjy_muty + " range=" + Math.sqrt(q));
+                cout.println("xdist=" + mjx_mutx + " ydist=" + mjy_muty + " range=" + Math.sqrt(q));
 
                 // LINE 12, z_hat is predicted observation based on robot's believed position
                 double sqrt_q = Math.sqrt(q);
@@ -224,21 +224,21 @@ public class Agent {
                 z_t_hat.set(1, 0, Math.atan2(mjy_muty, mjx_mutx) - Mut_bar.get(2, 0));
                 z_t_hat.set(2, 0, z_t_i.m_signature);
                 if (z_t_hat.get(1, 0) > Math.PI / 2) {
-                    //cout.print("OLD = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
+                    cout.print("OLD = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
                     z_t_hat.set(1, 0, Utils.clamp_angle_within_pi_over_two(z_t_hat.get(1, 0)));
-                    //cout.println("  NEW = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
+                    cout.println("  NEW = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
 
                 }
-                //cout.println("z    range=" + z.get(0,0) + "\tangle=" + Math.toDegrees(z.get(1, 0)) + "\tsig=" + z.get(2, 0));
-                //cout.println("zhat range=" + z_t_hat.get(0,0) + "\tangle=" + Math.toDegrees(z_t_hat.get(1, 0)) + "\tsig=" + z_t_hat.get(2, 0));
-                //cout.println("atan2=" + Math.toDegrees(Math.atan2(mjy_muty, mjx_mutx)) + " Mut_bar=" + Math.toDegrees(Mut_bar.get(2, 0)));
+                cout.println("z    range=" + z.get(0, 0) + "\tangle=" + Math.toDegrees(z.get(1, 0)) + "\tsig=" + z.get(2, 0));
+                cout.println("zhat range=" + z_t_hat.get(0, 0) + "\tangle=" + Math.toDegrees(z_t_hat.get(1, 0)) + "\tsig=" + z_t_hat.get(2, 0));
+                cout.println("atan2=" + Math.toDegrees(Math.atan2(mjy_muty, mjx_mutx)) + " Mut_bar=" + Math.toDegrees(Mut_bar.get(2, 0)));
 
-                //cout.println("z angle=" + Math.round(Math.toDegrees(z.get(1, 0)))
-                //		+ " zhat angle=" + Math.round(Math.toDegrees(z_t_hat.get(1, 0)))
-                //		+ " atan2=" + Math.round(Math.toDegrees(Math.atan2(mjy_muty, mjx_mutx)))
-                //		+ " Mut_bar=" + Math.round(Math.toDegrees(Mut_bar.get(2, 0)))
-                //		+ " mjx=" + mjx_mutx
-                //		+ " mjy=" + mjy_muty);
+                cout.println("z angle=" + Math.round(Math.toDegrees(z.get(1, 0)))
+                        + " zhat angle=" + Math.round(Math.toDegrees(z_t_hat.get(1, 0)))
+                        + " atan2=" + Math.round(Math.toDegrees(Math.atan2(mjy_muty, mjx_mutx)))
+                        + " Mut_bar=" + Math.round(Math.toDegrees(Mut_bar.get(2, 0)))
+                        + " mjx=" + mjx_mutx
+                        + " mjy=" + mjy_muty);
 
                 // LINE 13, H is Jacobian wrt to pose (x,y,theta) taken of h (measurement model)
                 Matrix Ht = new Matrix(3, 3);
@@ -303,7 +303,7 @@ public class Agent {
                 weights[m] = landmark_model_known_correspondence(
                         z_t_i, -1, m_new_particles[m], AGVsim.m_testbed);
             else weights[m] = Minv;
-            //cout.println("Weight[" + m + "]=" + weights[m]);
+            cout.println("Weight[" + m + "]=" + weights[m]);
         }
         if (this.m_enable_correction)
             m_particles = low_variance_sampler(m_new_particles, weights);
@@ -341,11 +341,11 @@ public class Agent {
         for (int m = 1; m <= m_num_particles; m++) {
             double U = r + (m - 1) * Minv;
             while (U > c && i < m_num_particles) {
-                //cout.println("U=" + U + " c=" + c + " m=" + m + " r=" + r + " i=" + i);
+                cout.println("U=" + U + " c=" + c + " m=" + m + " r=" + r + " i=" + i);
                 i++;
                 c = c + weights[i - 1];
             }
-            //cout.println("Adding particle " + i + " to the set.");
+            cout.println("Adding particle " + i + " to the set.");
             m_new_particles[m - 1] = chi_t[i - 1];
         }
         return m_new_particles;
@@ -359,25 +359,25 @@ public class Agent {
     double landmark_model_known_correspondence(SensorReading f, int c, Particle x_t, Testbed m) {
         int j = f.m_signature; // LINE 2 j = c_i_t
         SimObject o = m.object_at(j);
-        //cout.println("BOT (X,Y)=(" + x_t.get(0,0) + ", " + x_t.get(1,0) + ") OBJ (X,Y)=(" + o.x() + ", " + o.y() + ")");
+//        cout.println("BOT (X,Y)=(" + x_t.get(0,0) + ", " + x_t.get(1,0) + ") OBJ (X,Y)=(" + o.x() + ", " + o.y() + ")");
         double r_hat = Math.sqrt(
                 Utils.square(o.x() - x_t.x())
                         + Utils.square(o.y() - x_t.y())); // LINE 3
         double phi_hat = Math.atan2(o.y() - x_t.y(), o.x() - x_t.x()) - x_t.theta(); // LINE 4
         if (phi_hat > Math.PI / 2) {
-            //cout.print("OLD = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
+//            cout.print("OLD = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
             phi_hat = Utils.clamp_angle_within_pi_over_two(phi_hat);
-            //cout.println("  NEW = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
+//            cout.println("  NEW = " + Math.round(Math.toDegrees(z_t_hat.get(1, 0))));
 
         }
 
         // LINE 5
         // f.m_actual_range represents r_i_t
         // Qt.get(0, 0) represents sigma_r, for example.
-        //cout.println("p1=" + Utils.prob(f.m_actual_range - r_hat, Math.sqrt(Qt.get(0, 0)))
-        //		+ "r_hat=" + r_hat + " r_act=" + f.m_actual_range  + "Q_sig_r=" + Math.sqrt(Qt.get(0, 0))
-        //		+ " p2=" + Utils.prob(f.m_actual_angle - phi_hat, Math.sqrt(Qt.get(1, 1)))
-        //		+ " p3=" + Utils.prob(0, Math.sqrt(Qt.get(2, 2))));
+        cout.println("p1=" + Utils.prob(f.m_actual_range - r_hat, Math.sqrt(Qt.get(0, 0)))
+                + "r_hat=" + r_hat + " r_act=" + f.m_actual_range + "Q_sig_r=" + Math.sqrt(Qt.get(0, 0))
+                + " p2=" + Utils.prob(f.m_actual_angle - phi_hat, Math.sqrt(Qt.get(1, 1)))
+                + " p3=" + Utils.prob(0, Math.sqrt(Qt.get(2, 2))));
         double q = Utils.prob(f.m_actual_range - r_hat, Math.sqrt(Qt.get(0, 0))) *
                 Utils.prob(f.m_actual_angle - phi_hat, Math.sqrt(Qt.get(1, 1))) *
                 Utils.prob(0, Math.sqrt(Qt.get(2, 2))); // prob (s_i_t - s_j, sigma_s) ??

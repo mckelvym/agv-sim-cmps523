@@ -193,7 +193,7 @@ public class TestbedView extends JPanel implements Observer {
             Matrix eigenvalue_matrix = eigenvalue_decomposition.getD();
 
             if (i == -1) {
-                //cout.println("Covar"); covariance_matrix.print(20, 2);
+                cout.println("Covar"); covariance_matrix.print(20, 2);
                 cout.println("EVec");
                 eigenvector_matrix.print(20, 2);
                 cout.println("EVal");
