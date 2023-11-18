@@ -28,7 +28,7 @@ public class Engine {
     void build_testbed_skeleton() {
         AGVsim.m_agent = new Agent();
         AGVsim.m_agent.set_sensor(AGVsim.m_sensor);
-        Vector objects = AGVsim.m_testbed.get_objects();
+        Vector<SimObject> objects = AGVsim.m_testbed.get_objects();
         AGVsim.m_testbed = new Testbed();
         AGVsim.m_testbed.set_objects(objects);
         cout.println("Engine: created new agent and testbed.");

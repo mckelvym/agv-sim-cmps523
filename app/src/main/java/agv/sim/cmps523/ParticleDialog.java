@@ -17,7 +17,7 @@ class ParticleDialog extends JDialog {
     static String[] num_particles = {
             "100", "1000", "10000"
     };
-    static JComboBox num_particles_combo = new JComboBox(num_particles);
+    static JComboBox<String> num_particles_combo = new JComboBox<>(num_particles);
     static int number_particles;
     JButton close = new JButton("OK");
 

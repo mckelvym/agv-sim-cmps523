@@ -13,7 +13,7 @@ public class Sensor {
 
     static final PrintStream cout = System.out; // console out
     private final double m_range_resolution;
-    private final Vector m_sensor_hits;
+    private final Vector<SensorReading> m_sensor_hits;
     Matrix m_noise;
     double sigma_hit;
     double lambda_short;
@@ -30,7 +30,7 @@ public class Sensor {
         m_fov_degrees = 180;
         m_min_range = 0;
         m_max_range = 500;
-        m_sensor_hits = new Vector();
+        m_sensor_hits = new Vector<>();
         m_range_resolution = 1.0;
         m_angular_resolution = Math.toRadians(5.0);
         init_readings();

@@ -23,12 +23,12 @@ public class ObjectControlPanel extends JDialog {
     static String[] object_size = {
             "1"
     };
-    static JComboBox object_size_combo = new JComboBox(object_size);
-    static JComboBox object_combo = new JComboBox();
+    static JComboBox<String> object_size_combo = new JComboBox<>(object_size);
+    static JComboBox<String> object_combo = new JComboBox<>();
     static String[] object_id_display = {
             "Yes", "No"
     };
-    static JComboBox object_id_display_combo = new JComboBox(object_id_display);
+    static JComboBox<String> object_id_display_combo = new JComboBox<>(object_id_display);
 
     ObjectControlPanel() {
         close_button.addActionListener(new ActionListener() {

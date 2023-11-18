@@ -23,11 +23,11 @@ public class Testbed extends Observable {
     private double m_bot_location_x0 = 180;
     private double m_bot_location_y0 = 200;
     private double m_bot_orientation0 = Math.PI / 2;
-    private Vector m_objects;
+    private Vector<SimObject> m_objects;
 
     public Testbed() {
         m_pose = new Matrix(3, 1);
-        m_objects = new Vector();
+        m_objects = new Vector<>();
         initialize_bot_pose();
         initialize_testbed_noise();
     }
@@ -152,7 +152,7 @@ public class Testbed extends Observable {
     }
 
     public SimObject object_at(int index) {
-        return (SimObject) (m_objects.elementAt(index));
+        return m_objects.elementAt(index);
     }
 
     public void remove_object(int object_id) {
@@ -162,11 +162,11 @@ public class Testbed extends Observable {
         AGVsim.m_testbedview.repaint();
     }
 
-    public Vector get_objects() {
+    public Vector<SimObject> get_objects() {
         return m_objects;
     }
 
-    public void set_objects(Vector objs) {
+    public void set_objects(Vector<SimObject> objs) {
         m_objects = objs;
     }
 }

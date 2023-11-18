@@ -31,13 +31,13 @@ public class ControlPanel extends JPanel {
             "1", "2", "5", "10", "15",
             "20", "30", "45", "60"
     };
-    static final JComboBox framerate_combo = new JComboBox(frame_rates);
+    static final JComboBox<String> framerate_combo = new JComboBox<>(frame_rates);
     static String[] mouse_mode = {
             "Add Object",
             "Bot Actual",
             "Bot Belief"
     };
-    static JComboBox mouse_mode_combo = new JComboBox(mouse_mode);
+    static JComboBox<String> mouse_mode_combo = new JComboBox<>(mouse_mode);
     static JCheckBox enable_correction_checkbox = new JCheckBox("Enable Correction/Resampling");
     boolean is_paused = false; // Is simulation paused?
     JButton reset_button;
@@ -69,12 +69,12 @@ public class ControlPanel extends JPanel {
         time_delta_slider.setMajorTickSpacing(10);
         time_delta_slider.setPaintTicks(false);
         time_delta_slider.setPaintLabels(true);
-        Hashtable rotational_velocity_slider_label_table = new Hashtable();
+        Hashtable<Integer, JLabel> rotational_velocity_slider_label_table = new Hashtable<>();
         rotational_velocity_slider_label_table.put(Integer.valueOf(-10), new JLabel("10"));
         rotational_velocity_slider_label_table.put(Integer.valueOf(0), new JLabel("0"));
         rotational_velocity_slider_label_table.put(Integer.valueOf(10), new JLabel("-10"));
         rotational_velocity_slider.setLabelTable((rotational_velocity_slider_label_table));
-        Hashtable time_delta_slider_label_table = new Hashtable();
+        Hashtable<Integer, JLabel> time_delta_slider_label_table = new Hashtable<>();
         time_delta_slider_label_table.put(Integer.valueOf(1), new JLabel("1.0"));
         time_delta_slider_label_table.put(Integer.valueOf(100), new JLabel("0.01"));
         time_delta_slider.setLabelTable((time_delta_slider_label_table));

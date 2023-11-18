@@ -17,11 +17,11 @@ public class Logger {
     String testbed_data_file;
     String misc_data_file;
 
-    Vector agent_poses;
-    Vector testbed_poses;
+    Vector<Matrix> agent_poses;
+    Vector<Matrix> testbed_poses;
     Vector pose_error;
     Vector pose_orientation_error;
-    Vector time;
+    Vector<Double> time;
 
     Logger() {
         this.init();
@@ -58,9 +58,9 @@ public class Logger {
 
         (new File(data_directory)).mkdir();
 
-        agent_poses = new Vector();
-        testbed_poses = new Vector();
-        time = new Vector();
+        agent_poses = new Vector<>();
+        testbed_poses = new Vector<>();
+        time = new Vector<>();
         for (int i = 0; i < 3; i++)
             time.add(0.0);
 
@@ -93,17 +93,18 @@ public class Logger {
             this.write_pose_vector_to_matlab_file(testbed_data, testbed_poses, "testbed_poses");
             this.write_array_to_matlab_file(misc_data, time, "time");
 
-            Vector pose_diffs = new Vector();
-            Vector pose_orient_diffs = new Vector();
+            Vector<Double> pose_diffs = new Vector<>();
+            Vector<Double> pose_orient_diffs = new Vector<>();
             for (int i = 0; i < agent_poses.size(); i++) {
                 pose_diffs.add(Utils.dist(agent_poses.elementAt(i), testbed_poses.elementAt(i)));
-                pose_orient_diffs.add(Math.toDegrees(((Matrix) testbed_poses.elementAt(i)).get(2, 0) - ((Matrix) agent_poses.elementAt(i)).get(2, 0)));
+                final double degrees = Math.toDegrees(testbed_poses.elementAt(i).get(2, 0) - agent_poses.elementAt(i).get(2, 0));
+                pose_orient_diffs.add(degrees);
             }
             this.write_array_to_matlab_file(agent_data, pose_diffs, "pose_error");
             this.write_array_to_matlab_file(agent_data, pose_orient_diffs, "pose_orientation_error");
 
-            Vector objx = new Vector();
-            Vector objy = new Vector();
+            Vector<Double> objx = new Vector<>();
+            Vector<Double> objy = new Vector<>();
             for (int i = 0; i < AGVsim.m_testbed.num_objects(); i++) {
                 objx.add(AGVsim.m_testbed.object_at(i).x());
                 objy.add(AGVsim.m_testbed.object_at(i).y());

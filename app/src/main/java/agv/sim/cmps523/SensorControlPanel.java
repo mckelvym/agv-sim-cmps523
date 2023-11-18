@@ -27,19 +27,19 @@ public class SensorControlPanel extends JDialog {
     static String[] sensor_max_range = {
             "200", "300", "500", "1000"
     };
-    static JComboBox sensor_max_range_combo = new JComboBox(sensor_max_range);
+    static JComboBox<String> sensor_max_range_combo = new JComboBox<>(sensor_max_range);
     static String[] sensor_ang_res = {
             "5", "2", "1"
     };
-    static JComboBox sensor_ang_res_combo = new JComboBox(sensor_ang_res);
+    static JComboBox<String> sensor_ang_res_combo = new JComboBox<>(sensor_ang_res);
     static String[] sensor_display = {
             "Yes", "No"
     };
-    static JComboBox sensor_display_combo = new JComboBox(sensor_display);
+    static JComboBox<String> sensor_display_combo = new JComboBox<>(sensor_display);
     static String[] sensor_return_display = {
             "Yes", "No"
     };
-    static JComboBox sensor_return_display_combo = new JComboBox(sensor_return_display);
+    static JComboBox<String> sensor_return_display_combo = new JComboBox<>(sensor_return_display);
     JButton close = new JButton("Close");
 
     SensorControlPanel() {
@@ -81,25 +81,25 @@ public class SensorControlPanel extends JDialog {
         sigma_hit_slider.addChangeListener(new SigmaHitHandler());
         lambda_short_slider.addChangeListener(new LambdaShortHandler());
 
-        Hashtable z_hit_labels = new Hashtable();
+        Hashtable<Integer, JLabel> z_hit_labels = new Hashtable<>();
         z_hit_labels.put(Integer.valueOf(0), new JLabel("None"));
         z_hit_labels.put(Integer.valueOf(50), new JLabel("Less"));
         z_hit_labels.put(Integer.valueOf(100), new JLabel("More"));
         z_hit_slider.setLabelTable(z_hit_labels);
 
-        Hashtable z_short_labels = new Hashtable();
+        Hashtable<Integer, JLabel> z_short_labels = new Hashtable<>();
         z_short_labels.put(Integer.valueOf(0), new JLabel("None"));
         z_short_labels.put(Integer.valueOf(50), new JLabel("Less"));
         z_short_labels.put(Integer.valueOf(100), new JLabel("More"));
         z_short_slider.setLabelTable(z_short_labels);
 
-        Hashtable z_max_labels = new Hashtable();
+        Hashtable<Integer, JLabel> z_max_labels = new Hashtable<>();
         z_max_labels.put(Integer.valueOf(0), new JLabel("None"));
         z_max_labels.put(Integer.valueOf(50), new JLabel("Less"));
         z_max_labels.put(Integer.valueOf(100), new JLabel("More"));
         z_max_slider.setLabelTable(z_max_labels);
 
-        Hashtable z_rand_labels = new Hashtable();
+        Hashtable<Integer, JLabel> z_rand_labels = new Hashtable<>();
         z_rand_labels.put(Integer.valueOf(0), new JLabel("None"));
         z_rand_labels.put(Integer.valueOf(50), new JLabel("Less"));
         z_rand_labels.put(Integer.valueOf(100), new JLabel("More"));

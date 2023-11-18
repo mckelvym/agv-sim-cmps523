@@ -17,7 +17,7 @@ public class AlgorithmControlPanel extends JDialog {
     static String[] bayesian_filter = {
             "None", "Extended Kalman Filter (EKF)", "Monte Carlo Localization (MCL)"
     };
-    static JComboBox bayesian_filter_combo = new JComboBox(bayesian_filter);
+    static JComboBox<String> bayesian_filter_combo = new JComboBox<>(bayesian_filter);
     JButton close = new JButton("OK");
 
     AlgorithmControlPanel() {
