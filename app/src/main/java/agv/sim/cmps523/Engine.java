@@ -5,63 +5,52 @@
 package agv.sim.cmps523;
 
 import static java.lang.System.out;
+import static java.util.Objects.requireNonNull;
 
-import java.util.Vector;
+import agv.sim.cmps523.data.Logger;
+import agv.sim.cmps523.event.EngineEventListener;
 
-public class Engine {
-    private static int fps = Integer.parseInt(String.valueOf(ControlPanel.getFramerateCombo().getSelectedItem())); // default, sync w/ choice 2 of cPanel
-    private static double deltaT = 0.1; //AGVsim.control_panel.get_current_time_delta();
+public class Engine implements EngineEventListener {
+    private final Values values;
+    private final Logger logger;
 
-    public Engine() {
+    public Engine(Values values, Logger logger) {
+        this.values = requireNonNull(values);
+        this.logger = requireNonNull(logger);
+        values.addEngineEventListener(this);
     }
 
-    public static int getFps() {
-        return fps;
-    }
-
-    public static void setFps(int fps) {
-        Engine.fps = fps;
-    }
-
-    public static double getDeltaT() {
-        return deltaT;
-    }
-
-    public static void setDeltaT(double deltaT) {
-        Engine.deltaT = deltaT;
-    }
-
-    public void buildArchitecture() {
-        buildTestbedSkeleton();
-        AGVsim.getTestbed().addObserver(AGVsim.getTestbedview());
-        resetSystem();
-        if (AGVsim.getControlPanel().isNotPaused())  // ensure simulation is paused
-            AGVsim.getControlPanel().getPauseButton().doClick();
-        AGVsim.getControlPanel().getStepButton().setEnabled(true); // enable step button
-        AGVsim.getControlPanel().getRunButton().setEnabled(true);  // enable run button
-    }
-
-    void buildTestbedSkeleton() {
-        AGVsim.setAgent(new Agent());
-        AGVsim.getAgent().setSensor(AGVsim.getSensor());
-        Vector<SimObject> objects = AGVsim.getTestbed().getObjects();
-        AGVsim.setTestbed(new Testbed());
-        AGVsim.getTestbed().set_objects(objects);
+    @Override
+    public void buildRequested() {
+        final Sensor sensor = requireNonNull(Agent.getCurrent().getSensor());
+        Agent.newAgent(values, logger).setSensor(sensor);
+        Testbed.newTestbed(values, logger);
         out.println("Engine: created new agent and testbed.");
+        resetRequested();
     }
 
-    void run1Frame() {
-        AGVsim.getAgent().actAndObserve();
-        AGVsim.getTestbed().assertModelHasChanged();
+    @Override
+    public void pauseStatusChanged() {
+        if (values.isEnginePaused()) {
+            return;
+        }
+        EngineRunner thread = new EngineRunner(values, this::runStepRequested, logger);    // Create a new thread
+        thread.setPriority(Thread.MAX_PRIORITY);    // with max priority
+        thread.start();
     }
 
-    void resetSystem() {
-        AGVsim.getTestbed().initializeBotPose();
-        AGVsim.getAgent().initializeSubjectiveBotPose();
-        AGVsim.getAgent().setTranslationalVelocity(AGVsim.getControlPanel().getCurrentTranslationalVelocity());
-        AGVsim.getAgent().setRotationalVelocity(AGVsim.getControlPanel().getCurrentRotationalVelocity());
-        if (AGVsim.getAlgorithm() == 2)
-            AGVsim.getAgent().initializeParticles();
-        AGVsim.getTestbed().assertModelHasChanged();
+    @Override
+    public void resetRequested() {
+        logger.init();
+        Testbed.getCurrent().initializeBotPose();
+        Agent.getCurrent().initializeSubjectiveBotPose();
+        Agent.getCurrent().initializeParticles();
+        values.notifyTestbedChanged();
+    }
+
+    @Override
+    public void runStepRequested() {
+        Agent.getCurrent().actAndObserve();
+        values.notifyTestbedChanged();
     }
 }
