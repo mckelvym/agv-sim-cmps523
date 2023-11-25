@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0 - 2023-11-24
+
+- Refactoring and cleanup
+
 ## 1.1.0 - 2023-11-17
 
 - Create Gradle project

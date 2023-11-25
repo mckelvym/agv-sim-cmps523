@@ -4,154 +4,128 @@
 // File: Testbed.java
 package agv.sim.cmps523;
 
+import static java.lang.Math.*;
 import static java.lang.System.out;
+import static java.util.Objects.requireNonNull;
 
 import Jama.Matrix;
-import java.util.Observable;
+import agv.sim.cmps523.data.Logger;
 import java.util.Random;
-import java.util.Vector;
 
-public class Testbed extends Observable {
+// actual world
+public class Testbed {
+
     // testbed noise
-    private static long randSeed = 314159265;
-    private static Random randGen = new Random(getRandSeed());
-    private static double muNoise = 0.0; // default value
-    private static double sigmaVNoise = 2.0; // default value
-    private static double sigmaWNoise = 2.0; // default value
-    private static boolean configOrientation = false;
-    private Matrix pose;
-    private double botLocationX0 = 180;
-    private double botLocationY0 = 200;
-    private double botOrientation0 = Math.PI / 2;
-    private Vector<SimObject> objects;
+    private static final long randSeed = 314159265;
+    private static final Random randGen = new Random(randSeed);
+    private static Testbed INSTANCE;
+    private final double muNoise; // default value
+    private final Values values;
+    private final Matrix pose;
+    private final Logger logger;
+    private boolean configOrientation;
+    private double botLocationX0;
+    private double botLocationY0;
+    private double botOrientation0;
 
-    public Testbed() {
-        setPose(new Matrix(3, 1));
-        setObjects(new Vector<>());
+    private Testbed(Values values, Logger logger) {
+        this.values = requireNonNull(values);
+        this.logger = requireNonNull(logger);
+        configOrientation = false;
+        this.values.setTranslationalNoise(2d);
+        this.values.setRotationalNoise(toRadians(2d));
+        pose = new Matrix(3, 1);
+        botLocationX0 = 180;
+        botLocationY0 = 200;
+        botOrientation0 = Math.PI / 2;
+        muNoise = 0.0;
         initializeBotPose();
-        initializeTestbedNoise();
+        out.println("Testbed: sigma_v_noise = " + this.values.getTranslationalNoise() + " sigma_w_noise = " + this.values.getRotationalNoise());
     }
 
-    public static long getRandSeed() {
-        return randSeed;
+    public static Testbed newTestbed(Values values, Logger logger) {
+        INSTANCE = new Testbed(values, logger);
+        return getCurrent();
     }
 
-    public static void setRandSeed(long randSeed) {
-        Testbed.randSeed = randSeed;
+    public static Testbed getCurrent() {
+        return requireNonNull(INSTANCE);
     }
 
-    public static Random getRandGen() {
-        return randGen;
-    }
-
-    public static void setRandGen(Random randGen) {
-        Testbed.randGen = randGen;
-    }
-
-    public static double getMuNoise() {
-        return muNoise;
-    }
-
-    public static void setMuNoise(double muNoise) {
-        Testbed.muNoise = muNoise;
-    }
-
-    public static double getSigmaVNoise() {
-        return sigmaVNoise;
-    }
-
-    public static void setSigmaVNoise(double sigmaVNoise) {
-        Testbed.sigmaVNoise = sigmaVNoise;
-    }
-
-    public static double getSigmaWNoise() {
-        return sigmaWNoise;
-    }
-
-    public static void setSigmaWNoise(double sigmaWNoise) {
-        Testbed.sigmaWNoise = sigmaWNoise;
-    }
-
-    public static boolean isConfigOrientation() {
+    public boolean isConfigOrientation() {
         return configOrientation;
     }
 
-    public static void setConfigOrientation(boolean configOrientation) {
-        Testbed.configOrientation = configOrientation;
+    public void setConfigOrientation(boolean configOrientation) {
+        this.configOrientation = configOrientation;
     }
 
-    double getXPosition() {
-        return getPose().get(0, 0);
+    public double getXPosition() {
+        return pose.get(0, 0);
     }
 
-    double getYPosition() {
-        return getPose().get(1, 0);
+    public double getYPosition() {
+        return pose.get(1, 0);
     }
 
-    double getInitialXPosition() {
-        return getBotLocationX0();
+    public double getInitialXPosition() {
+        return botLocationX0;
     }
 
-    double getInitialYPosition() {
-        return getBotLocationY0();
+    public double getInitialYPosition() {
+        return botLocationY0;
     }
 
-    double getOrientation() {
-        return getPose().get(2, 0);
+    public double getOrientation() {
+        return pose.get(2, 0);
     }
 
-    void setOrientation(double orient) {
+    private void setOrientation(double orient) {
         if (orient > Math.PI * 2)
             orient -= Math.PI * 2;
         else if (orient < -Math.PI * 2)
             orient += Math.PI * 2;
-        getPose().set(2, 0, orient);
-        AGVsim.getSensor().set_orientation(orient);
+        pose.set(2, 0, orient);
+        Agent.getCurrent().getSensor().setOrientation(orient);
     }
 
-    void setInitialOrientation(double orient) {
+    public void setInitialOrientation(double orient) {
         if (orient > Math.PI * 2)
             orient -= Math.PI * 2;
         else if (orient < -Math.PI * 2)
             orient += Math.PI * 2;
-        setBotOrientation0(orient);
-        AGVsim.getSensor().set_orientation(orient);
+        this.botOrientation0 = orient;
+        Agent.getCurrent().getSensor().setOrientation(orient);
     }
 
-    void setInitialPosition(double x, double y) {
-        setBotLocationX0(x);
-        setBotLocationY0(y);
-        AGVsim.getSensor().set_position(x, y);
+    public void setInitialPosition(double x, double y) {
+        this.botLocationX0 = x;
+        this.botLocationY0 = y;
+        Agent.getCurrent().getSensor().setPosition(x, y);
     }
 
-    void setPosition(double x, double y) {
-        getPose().set(0, 0, x);
-        getPose().set(1, 0, y);
-        AGVsim.getSensor().set_position(x, y);
-    }
-
-    void initializeTestbedNoise() {
-        setSigmaVNoise(NoiseControlPanel.getTestbedVNoise());
-        setSigmaWNoise(NoiseControlPanel.getTestbedWNoise());
-        out.println("Testbed: sigma_v_noise = " + getSigmaVNoise() + " sigma_w_noise = " + getSigmaWNoise());
+    private void setPosition(double x, double y) {
+        pose.set(0, 0, x);
+        pose.set(1, 0, y);
+        Agent.getCurrent().getSensor().setPosition(x, y);
     }
 
     // used in Engine.resetSystem()
-    void initializeBotPose() {
-        setPosition(getBotLocationX0(), getBotLocationY0());
-        setOrientation(getBotOrientation0());
+    public void initializeBotPose() {
+        setPosition(botLocationX0, botLocationY0);
+        setOrientation(botOrientation0);
 
-        AGVsim.getLogger().saveTestbedPose(getPose());
+        logger.addTestbedPose(pose);
     }
 
     // The agent invokes this method to move within the testbed.
     // Control noise is added to the command.
-    public void move(Matrix velocity_control_commands) {
-        double v_noise = getSigmaVNoise() * getRandGen().nextGaussian() + getMuNoise();
-        double w_noise = getSigmaWNoise() * getRandGen().nextGaussian() + getMuNoise();
-        double dt = Engine.getDeltaT();            // delta time
-        double v = (velocity_control_commands.get(0, 0) + v_noise); // v from robot motion - translational velocity
-        double w = (velocity_control_commands.get(1, 0) + w_noise); // omega from robot motion - rotataional velocity
+    public void move(Matrix velocityControlCommands) {
+        double v_noise = values.getTranslationalNoise() * randGen.nextGaussian() + muNoise;
+        double w_noise = values.getRotationalNoise() * randGen.nextGaussian() + muNoise;
+        double dt = values.getTimestampDelta();            // delta time
+        double v = (velocityControlCommands.get(0, 0) + v_noise); // v from robot motion - translational velocity
+        double w = (velocityControlCommands.get(1, 0) + w_noise); // omega from robot motion - rotataional velocity
         double x = getXPosition();
         double y = getYPosition();
         double theta = getOrientation();
@@ -160,93 +134,16 @@ public class Testbed extends Observable {
         setOrientation(theta + dtheta);
         if (w != 0.0)
             setPosition(
-                    x - ((v / w) * Math.sin(theta)) + ((v / w) * Math.sin((theta + dtheta))),
-                    y + ((v / w) * Math.cos(theta)) - ((v / w) * Math.cos((theta + dtheta)))
+                    x - ((v / w) * sin(theta)) + ((v / w) * sin((theta + dtheta))),
+                    y + ((v / w) * cos(theta)) - ((v / w) * cos((theta + dtheta)))
             );
         else
             setPosition(
-                    x + (v * dt) * Math.cos(theta),
-                    y + (v * dt) * Math.sin(theta)
+                    x + (v * dt) * cos(theta),
+                    y + (v * dt) * sin(theta)
             );
-        out.println("Pose: " + getXPosition() + " " + getYPosition() + " " + Math.toDegrees(getOrientation()));
+        out.println("Pose: " + getXPosition() + " " + getYPosition() + " " + toDegrees(getOrientation()));
 
-        AGVsim.getLogger().saveTestbedPose(getPose());
-    }
-
-    public void assertModelHasChanged() {
-        setChanged();
-        notifyObservers();
-    }
-
-    public void addObjectWithoutRepaint(int x, int y, double size) {
-        getObjects().add(new SimObject(x, y, size));
-        String label = "Object at (" + x + ", " + y + ")";
-        ObjectControlPanel.getObjectCombo().addItem(label);
-    }
-
-    public void addObject(int x, int y, double size) {
-        getObjects().add(new SimObject(x, y, size));
-        String label = "Object at (" + x + ", " + y + ")";
-        ObjectControlPanel.getObjectCombo().addItem(label);
-        AGVsim.getTestbedview().repaint();
-    }
-
-    public int numObjects() {
-        return getObjects().size();
-    }
-
-    public SimObject objectAt(int index) {
-        return getObjects().elementAt(index);
-    }
-
-    public void removeObject(int objectId) {
-        if (objectId > numObjects() || objectId < 0)
-            return;
-        getObjects().removeElementAt(objectId - 1);
-        AGVsim.getTestbedview().repaint();
-    }
-
-    public Vector<SimObject> getObjects() {
-        return objects;
-    }
-
-    public void setObjects(Vector<SimObject> objects) {
-        this.objects = objects;
-    }
-
-    public void set_objects(Vector<SimObject> objs) {
-        setObjects(objs);
-    }
-
-    public Matrix getPose() {
-        return pose;
-    }
-
-    public void setPose(Matrix pose) {
-        this.pose = pose;
-    }
-
-    public double getBotLocationX0() {
-        return botLocationX0;
-    }
-
-    public void setBotLocationX0(double botLocationX0) {
-        this.botLocationX0 = botLocationX0;
-    }
-
-    public double getBotLocationY0() {
-        return botLocationY0;
-    }
-
-    public void setBotLocationY0(double botLocationY0) {
-        this.botLocationY0 = botLocationY0;
-    }
-
-    public double getBotOrientation0() {
-        return botOrientation0;
-    }
-
-    public void setBotOrientation0(double botOrientation0) {
-        this.botOrientation0 = botOrientation0;
+        logger.addTestbedPose(pose);
     }
 }

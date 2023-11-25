@@ -2,13 +2,12 @@
 // CMPS 523
 // Final Project
 // File: GuiUtils.java
-package agv.sim.cmps523;
+package agv.sim.cmps523.ui;
 
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -17,18 +16,16 @@ import javax.swing.JTextField;
 public final class GuiUtils {
 
     public static void centerOnScreen(Window w) {
-        int scr_width, scr_height, win_width, win_height;
-        Dimension dim;
-        dim = w.getToolkit().getScreenSize();
-        scr_width = (int) (dim.getWidth());
-        scr_height = (int) (dim.getHeight());
-        dim = w.getSize();
-        win_width = (int) (dim.getWidth());
-        win_height = (int) (dim.getHeight());
-        w.setLocation((scr_width - win_width) / 2, (scr_height - win_height) / 2);
+        Dimension screenDimension = w.getToolkit().getScreenSize();
+        int scrWidth = (int) (screenDimension.getWidth());
+        int scrHeight = (int) (screenDimension.getHeight());
+        Dimension windowDimension = w.getSize();
+        int winWidth = (int) (windowDimension.getWidth());
+        int winHeight = (int) (windowDimension.getHeight());
+        w.setLocation((scrWidth - winWidth) / 2, (scrHeight - winHeight) / 2);
     }
 
-    public static void addToGridbag(Window w, Component c, int posx, int posy, int width, int height) {
+    public static void addToWindow(Window w, Component c, int posx, int posy, int width, int height) {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = width;
         gridBagConstraints.gridheight = height;
@@ -39,7 +36,7 @@ public final class GuiUtils {
         w.add(c, gridBagConstraints);
     }
 
-    public static void addToGridbag(JPanel p, Component c, int posx, int posy, int width, int height) {
+    public static void addToPanel(JPanel p, Component c, int posx, int posy, int width, int height) {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = width;
         gridBagConstraints.gridheight = height;
@@ -71,9 +68,5 @@ public final class GuiUtils {
      */
     public static double getValueDouble(JSlider jSlider) {
         return Integer.valueOf(jSlider.getValue()).doubleValue();
-    }
-
-    public static String getJComboBoxSelectedItem(ActionEvent e) {
-        return String.valueOf(((JComboBox<?>) e.getSource()).getSelectedItem());
     }
 }
